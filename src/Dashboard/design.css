@@ -1,0 +1,27 @@
+
+.cols
+{
+       background: rgb(2,0,36);
+       background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(121,9,30,1) 35%, rgba(0,212,255,1) 100%);
+      
+}
+.align
+{
+  margin-left: 500px;
+}
+.align1
+{
+       margin-top:2px;
+
+}
+
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation16.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.css-4t3x6l-MuiPaper-root-MuiDrawer-paper
+{      
+       background-color:#032d7c;
+       width: 200px;
+       height: 400px;
+       margin-top: 65px;
+       overflow-x: hidden;
+       
+       
+}

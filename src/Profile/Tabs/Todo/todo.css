@@ -1,0 +1,64 @@
+#todo{
+    background-color: #eaf0f7;
+}
+#todo .header{
+    padding:  10px 0;
+    background-color: #eaf0f7;
+    font-family:Arial, Helvetica, sans-serif;
+}
+#todo .header h5{
+    color: #3d3f43;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: raleway,sans-serif;
+}
+
+
+.css-19kzrtu {padding: 0 !important;}
+
+#todo .card{
+    background-color: white;
+    padding: 15px;
+    border: none;  
+    box-shadow: -1px -1px 22px -13px #6c757d;
+}
+
+
+/* datePicker------------- */
+
+#todo .datePicker{width: 50%;}
+#todo .datePicker > div {
+        flex-direction: row-reverse;
+        border: none;
+       
+}
+
+#todo .datePicker > div input{
+    padding: 0;
+    text-align: center;
+    font-size: 14px;
+}
+#todo .datePicker > div div{
+    height: auto;
+}
+#todo .datePicker > div fieldset{
+    border: none;
+}
+
+.progressItem-Card{
+    border-radius: 5px;
+}
+.addComments button{
+    border: 1px solid #367ef5;
+    border-radius: 5px;
+    background-color: #367ef5;
+    color:white;
+    font-size: 10px;
+    padding: 0;
+}
+
+
+#todo .addComments .form-control:focus {
+    border: 0.5px solid gray;
+    box-shadow: none;
+}

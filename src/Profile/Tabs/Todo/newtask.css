@@ -1,0 +1,27 @@
+#addtaskpopup{
+    top: unset;
+    left: 5%;
+    bottom:10%;
+    right:unset;
+
+    /* width:200px; */
+}
+.css-1b0ve20>:not(style){
+    margin: 0 !important;
+}
+.css-1wchs4a{
+    padding: 10px !important;
+}
+.css-1wchs4a {
+    width: 100% !important;
+    max-width: 280px !important;}
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+    padding: 4px 13px !important;
+}
+
+#addtaskpopup div:first-child{
+    background-color: transparent;
+}
+#addtaskpopup .css-9tj150-MuiButton-endIcon>*:nth-of-type(1) {
+    font-size: 14px;
+}

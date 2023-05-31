@@ -1,0 +1,120 @@
+.section-border{border: solid 1px lightgray;
+    border-radius:8px ;
+    box-shadow: 0px 0px 9px 0px #d3d3d37a;
+    height: 100%;
+    padding:  15px;
+}
+header{padding:15px 0;}
+header p{
+    margin :0;
+}
+
+header a{
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    padding: 0 10px;
+    font-weight: 500;
+    font-size: 15px;
+}
+.nav-icon{
+    font-size: 18px;
+    display: inline;
+    
+}
+.seachbar{position: relative;}
+.header-right input{
+     margin-right: 20px;
+    border-radius: 5px;
+    padding-left: 30px;
+}
+.header-right span{
+    position: absolute;
+    left: 4px;
+}
+.header-name p{
+    padding: 0 10px;
+}
+.firstLetter{
+    width:30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color:#0088ff;
+    text-align: center;
+    color: white;
+    font-weight: 400;
+    font-size:13px;
+    line-height: 28px ;
+}
+
+
+
+
+.navigation-section p{
+    padding-right:20px ;
+}
+.navigation-section .slash::after{
+    content: "/";
+    margin-left: 20px;
+}
+
+/* profile-section- starts----------------*/
+
+.profile img{  
+    width:100%;
+    height: 270px;
+    border-radius: 8px;
+}
+.profile-values span{
+    font-size: 20px;
+}
+.profile .user-role{
+    color:#0088ff;
+}
+
+.profile .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {padding: 0;}
+.user-details .profile-labels{ min-width: 150px;}
+.user-details ul{
+    padding-left: 0;
+    list-style: none;}
+    
+.user-details li{
+    padding: 3px 0;
+}
+.user-details .profile-values li{font-weight: 500;}
+
+.attachments .file{
+    color:#ee5252;
+}
+
+
+/* -------------- current status-------------*/
+
+
+
+.current-status{
+    margin: 0;
+}
+.status-box{
+        background-color: #6ab4f64a;
+        border-radius: 1000000px;
+        padding: 10px 10px;
+     /* line-height: 30px; */
+}
+.status-box .check{
+    right:10px
+}
+
+.person-logo{
+    width:30px;
+    height: 30px;
+    border-radius:50%;
+    background-color: aqua;
+    text-align: center;
+    line-height: 28px;
+    margin-right: 10px;
+}
+
+.person-status p{
+    margin:0;
+}
