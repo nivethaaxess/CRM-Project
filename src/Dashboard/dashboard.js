@@ -6,11 +6,21 @@ import React from 'react'
 // import { Container } from '@mui/system'
 import Navbar from './components/Navbar'
 import Sidebar1 from './components/Sidebar1'
+import Dashboard1 from '../pages/Dashboard1'
+import User1 from '../pages/User1'
+import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
+
 
 function Dashboard() {
   return (
+    <Router>
     <Box>
        <Navbar />
+       <Routes>
+        {/* <Route path = '/' element={}></Route> */}
+        <Route path= '/dashboard' element={<Dashboard1/>}></Route>
+        <Route path= '/User1' element ={<User1/>}></Route>
+       </Routes>
       
      
      
@@ -22,6 +32,7 @@ function Dashboard() {
         </Stack>
      
     </Box>
+    </Router>
   )
 }
 
