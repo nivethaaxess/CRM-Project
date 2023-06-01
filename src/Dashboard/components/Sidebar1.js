@@ -64,9 +64,9 @@ export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
             >
               Dashboard
             </Button>
-            
+         
           </Box>
-          <User />
+          <User toggleDrawer={toggleDrawer}/>
          
         </List>
         {/* <Divider /> */}

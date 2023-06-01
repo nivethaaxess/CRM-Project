@@ -11,15 +11,30 @@ import ListItemText from '@mui/material/ListItemText';
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import PersonIcon from '@mui/icons-material/Person';
 import { Collapse } from '@mui/material';
+import { Button } from 'bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 
-const User=()=> {
+
+const User=({toggleDrawer})=> {
+
+  const navigate = useNavigate();
 
     const [open, setOpen] = useState(false);
 
     const handleClick = () => {
       setOpen(!open);
     };
+const handleOne=(anchor)=>
+{
+     navigate('/user1')
+     setOpen(!open)
+    
+}
+const handleTwo=()=>
+{
+
+}
 
 
 
@@ -33,10 +48,10 @@ const User=()=> {
           </ListItem>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button>
-                <ListItemText primary="Submenu 1" />
+              <ListItem button onClick={handleOne}>
+                <ListItemText primary="Submenu 1"/>
               </ListItem>
-              <ListItem button>
+              <ListItem button onclick={handleTwo}>
                 <ListItemText primary="Submenu 2" />
               </ListItem>
             </List>
