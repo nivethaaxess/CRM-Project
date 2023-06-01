@@ -4,12 +4,12 @@
     height: 100%;
     padding:  15px;
 }
-header{padding:15px 0;}
-header p{
+#profile header{padding:15px 0;}
+#profile header p{
     margin :0;
 }
 
-header a{
+#profile header a{
     color: black;
     text-decoration: none;
     display: inline-block;
@@ -17,25 +17,25 @@ header a{
     font-weight: 500;
     font-size: 15px;
 }
-.nav-icon{
+#profile .nav-icon{
     font-size: 18px;
     display: inline;
     
 }
-.seachbar{position: relative;}
-.header-right input{
+#profile .seachbar{position: relative;}
+#profile .header-right input{
      margin-right: 20px;
     border-radius: 5px;
     padding-left: 30px;
 }
-.header-right span{
+#profile .header-right span{
     position: absolute;
     left: 4px;
 }
-.header-name p{
+#profile .header-name p{
     padding: 0 10px;
 }
-.firstLetter{
+#profile .firstLetter{
     width:30px;
     height: 30px;
     border-radius: 50%;

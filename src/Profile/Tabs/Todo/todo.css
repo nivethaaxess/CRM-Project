@@ -8,12 +8,10 @@
 }
 #todo .header h5{
     color: #3d3f43;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 14px;
     font-family: raleway,sans-serif;
 }
-
-
 .css-19kzrtu {padding: 0 !important;}
 
 #todo .card{
@@ -21,22 +19,38 @@
     padding: 15px;
     border: none;  
     box-shadow: -1px -1px 22px -13px #6c757d;
+    margin:0 10px;
+    border-radius: 8px;
 }
-
+#todo .card h5{
+    font-family:"open sans ,sans-serif";
+    font-size: 16px;
+    font-weight: 600;
+}
+#todo .card p{
+    /* font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 500; */
+    color: #6f6f6f;
+    font-size: 14px;
+}
 
 /* datePicker------------- */
 
 #todo .datePicker{width: 50%;}
 #todo .datePicker > div {
-        flex-direction: row-reverse;
+        /* flex-direction: row-reverse; */
         border: none;
        
 }
 
 #todo .datePicker > div input{
     padding: 0;
-    text-align: center;
+    /* text-align: center; */
     font-size: 14px;
+}
+#todo .datePicker > div input{
+    display: none;
 }
 #todo .datePicker > div div{
     height: auto;
@@ -45,9 +59,6 @@
     border: none;
 }
 
-.progressItem-Card{
-    border-radius: 5px;
-}
 .addComments button{
     border: 1px solid #367ef5;
     border-radius: 5px;

@@ -4,6 +4,7 @@ import "./profile.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Tabs from "./Tabs/tabs";
+import RightTabs from "./RightTab/rightTab";
 import InputIcon from "@mui/icons-material/Input";
 import SearchIcon from "@mui/icons-material/Search";
 import RatingValue from "./Rating/rating";
@@ -26,6 +27,7 @@ import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 const Profile = () => {
   // const [username, setUserName] = useState("Nikandrav");
   const [userList, setUserList] = useState({});
+
   // const obj = userList.length > 0 ? true : " ";
   //   name: "Nikil",
   //   role: "Remote UI/UX Designers(Mobile/Web)",
@@ -44,7 +46,8 @@ const Profile = () => {
   useEffect(() => {
     console.log("useeffect");
     axios
-      .get("http://192.168.0.126:8000/myprofile/")
+      .get("http://89.116.30.81:8000/myprofile/")
+  
       .then((val) => {
         console.log("val", val.data);
         setUserList(val.data);
@@ -71,7 +74,7 @@ const Profile = () => {
 
   return (
     <div>
-      <div className="profile-page ">
+      <div id = "profile" className="profile-page ">
         <div className="container">
           <header className="border-bottom">
             <div className="d-flex align-items-center justify-content-between">
@@ -311,10 +314,14 @@ const Profile = () => {
                 <div className="row">
                   <div className="col-lg-9">
                     <Box sx={{width:'100%'}}>
-                    <Tabs  />
+                     <Tabs  />
                     </Box>
                   </div>
-                  <div className="col-lg-3"></div>
+                  <div className="col-lg-3">
+                    <div className="p-3">
+                              <RightTabs/>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

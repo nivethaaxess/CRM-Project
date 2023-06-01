@@ -18,7 +18,11 @@
 .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
     padding: 4px 13px !important;
 }
-
+#addtaskpopup h6{
+    font-family: 'Poppins,san-serif';
+    font-weight: 600;
+    color: #1976d2;
+}
 #addtaskpopup div:first-child{
     background-color: transparent;
 }

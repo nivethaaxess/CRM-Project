@@ -261,14 +261,8 @@ import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import IconButton from '@mui/material/IconButton';
-
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 // import Box from '@mui/material/Box';--
 import TextField from '@mui/material/TextField';
@@ -279,19 +273,12 @@ import InfoIcon from "@mui/icons-material/Info";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import CheckIcon from '@mui/icons-material/Check';
 
-
-
-import dayjs from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
-import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
-import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import axios from "axios";
-import { Button } from "@mui/material";
+
 
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 
@@ -606,7 +593,7 @@ const handleTimeChange = (index, e) => {
           component="form"
           sx={{
             // '& .MuiTextField-root': { m: 1, width: '25ch' },
-            backgroundColor:'#a18aff',
+            backgroundColor:'#eaf0f7',
             height:'100vh'  
           }}
           noValidate
@@ -623,9 +610,9 @@ const handleTimeChange = (index, e) => {
           rows={4}
           // defaultValue="Default Value"
         />
-      </div> */}
+      </div> */}  
 
-          <Box sx={{backgroundColor:'#a18aff' ,padding:'2%'}}>
+          <Box sx={{backgroundColor:'#eaf0f7' ,padding:'2%'}}>
 
             {/* sx={{backgroundColor:'#a18aff'}} */}
 

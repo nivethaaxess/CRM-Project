@@ -79,13 +79,15 @@ console.log(comment)
       description: description,
       start_date: startDate,
       end_date: endDate,
-      status : "progress"
+      status : "in progress",
+
     };
     console.log(data)
     axios
-      .post("http://192.168.0.126:8000/daily_task/insert/", data)
+      .post("http://89.116.30.81:8000/daily_task/insert/", data)
       .then((response) => {
          setComment(response.data);
+         console.log("set new task")
       })
       .catch((err) => console.log("er", err));
   };
