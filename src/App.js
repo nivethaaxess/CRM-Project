@@ -14,7 +14,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
-   {/* <Dashboard /> */}
+   <Dashboard />
     </div>
   );
 }
