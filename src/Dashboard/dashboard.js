@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material'
 import React from 'react'
-// import Menu from './components/Menu'
-// import Content from './components/Content'
+import Menu from './components/Menu'
+import Content from './components/Content'
 // import Sidebar from './components/Sidebar'
 // import { Container } from '@mui/system'
 import Navbar from './components/Navbar'
@@ -15,21 +15,22 @@ function Dashboard() {
   return (
     <Router>
     <Box>
-       <Navbar />
+       {/* <Navbar /> */}
        <Routes>
         {/* <Route path = '/' element={}></Route> */}
-        <Route path= '/dashboard' element={<Dashboard1/>}></Route>
-        <Route path= '/User1' element ={<User1/>}></Route>
+        {/* <Route path= '/dashboard' element={<Dashboard1/>}></Route>
+        <Route path= '/User1' element ={<User1/>}></Route> */}
        </Routes>
       
      
      
-     <Stack direction={'row'}>
              {/* <Sidebar1/> */}
-          {/* <Menu /> */}
+          {/* <Menu />  */}
+          {/* <Dashboard1/> */}
+
           {/* <Content /> */}
           {/* <Sidebar /> */}
-        </Stack>
+      
      
     </Box>
     </Router>

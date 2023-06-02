@@ -18,16 +18,16 @@ import { useNavigate } from 'react-router-dom';
 
 const User=({toggleDrawer})=> {
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
     const [open, setOpen] = useState(false);
 
     const handleClick = () => {
       setOpen(!open);
     };
-const handleOne=(anchor)=>
+const handleOne=()=>
 {
-     navigate('/user1')
+    //  navigate('/User1')
      setOpen(!open)
     
 }
@@ -39,7 +39,7 @@ const handleTwo=()=>
 
 
   return (
-    <Box sx={{backgroundColor: '#022567',color:'white', width:'200px',marginTop:2,marginLeft:3,}} >
+    <Box sx={{backgroundColor: '#022567',color:'white', width:'200px',marginTop:2,marginLeft:1,}} flex={3} >
        <List>
          <ListItem onClick={handleClick} >
             <PersonIcon  />
@@ -49,10 +49,19 @@ const handleTwo=()=>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItem button onClick={handleOne}>
-                <ListItemText primary="Submenu 1"/>
+                <ListItemText primary="UserList"/>
               </ListItem>
               <ListItem button onclick={handleTwo}>
-                <ListItemText primary="Submenu 2" />
+                <ListItemText primary="UserGroup" />
+              </ListItem>
+              <ListItem button onclick={handleTwo}>
+                <ListItemText primary="Userroles" />
+              </ListItem>
+              <ListItem button onclick={handleTwo}>
+                <ListItemText primary="Invalid User" />
+              </ListItem>
+              <ListItem button onclick={handleTwo}>
+                <ListItemText primary="Add new user" />
               </ListItem>
             </List>
           </Collapse>
