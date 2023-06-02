@@ -22,14 +22,12 @@ function Dashboard() {
         <Route path= '/User1' element ={<User1/>}></Route>
        </Routes>
       
-     
-     
      <Stack direction={'row'}>
              {/* <Sidebar1/> */}
           {/* <Menu /> */}
           {/* <Content /> */}
           {/* <Sidebar /> */}
-        </Stack>
+      </Stack>
      
     </Box>
     </Router>

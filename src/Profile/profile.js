@@ -8,11 +8,16 @@ import RightTabs from "./RightTab/rightTab";
 import InputIcon from "@mui/icons-material/Input";
 import SearchIcon from "@mui/icons-material/Search";
 import RatingValue from "./Rating/rating";
+//pdf reader---------
+
+import { PDFReader } from 'reactjs-pdf-reader';
+
 
 // header
 import Avatar from "@mui/material/Avatar";
 
 /* profile-dropdown-----------*/
+
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -21,6 +26,7 @@ import Select from "@mui/material/Select";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
 /* current-status-----------*/
+
 import CheckIcon from "@mui/icons-material/Check";
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 
@@ -232,9 +238,12 @@ const Profile = () => {
                               <p className="file">
                                 <PictureAsPdfIcon />
                                 {/* <a href="">{userList.attachments}</a> */}
+                                {/* <div style={{overflow:'scroll',height:600}}>
+            <PDFReader url="http://localhost:3000/test.pdf"/>
+           </div> */}
                               </p>
                             </div>
-                          </div>
+                          </div>  
                         </div>
                       </div>
                     </div>

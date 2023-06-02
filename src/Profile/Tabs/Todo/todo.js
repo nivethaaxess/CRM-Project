@@ -31,9 +31,9 @@ const Todo = () => {
 
   console.log(today);
 
-  const [progressDate, setProgressDate] = useState(today);
-   const [reviewDate, setReviewDate] = useState(today);
-   const [completedDate, setCompletedDate] = useState(today);
+  const [viewDate, setViewDate] = useState(today);
+  //  const [reviewDate, setReviewDate] = useState(today);
+  //  const [completedDate, setCompletedDate] = useState(today);
 
   //comment box
    const [comment, setComment] = useState("");
@@ -43,7 +43,7 @@ const Todo = () => {
   useEffect(() => {
     
     axios
-      .get(`http://89.116.30.81:8000/daily_task/status/?status=in progress`)
+      .get(`http://89.116.30.81:8000/daily_task/status/?status=in progress&start_date=${viewDate}`)
       .then((val) => {
         console.log("progerss", val.data);
         setProgressList(val.data);
@@ -52,29 +52,29 @@ const Todo = () => {
       .catch((err) => console.log("er", err));
       // http://89.116.30.81:8000/daily_task/status/?status=completed&start_date=2023-05-24&end_date=2023-05-30
       // setProgressList([{id: 5, title: 'This is my task', description: 'my descriptions', start_date: '2022-12-15', end_date: '2022-12-25', …}])
-  }, [progressDate]);
+  }, [viewDate]);
 
   useEffect(() => {
     
     axios
-    .get(`http://89.116.30.81:8000/daily_task/status/?status=review`)
+    .get(`http://89.116.30.81:8000/daily_task/status/?status=review&start_date=${viewDate}`)
       .then((val) => {
         console.log("review", val.data);
         setReviewList(val.data);
       })
       .catch((err) => console.log("er", err));
       
-  }, [reviewDate]);
+  }, [viewDate]);
 
   useEffect(() => {
     axios
-    .get(`http://89.116.30.81:8000/daily_task/status/?status=completed`)
+    .get(`http://89.116.30.81:8000/daily_task/status/?status=completed&start_date=${viewDate}`)
       .then((val) => {
         console.log("complted", val.data);
         setCompletedList(val.data);
       })
       .catch((err) => console.log("er", err));
-  }, [completedDate]);
+  }, [viewDate]);
 
   
   // date change---------->
@@ -87,7 +87,7 @@ const Todo = () => {
         console.log(`${getyear}-${getmonth}-${getdate}`)
 
     if (status === "progress") {
-      setProgressDate(`${getyear}-${getmonth}-${getdate}`);
+      setViewDate(`${getyear}-${getmonth}-${getdate}`);
     }
     // if (status === "review") {
     //   setReviewDate(`${getyear}-${getmonth}-${getdate}`);
