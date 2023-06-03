@@ -4,8 +4,15 @@ import Profile from './Profile/profile';
 // import './App.css';
 import Dashboard from './Dashboard/dashboard';
 import LoginPage from './Login/login';
+import Menu from './Dashboard/components/Menu';
+import Navbar from './Dashboard/components/Navbar';
 function App() {
   return (
+   <div>
+    <div>
+      <Navbar/>
+      <Menu/>
+    </div>
     <div>
     <Router>
       <Routes>
@@ -14,8 +21,11 @@ function App() {
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
-   <Dashboard />
+
+    {/* <Dashboard /> */}
+    
     </div>
+    </div>  
   );
 }
 
