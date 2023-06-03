@@ -1,4 +1,5 @@
-.section-border{border: solid 1px lightgray;
+.section-border{
+    border: solid 1px lightgray;
     border-radius:8px ;
     box-shadow: 0px 0px 9px 0px #d3d3d37a;
     height: 100%;
@@ -61,7 +62,7 @@
 /* profile-section- starts----------------*/
 
 .profile img{  
-    width:100%;
+    /* width:100%; */
     height: 270px;
     border-radius: 8px;
 }
@@ -73,15 +74,17 @@
 }
 
 .profile .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {padding: 0;}
-.user-details .profile-labels{ min-width: 150px;}
+.user-details .profile-labels{ min-width: 110px;}
 .user-details ul{
     padding-left: 0;
-    list-style: none;}
-    
-.user-details li{
-    padding: 3px 0;
+    list-style: none;
 }
-.user-details .profile-values li{font-weight: 500;}
+.user-details .profile-labels li{
+    font-size: 14px;
+}
+.user-details .profile-values li{
+    font-size: 14px;
+    font-weight: 500;}
 
 .attachments .file{
     color:#ee5252;

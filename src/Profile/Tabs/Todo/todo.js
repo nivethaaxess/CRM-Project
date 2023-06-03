@@ -5,7 +5,6 @@ import axios from "axios";
 //icons---
 import CommentIcon from "@mui/icons-material/Comment";
 import BuildIcon from "@mui/icons-material/Build";
-import PreviewIcon from "@mui/icons-material/Preview";
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -41,7 +40,7 @@ const Todo = () => {
 
   //task list--------------
   useEffect(() => {
-    
+    console.log(`http://89.116.30.81:8000/daily_task/status/?status=in progress&start_date=${viewDate}`)
     axios
       .get(`http://89.116.30.81:8000/daily_task/status/?status=in progress&start_date=${viewDate}`)
       .then((val) => {
@@ -127,15 +126,15 @@ const Todo = () => {
 
   return (
     <div  id="todo" className="position-relative pt-2" >
-      <div className="position-absolute top-0 start-0 ">
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+ 
+      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     // value={progressDate}
                     className = "datePicker"
                     onChange={(date) => handleDateChange(date, "progress")}
                   />
-        </LocalizationProvider>
-        </div>
+        </LocalizationProvider> */}
+    
       <div className="row justify-content-between" >
         {/* progress field --------------------------------*/}
 
@@ -210,6 +209,13 @@ const Todo = () => {
             </div>
             <>
           <Newtask />
+             <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    // value={progressDate}
+                    className = "datePicker"
+                    onChange={(date) => handleDateChange(date, "progress")}
+                  />
+        </LocalizationProvider>
       </>
           </div>
         </div>

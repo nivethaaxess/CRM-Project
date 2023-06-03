@@ -2,7 +2,7 @@ import React from "react";
 import "./profile.css";
 
 
-//helpp
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Tabs from "./Tabs/tabs";
@@ -33,6 +33,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 
 const Profile = () => {
+
   // const [username, setUserName] = useState("Nikandrav");
   const [userList, setUserList] = useState({});
 
@@ -199,11 +200,10 @@ const Profile = () => {
                                 <li>Specifications</li>
                               </ul>
                               <ul className="profile-values">
-                                {console.log(userList.name)}
+
                                 <li>{userList.name || ""}</li>
                                 <li>{userList.date_of_birth || ""}</li>
                                 <li>{userList.email_address || ""}</li>
-                                {console.log()}
                                 <li>{userList.job || ""}</li>
                                 <li>{userList.specification || ""}</li>
                               </ul>
@@ -297,22 +297,7 @@ const Profile = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="others d-flex">
-                          <div className="">
-                            <div className="person-logo">
-                              {othersList[2].name[0]}
-                            </div>
-                          </div>
-                          <div className=" person-status">
-                            <p>
-                              <b>{othersList[2].name}</b> status changed as{" "}
-                              <span>{othersList[2].available}</span>
-                            </p>
-                            <div>
-                              <QueryBuilderIcon /> {"10 mins ago"}
-                            </div>
-                          </div>
-                        </div>
+                
                       </div>
                     </div>
                   </div>

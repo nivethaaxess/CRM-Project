@@ -12,9 +12,15 @@ import TextField from "@mui/material/TextField";
 // date
 import dayjs from "dayjs";
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+
+
+//date
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 //add button
 import Button from "@mui/material/Button";
@@ -93,6 +99,7 @@ console.log(comment)
   };
 
   return (
+    <div id="newTask">
     <div className="align">
       <TriggerButton type="button" onClick={handleOpen}>
         Add Task
@@ -144,11 +151,22 @@ console.log(comment)
                     defaultValue={[dayjs(startDate), dayjs(endDate)]}
                     // value={ste}
                     onChange={(e) => getDate(e)}
+                    // className = "datePicker"
                     sx={{marginTop:1}}
                   />
                 </DemoItem>
               </DemoContainer>
             </LocalizationProvider>
+          
+        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                  id = "datepicker"
+                    // value={progressDate}
+                    className = "datePicker"
+                    // onChange={(date) => handleDateChange(date, "progress")}
+                  />
+        </LocalizationProvider> */}
+        
           </Box>
           <Stack direction="row" spacing={2}>
             <Button
@@ -162,6 +180,7 @@ console.log(comment)
           </Stack>
         </Box>
       </StyledModal>
+    </div>
     </div>
   );
 }

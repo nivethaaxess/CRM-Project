@@ -39,14 +39,14 @@
 
 #todo .datePicker{width: 50%;}
 #todo .datePicker > div {
-        /* flex-direction: row-reverse; */
+        
         border: none;
        
 }
 
 #todo .datePicker > div input{
     padding: 0;
-    /* text-align: center; */
+    
     font-size: 14px;
 }
 #todo .datePicker > div input{
