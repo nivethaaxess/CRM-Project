@@ -5,13 +5,17 @@ import axios from "axios";
 //icons---
 import CommentIcon from "@mui/icons-material/Comment";
 import BuildIcon from "@mui/icons-material/Build";
-import ReviewsIcon from '@mui/icons-material/Reviews';
+import ReviewsIcon from "@mui/icons-material/Reviews";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 //calender--
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
+//popper
+import Popper from "@mui/base/Popper";
+import { styled } from "@mui/system";
 
 // component starts--------------------------------/
 
@@ -35,39 +39,58 @@ const Todo = () => {
   //  const [completedDate, setCompletedDate] = useState(today);
 
   //comment box
-   const [comment, setComment] = useState("");
+  const [comment, setComment] = useState("");
   const [task, setTaskName] = useState("");
+
+  //popper
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popper" : undefined;
+  const StyledPopperDiv = styled("div")(
+    ({ theme }) => `
+    padding: 0.5rem;
+    border: 1px solid;
+    background-color: ${theme.palette.mode === "dark" ? "#121212" : "#fff"};
+    opacity: 1;
+    margin: 0.25rem 0px;
+  `
+  );
 
   //task list--------------
   useEffect(() => {
-    console.log(`http://89.116.30.81:8000/daily_task/status/?status=in progress&start_date=${viewDate}`)
     axios
-      .get(`http://89.116.30.81:8000/daily_task/status/?status=in progress&start_date=${viewDate}`)
+      .get(
+         `http://89.116.30.81:8000/daily_task/status/?status=in progress&start_date=${viewDate}&end_date=${viewDate}`
+      )
       .then((val) => {
         console.log("progerss", val.data);
         setProgressList(val.data);
-
       })
       .catch((err) => console.log("er", err));
-      // http://89.116.30.81:8000/daily_task/status/?status=completed&start_date=2023-05-24&end_date=2023-05-30
-      // setProgressList([{id: 5, title: 'This is my task', description: 'my descriptions', start_date: '2022-12-15', end_date: '2022-12-25', …}])
-  }, [viewDate]);
+    }, [viewDate]);
 
   useEffect(() => {
-    
     axios
-    .get(`http://89.116.30.81:8000/daily_task/status/?status=review&start_date=${viewDate}`)
+      .get(
+        `http://89.116.30.81:8000/daily_task/status/?status=review&start_date=${viewDate}&end_date=${viewDate}`
+      )
       .then((val) => {
         console.log("review", val.data);
         setReviewList(val.data);
       })
       .catch((err) => console.log("er", err));
-      
   }, [viewDate]);
 
   useEffect(() => {
     axios
-    .get(`http://89.116.30.81:8000/daily_task/status/?status=completed&start_date=${viewDate}`)
+      .get(
+        `http://89.116.30.81:8000/daily_task/status/?status=completed&start_date=${viewDate}&end_date=${viewDate}`
+      )
       .then((val) => {
         console.log("complted", val.data);
         setCompletedList(val.data);
@@ -75,25 +98,14 @@ const Todo = () => {
       .catch((err) => console.log("er", err));
   }, [viewDate]);
 
-  
   // date change---------->
 
-  const handleDateChange = (date, status) => {
+  const handleDateChange = (date) => {
     let getdate = date.$D < 10 ? "0" + date.$D : date.$D;
     let getmonth = date.$M + 1 < 10 ? "0" + (date.$M + 1) : date.$M + 1;
     let getyear = date.$y;
-
-        console.log(`${getyear}-${getmonth}-${getdate}`)
-
-    if (status === "progress") {
-      setViewDate(`${getyear}-${getmonth}-${getdate}`);
-    }
-    // if (status === "review") {
-    //   setReviewDate(`${getyear}-${getmonth}-${getdate}`);
-    // }
-    // if (status === "completed") {
-    //   setCompletedDate(`${getyear}-${getmonth}-${getdate}`);
-    // }
+    console.log(`${getyear}-${getmonth}-${getdate}`);
+      setViewDate(`${getyear}-${getmonth}-${getdate}`);   
   };
 
   const toggleComment = (id, classname, i) => {
@@ -102,64 +114,58 @@ const Todo = () => {
     element.classList.toggle("d-none");
   };
 
-  const SubmitComment = (id, tagname, i,taskId) => {
+  const SubmitComment = (id, tagname, i, taskId) => {
     let idElement = document.getElementById(id);
     let element = idElement.getElementsByTagName(tagname)[i];
     let value = element.value;
 
-    console.log(taskId,value)
+    console.log(taskId, value);
     element.value = "";
-      const data = {
-        task_id : taskId,
-        comment : value,
-      }
-      axios
-        .post("http://89.116.30.81:8000/task/comments/", data )
-        .then((response) => {
-          setComment(response.data);
-          console.log("entered comment")
-
-        })
-        .catch((err) => console.log("er", err));
-  
+    const data = {
+      task_id: taskId,
+      comment: value,
+    };
+    axios
+      .post("http://89.116.30.81:8000/task/comments/", data)
+      .then((response) => {
+        setComment(response.data);
+        console.log("entered comment");
+      })
+      .catch((err) => console.log("er", err));
   };
 
   return (
-    <div  id="todo" className="position-relative pt-2" >
- 
-      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    // value={progressDate}
-                    className = "datePicker"
-                    onChange={(date) => handleDateChange(date, "progress")}
-                  />
-        </LocalizationProvider> */}
-    
-      <div className="row justify-content-between" >
+    <div id="todo" className="position-relative pt-2">
+      <div className="row justify-content-between">
         {/* progress field --------------------------------*/}
 
         <div className="col-lg-4">
-          <div style={{}} className="p-2">
+          <div >
             <div className="progress-Header d-flex justify-content-between align-items-flex-start header">
               <h5 className="text-center">
-              <BuildIcon style={{ color: "#e4b33b", fontSize: "20px",marginRight:"6px" }} />
-                Progress{" "}         
+                <BuildIcon
+                  style={{
+                    color: "#e4b33b",
+                    fontSize: "20px",
+                    marginRight: "6px",
+                  }}
+                />
+                Progress{" "}
               </h5>
-              <MoreVertIcon style={{color:"#787c7f"}}/>         
+              {/* <MoreVertIcon style={{color:"#787c7f"}}/>          */}
             </div>
             <div className="progress-body body" id="progress-body">
               {progressList.map((a, i) => {
                 return (
-                  <div className="progressItem-Card card mt-2 mb-2">
-                    <div className="progressItem-header d-flex justify-content-between ">
-                      <h5>{a.title}</h5>      
-                    
+                  <div className="progressItem-Card card mb-2">
+                    <div className="progressItem-header">
+                       <span>
+                          {a.start_date}
+                        </span> 
+                      <h5>{a.title}</h5>
                     </div>
                     <div className="progressItem-body">
                       <p>{a.description}</p>
-                      <p>
-                        <small>{a.start_date} to {a.end_date}</small>
-                      </p>
                     </div>
                     <div className="progressItem-footer text-justify">
                       <div
@@ -167,12 +173,14 @@ const Todo = () => {
                           toggleComment("progress-body", "view-comments", i)
                         }
                       >
-                        <CommentIcon style={{color:"#1976d2",fontSize: "16px"}}/>
+                        <CommentIcon
+                          style={{ color: "#1976d2", fontSize: "16px" }}
+                        />
                       </div>
 
                       <div className="view-comments d-none ">
                         {a.comments.length > 0 ? (
-                          a.comments.map((b,) => {
+                          a.comments.map((b) => {
                             return (
                               <div>
                                 <p style={{ margin: 0 }}>{b.comment}</p>
@@ -195,7 +203,12 @@ const Todo = () => {
                           <button
                             type="button"
                             onClick={() =>
-                              SubmitComment("progress-body", "textarea", i, a.id)
+                              SubmitComment(
+                                "progress-body",
+                                "textarea",
+                                i,
+                                a.id
+                              )
                             }
                           >
                             OK
@@ -207,42 +220,37 @@ const Todo = () => {
                 );
               })}
             </div>
-            <>
-          <Newtask />
-             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    // value={progressDate}
-                    className = "datePicker"
-                    onChange={(date) => handleDateChange(date, "progress")}
-                  />
-        </LocalizationProvider>
-      </>
           </div>
         </div>
-                        {/* review field----------------------------------- */}
-
+        {/* review field----------------------------------- */}
 
         <div className="col-lg-4">
-          <div style={{}} className="p-2">
+          <div>
             <div className="review-Header d-flex justify-content-between align-items-flex-start header">
               <h5 className="text-center">
-              <ReviewsIcon style={{ color: "#aa34ed", fontSize: "20px",marginRight:"6px" }} />
+                <ReviewsIcon
+                  style={{
+                    color: "#aa34ed",
+                    fontSize: "20px",
+                    marginRight: "6px",
+                  }}
+                />
                 Review{" "}
               </h5>
-              <MoreVertIcon style={{color:""}}/>
+              {/* <MoreVertIcon style={{color:""}}/> */}
             </div>
             <div className="review-body body" id="review-body">
               {reviewList.map((a, i) => {
                 return (
-                  <div className="reviewItem-Card card mt-2 mb-2">
-                    <div className="reviewItem-header d-flex justify-content-between ">
-                      <h5>{a.title}</h5>           
+                  <div className="reviewItem-Card card  ">
+                    <div className="reviewItem-header">
+                      <span>
+                          {a.start_date}
+                        </span> 
+                      <h5>{a.title}</h5>
                     </div>
                     <div className="reviewItem-body">
                       <p>{a.description}</p>
-                      <p>
-                        <small>{a.start_date} to {a.end_date}</small>
-                      </p>
                     </div>
                     <div className="reviewItem-footer text-justify">
                       <div
@@ -250,7 +258,9 @@ const Todo = () => {
                           toggleComment("review-body", "view-comments", i, a.id)
                         }
                       >
-                        <CommentIcon style={{color:"#1976d2",fontSize: "16px"}}/>
+                        <CommentIcon
+                          style={{ color: "#1976d2", fontSize: "16px" }}
+                        />
                       </div>
 
                       <div className="view-comments d-none ">
@@ -297,15 +307,44 @@ const Todo = () => {
         {/* completed field starts-------------------------------- */}
 
         <div className="col-lg-4">
-          <div style={{}} className="p-2">
+          <div>
             <div className="completed-Header d-flex justify-content-between align-items-flex-start header">
               <h5 className="text-center">
-              <TaskAltIcon style={{ color: "green", fontSize: "20px",marginRight:"6px" }} />
+                <TaskAltIcon
+                  style={{
+                    color: "green",
+                    fontSize: "20px",
+                    marginRight: "6px",
+                  }}
+                />
                 Done{" "}
-                
               </h5>
-              <MoreVertIcon style={{color:"#787c7f"}}/>
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}  >
+              
+              <div id="taskFilter">
+                <button
+                  aria-describedby={id}
+                  type="button"
+                  onClick={handleClick}
+
+                >
+                  <MoreVertIcon style={{ color: "#787c7f" }} />
+                </button>
+                <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
+                  <StyledPopperDiv>        
+                   <div>Sort by</div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}  >
+                    
+                  <DatePicker
+                    //  value={viewDate}
+                    className = "datePicker"
+                    onChange={(date) => handleDateChange(date)}></DatePicker>
+                    
+                  
+                </LocalizationProvider>
+                    </StyledPopperDiv>
+                </Popper>
+              </div>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}  >
                   <DatePicker
                     // value={completedDate}
                     className = "datePicker"
@@ -318,15 +357,19 @@ const Todo = () => {
             <div className="completed-body body" id="completed-body">
               {completedList.map((a, i) => {
                 return (
-                  <div className="completedItem-Card card mt-2 mb-2">
-                    <div className="completedItem-header d-flex justify-content-between ">
+                  <div className="completedItem-Card card mb-2">
+                    <div className="completedItem-header">
+                        <span>
+                          {a.start_date}
+                        </span> 
                       <h5>{a.title}</h5>
-                      
                     </div>
                     <div className="completedItem-body">
                       <p>{a.description}</p>
                       <p>
-                        <small>{a.start_date} to {a.end_date}</small>
+                        {/* <small>
+                          {a.start_date} to {a.end_date}
+                        </small> */}
                       </p>
                     </div>
                     <div className="completedItem-footer text-justify">
@@ -335,7 +378,9 @@ const Todo = () => {
                           toggleComment("completed-body", "view-comments", i)
                         }
                       >
-                        <CommentIcon style={{color:"#1976d2",fontSize: "16px"}}/>
+                        <CommentIcon
+                          style={{ color: "#1976d2", fontSize: "16px" }}
+                        />
                       </div>
 
                       <div className="view-comments d-none ">
@@ -363,7 +408,12 @@ const Todo = () => {
                           <button
                             type="button"
                             onClick={() =>
-                              SubmitComment("completed-body", "textarea", i, a.id)
+                              SubmitComment(
+                                "completed-body",
+                                "textarea",
+                                i,
+                                a.id
+                              )
                             }
                             className="text-end"
                           >
@@ -379,7 +429,10 @@ const Todo = () => {
           </div>
         </div>
       </div>
-
+      <>
+      
+              <Newtask />
+       </>
     </div>
   );
 };
