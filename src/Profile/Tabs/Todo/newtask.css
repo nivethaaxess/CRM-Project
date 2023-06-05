@@ -1,3 +1,7 @@
+
+#newTask .align{
+    margin: 10px;
+}
 #addtaskpopup{
     top: unset;
     left: 5%;

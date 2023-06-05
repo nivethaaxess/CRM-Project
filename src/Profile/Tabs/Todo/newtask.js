@@ -98,6 +98,7 @@ console.log(comment)
       .catch((err) => console.log("er", err));
   };
 
+
   return (
     <div id="newTask">
     <div className="align">
@@ -181,6 +182,7 @@ console.log(comment)
         </Box>
       </StyledModal>
     </div>
+
     </div>
   );
 }
