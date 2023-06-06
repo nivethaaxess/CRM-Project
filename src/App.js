@@ -14,6 +14,7 @@ import { Box } from '@mui/joy';
  
 function App() {
   return (
+<<<<<<< HEAD
     <div >
       <div >
         {/* <Dashboard /> */}
@@ -36,6 +37,25 @@ function App() {
       </div>
       </div> 
       
+=======
+   <div>
+    <div>
+      <Navbar/>
+      <Menu/>
+    </div>
+    <div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+          <Route path="/navbar" element={<Dashboard />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </Router>
+
+    {/* <Dashboard /> */}
+    
+    </div>
+>>>>>>> c9713fa2d8da2fca4fa2d19f5adc41226d6011fd
     </div>  
   );
 }

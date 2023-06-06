@@ -1,8 +1,35 @@
 #todo{
     background-color: #eaf0f7;
 }
+
+
+#todo ::-webkit-scrollbar {
+    width:5px;
+  }
+  #todo ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #1976d2; 
+    border-radius: 1px;
+  }
+   
+  /* Handle */
+  #todo  ::-webkit-scrollbar-thumb {
+    background: rgb(89, 88, 88); 
+    border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  #todo ::-webkit-scrollbar-thumb:hover {
+    background:blue; 
+  }
+
+
+
+#todo-list{
+    max-height: 300px;
+    overflow-y: auto;
+}
 #todo .header{
-    padding:  10px 0;
+    padding:  10px 10px;
     background-color: #eaf0f7;
     font-family:Arial, Helvetica, sans-serif;
 }
@@ -16,11 +43,15 @@
 
 #todo .card{
     background-color: white;
-    padding: 15px;
+    padding: 10px;
     border: none;  
     box-shadow: -1px -1px 22px -13px #6c757d;
-    margin:0 10px;
+    margin: 10px;
     border-radius: 8px;
+}
+#todo .card span{ 
+    font-size:9px;
+    color: #6f6f6f;
 }
 #todo .card h5{
     font-family:"open sans ,sans-serif";
@@ -35,29 +66,58 @@
     font-size: 14px;
 }
 
+/* taskFilter */
+#taskFilter button{
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+
+}
+#taskFilter button:hover{
+background-color:#6f6f6f29;
+
+}
+
 /* datePicker------------- */
 
-#todo .datePicker{width: 50%;}
-#todo .datePicker > div {
-        /* flex-direction: row-reverse; */
+#simple-popper .datePicker{width: 50%;}
+ #simple-popper .datePicker > div {
+       /* flex-direction: row-reverse; */
         border: none;
        
 }
 
-#todo .datePicker > div input{
+#simple-popper > div{
+    font-size: 14px;
+    font-weight: 600;
+    color:#6f6f6f;
+    border: none;
+    min-width: 100px;
+    box-shadow: 0px 8px 10px 1px rgba(0,0,0,.14), 0px 3px 14px 2px rgba(0,0,0,.12), 0px 5px 5px -3px rgba(0,0,0,.2);
+}
+#simple-poppero .datePicker > div input{
     padding: 0;
-    /* text-align: center; */
+     /* text-align: center; */
     font-size: 14px;
 }
-#todo .datePicker > div input{
+#simple-popper .datePicker > div input{
     display: none;
 }
-#todo .datePicker > div div{
+#simple-popper .datePicker > div div{
     height: auto;
 }
-#todo .datePicker > div fieldset{
+#simple-popper .datePicker > div div button::before{
+    content: "Date";
+    font-size: 14px;
+}
+#simple-popper .datePicker > div div button svg{
+    font-size: 17px;
+}
+#simple-popper .datePicker > div fieldset{
     border: none;
 }
+
+
 
 .addComments button{
     border: 1px solid #367ef5;

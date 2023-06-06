@@ -2,7 +2,7 @@ import React from "react";
 import "./profile.css";
 
 
-//helpp
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Tabs from "./Tabs/tabs";
@@ -10,11 +10,16 @@ import RightTabs from "./RightTab/rightTab";
 import InputIcon from "@mui/icons-material/Input";
 import SearchIcon from "@mui/icons-material/Search";
 import RatingValue from "./Rating/rating";
+//pdf reader---------
+
+import { PDFReader } from 'reactjs-pdf-reader';
+
 
 // header
 import Avatar from "@mui/material/Avatar";
 
 /* profile-dropdown-----------*/
+
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -23,10 +28,12 @@ import Select from "@mui/material/Select";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
 /* current-status-----------*/
+
 import CheckIcon from "@mui/icons-material/Check";
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 
 const Profile = () => {
+
   // const [username, setUserName] = useState("Nikandrav");
   const [userList, setUserList] = useState({});
 
@@ -193,11 +200,10 @@ const Profile = () => {
                                 <li>Specifications</li>
                               </ul>
                               <ul className="profile-values">
-                                {console.log(userList.name)}
+
                                 <li>{userList.name || ""}</li>
                                 <li>{userList.date_of_birth || ""}</li>
                                 <li>{userList.email_address || ""}</li>
-                                {console.log()}
                                 <li>{userList.job || ""}</li>
                                 <li>{userList.specification || ""}</li>
                               </ul>
@@ -234,9 +240,12 @@ const Profile = () => {
                               <p className="file">
                                 <PictureAsPdfIcon />
                                 {/* <a href="">{userList.attachments}</a> */}
+                                {/* <div style={{overflow:'scroll',height:600}}>
+            <PDFReader url="http://localhost:3000/test.pdf"/>
+           </div> */}
                               </p>
                             </div>
-                          </div>
+                          </div>  
                         </div>
                       </div>
                     </div>
@@ -288,22 +297,7 @@ const Profile = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="others d-flex">
-                          <div className="">
-                            <div className="person-logo">
-                              {othersList[2].name[0]}
-                            </div>
-                          </div>
-                          <div className=" person-status">
-                            <p>
-                              <b>{othersList[2].name}</b> status changed as{" "}
-                              <span>{othersList[2].available}</span>
-                            </p>
-                            <div>
-                              <QueryBuilderIcon /> {"10 mins ago"}
-                            </div>
-                          </div>
-                        </div>
+                
                       </div>
                     </div>
                   </div>

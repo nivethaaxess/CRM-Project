@@ -397,16 +397,18 @@ const handleTimeChange = (index, e) => {
 
     const data = {
       task: input,
-      hour: hour,
+      hours: hour,
       minutes: minutes,
       period: period,
       findDate: findDate,
 
     }
-
-    axios.post('http://192.168.0.126:8000/comment/insert/',{data}).then((response) => {
+  
+    axios.post('http://89.116.30.81:8000/comment/insert/',{data})
+    .then((response) => {
       console.log('resss',response);
-    }).catch(err=>console.log('err',err))
+    })
+    .catch(err=>console.log('err',err))
 
     console.log('data===>>>>', data)
     // console.log('year===>>>>',year)

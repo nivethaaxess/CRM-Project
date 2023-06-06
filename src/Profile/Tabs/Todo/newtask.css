@@ -1,3 +1,7 @@
+
+#newTask .align{
+    margin: 10px;
+}
 #addtaskpopup{
     top: unset;
     left: 5%;
@@ -28,4 +32,29 @@
 }
 #addtaskpopup .css-9tj150-MuiButton-endIcon>*:nth-of-type(1) {
     font-size: 14px;
+}
+
+
+
+/* date */
+#addtaskpopup .datePicker{width: 50%;}
+#addtaskpopup .datePicker > div {
+        /* flex-direction: row-reverse; */
+        border: none;
+       
+}
+
+#addtaskpopup .datePicker > div input{
+    padding: 0;
+    /* text-align: center; */
+    font-size: 14px;
+}
+#addtaskpopup .datePicker > div input{
+    display: none;
+}
+#addtaskpopup .datePicker > div div{
+    height: auto;
+}
+#addtaskpopup .datePicker > div fieldset{
+    border: none;
 }
