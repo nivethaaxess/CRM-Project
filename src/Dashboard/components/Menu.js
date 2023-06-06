@@ -23,9 +23,12 @@ import TabSharpIcon from '@mui/icons-material/TabSharp';
 import AppsSharpIcon from '@mui/icons-material/AppsSharp';
 import PermMediaSharpIcon from '@mui/icons-material/PermMediaSharp';
 import Diversity3SharpIcon from '@mui/icons-material/Diversity3Sharp';
+import Content from './Content'
 const Menu=()=> {
 
-    // const navigate =useNavigate();
+    const [page,Setpage]= useState(0);
+
+  // const navigate = useNavigate();
   
     const buttonStyle = {
         backgroundColor: '#3c5dd0',
@@ -34,19 +37,34 @@ const Menu=()=> {
         width: '200px',
       };
 
-    const handleClick = () => {
+    // const handleClick = () => {
         
-        //  navigate('/Dashboard1');
-        //   setClose(!close);
-        //   toggleDrawer(anchor, true);
-        };
+    //     //  navigate('/dashboard1');  
+    //     //   setClose(!close);
+    //     //   toggleDrawer(anchor, true);
+    //     };
+
+        // const check = () => {
+        
+        //   //  navigate('/dashboard1');  
+        //   //   setClose(!close);
+        //   //   toggleDrawer(anchor, true);
+        //   };
+
+          // const final = () =>{
+          //   navigate('/check');
+          //   console.log('dinesh')
+          // }
+
+        
 
 
 
   return (
+    <div>
       <Box backgroundColor='#032d7c'sx={{height:'100vh',width:'230px'}}>
         <Button
-              onClick={handleClick()}
+              onClick={()=>Setpage("Dashboard")}
               style={buttonStyle}
               sx={{
                 marginLeft: 1,
@@ -62,7 +80,7 @@ const Menu=()=> {
             <User />
             <Box sx={{color:'white',marginTop:3,display:'flex',gap:2}}>
            <TabSharpIcon sx={{marginLeft:2}} />
-             <Typography>Documents</Typography>
+             <Typography >Documents</Typography>
              </Box>
              <Box sx={{color:'white',marginTop:3,display:'flex',gap:2}} >
              <PermMediaSharpIcon sx={{marginLeft:2}}/>
@@ -76,14 +94,13 @@ const Menu=()=> {
              <Diversity3SharpIcon sx={{marginLeft:2}}/>
              <Typography>Group</Typography>
              </Box>
+           </Box>
+            <div>
+              {page ==='Dashboard' && <div>hello is this world</div>}
+              </div>
+           </div>
 
 
-
-           
-
-
-
-      </Box>
   )
 }
 

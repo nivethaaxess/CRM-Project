@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
   const [close, setClose] = useState('');
-  const navigate = useNavigate();
+ // const navigate = useNavigate();
 
   const buttonStyle = {
     backgroundColor: '#3c5dd0',
@@ -31,13 +31,13 @@ export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
     width: '200px',
   };
 
-  const handleClick = (anchor) => {
-    return () => {
-      navigate('/dashboard');
-      setClose(!close);
-      toggleDrawer(anchor, true);
-    };
-  };
+  // const handleClick = (anchor) => {
+  //   return () => {
+  //     navigate('/dashboard');
+  //     setClose(!close);
+  //     toggleDrawer(anchor, true);
+  //   };
+  // };
 
   const list = (anchor) => (
     <Container sx={{ height: '200px' }}>
@@ -50,7 +50,7 @@ export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
           <Box onClick={toggleDrawer(anchor, false)}
         onKeyDown={toggleDrawer(anchor, false)}>
           
-            <Button
+            {/* <Button
               onClick={handleClick(anchor)}
               style={buttonStyle}
               sx={{
@@ -63,7 +63,7 @@ export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
               endIcon={<ArrowDropDownIcon sx={{ marginLeft: 8 }} />}
             >
               Dashboard
-            </Button>
+            </Button> */}
          
           </Box>
           <User toggleDrawer={toggleDrawer}/>
