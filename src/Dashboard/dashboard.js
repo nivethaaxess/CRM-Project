@@ -13,35 +13,16 @@ import User1 from '../pages/User1'
 function Dashboard()
 {
   return (
-<<<<<<< HEAD
+
     <div>
-     <Box >
-        <Navbar />
+     {/* <Box >
+        {/* <Navbr />
     
        <Stack direction="row" >
           <Menu />
           <Content />  
        </Stack>
-=======
-    <Router>
-    <Box>
-       {/* <Navbar /> */}
-       <Routes>
-        {/* <Route path = '/' element={}></Route> */}
-        {/* <Route path= '/dashboard' element={<Dashboard1/>}></Route>
-        <Route path= '/User1' element ={<User1/>}></Route> */}
-       </Routes>
-
-             {/* <Sidebar1/> */}
-          {/* <Menu />  */}
-          {/* <Dashboard1/> */}
-
-          {/* <Content /> */}
-          {/* <Sidebar /> */}
-
->>>>>>> c9713fa2d8da2fca4fa2d19f5adc41226d6011fd
-    </Box>
-    
+    </Box> */}
     </div>
   )
 }
