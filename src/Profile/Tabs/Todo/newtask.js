@@ -80,9 +80,10 @@ console.log(comment)
   };
 
   const addNewTask = () => {
+    if(title.trim() === ""||description.trim() === "" ){ return}
     const data = {
-      title: title,
-      description: description,
+      title: title.trim(),
+      description: description.trim(),
       start_date: startDate,
       end_date: endDate,
       status : "in progress",

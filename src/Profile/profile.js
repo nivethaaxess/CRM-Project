@@ -1,8 +1,6 @@
 import React from "react";
 import "./profile.css";
 
-
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Tabs from "./Tabs/tabs";
@@ -12,8 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import RatingValue from "./Rating/rating";
 //pdf reader---------
 
-import { PDFReader } from 'reactjs-pdf-reader';
-
+import { PDFReader } from "reactjs-pdf-reader";
 
 // header
 import Avatar from "@mui/material/Avatar";
@@ -33,40 +30,20 @@ import CheckIcon from "@mui/icons-material/Check";
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 
 const Profile = () => {
-
-  // const [username, setUserName] = useState("Nikandrav");
   const [userList, setUserList] = useState({});
-
-  // const obj = userList.length > 0 ? true : " ";
-  //   name: "Nikil",
-  //   role: "Remote UI/UX Designers(Mobile/Web)",
-  //   age: 42,
-  //   dateOfBirth: "17/05/1884",
-  //   email: "nikil.1882@gamil.com",
-  //   jobsDone: 40,
-  //   specification: "UI/UX",
-  //   joBSuccess: 3,
-  //   totalEarned: "50",
-  //   hoursRate: "$130",
-  //   hoursWorked: 2213,
-  //   skills: "ui/ux,products",
-  //   attachments: "",
 
   useEffect(() => {
     console.log("useeffect");
     axios
-      .get("http://89.116.30.81:8000/myprofile/")
-  
+      .get(`http://89.116.30.81:8000/myprofile/${1}/`)
       .then((val) => {
         console.log("val", val.data);
         setUserList(val.data);
       })
       .catch((err) => console.log("er", err));
-    //  console.log("res", han.data);
+    
   }, []);
-
-  console.log(userList);
-
+  
   const othersList = [
     { name: "Radha krishna", available: "interview" },
     { name: "Hasin mohamad", available: "yes" },
@@ -83,7 +60,7 @@ const Profile = () => {
 
   return (
     <div>
-      <div id = "profile" className="profile-page ">
+      <div id="profile" className="profile-page ">
         <div className="container">
           <header className="border-bottom">
             <div className="d-flex align-items-center justify-content-between">
@@ -122,13 +99,10 @@ const Profile = () => {
                   ></input>
                 </div>
                 <div className="d-flex header-name align-items-center justify-content-between">
-                  {Object.keys(userList).length > 0 ? (
-                    <>
-                      <Avatar>{userList.name[0]}</Avatar>
-                      <p>{userList?.name}</p>
-                    </>
-                  ) : null}
-
+                  <>
+                    {/* <Avatar>{userList.name[0]}</Avatar>  */}
+                    <p>{userList.name}</p>
+                  </>
                   <InputIcon />
                 </div>
               </div>
@@ -146,7 +120,7 @@ const Profile = () => {
                   <p className="slash">
                     <b>Designers</b>
                   </p>
-                  <p>{userList?.name}</p>
+                  <p>{userList.name}</p>
                 </div>
               </div>
             </div>
@@ -200,7 +174,6 @@ const Profile = () => {
                                 <li>Specifications</li>
                               </ul>
                               <ul className="profile-values">
-
                                 <li>{userList.name || ""}</li>
                                 <li>{userList.date_of_birth || ""}</li>
                                 <li>{userList.email_address || ""}</li>
@@ -239,13 +212,13 @@ const Profile = () => {
                               <p className="profile-labels">Attachments</p>
                               <p className="file">
                                 <PictureAsPdfIcon />
-                                {/* <a href="">{userList.attachments}</a> */}
-                                {/* <div style={{overflow:'scroll',height:600}}>
-            <PDFReader url="http://localhost:3000/test.pdf"/>
-           </div> */}
+                                {/* <a href="">{userList.attachments}</a>
+                                <div style={{overflow:'scroll',height:600}}>
+                                   <PDFReader url="http://localhost:3000/test.pdf"/>
+                                 </div> */}
                               </p>
                             </div>
-                          </div>  
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -297,7 +270,6 @@ const Profile = () => {
                             </div>
                           </div>
                         </div>
-                
                       </div>
                     </div>
                   </div>
@@ -309,13 +281,13 @@ const Profile = () => {
               <div className="container">
                 <div className="row">
                   <div className="col-lg-9">
-                    <Box sx={{width:'100%'}}>
-                     <Tabs  />
+                    <Box sx={{ width: "100%" }}>
+                      <Tabs />
                     </Box>
                   </div>
                   <div className="col-lg-3">
                     <div className="p-3">
-                              <RightTabs/>
+                      <RightTabs />
                     </div>
                   </div>
                 </div>

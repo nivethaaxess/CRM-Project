@@ -16,7 +16,10 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 //popper
 import Popper from "@mui/base/Popper";
 import { styled } from "@mui/system";
-
+//popover
+import Popover from "@mui/material/Popover";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 // component starts--------------------------------/
 
 const Todo = () => {
@@ -43,36 +46,51 @@ const Todo = () => {
   const [task, setTaskName] = useState("");
 
   //popper
+  // const [anchorEl, setAnchorEl] = React.useState(null);
+
+  // const handleClick = (event) => {
+  //   console.log(event.currentTarget);
+  //   setAnchorEl(anchorEl ? null : event.currentTarget);
+  // };
+
+  // const open = Boolean(anchorEl);
+  // const id = open ? "simple-popper" : undefined;
+  // const StyledPopperDiv = styled("div")(
+  //   ({ theme }) => `
+  //   padding: 0.5rem;
+  //   border: 1px solid;
+  //   background-color: ${theme.palette.mode === "dark" ? "#121212" : "#fff"};
+  //   opacity: 1;
+  //   margin: 0.25rem 0px;
+  // `
+  // );
+
+  //popover
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popper" : undefined;
-  const StyledPopperDiv = styled("div")(
-    ({ theme }) => `
-    padding: 0.5rem;
-    border: 1px solid;
-    background-color: ${theme.palette.mode === "dark" ? "#121212" : "#fff"};
-    opacity: 1;
-    margin: 0.25rem 0px;
-  `
-  );
+  const id = open ? "simple-popover" : undefined;
 
   //task list--------------
   useEffect(() => {
     axios
       .get(
-         `http://89.116.30.81:8000/daily_task/status/?status=in progress&start_date=${viewDate}&end_date=${viewDate}`
+        `http://89.116.30.81:8000/daily_task/status/?status=in progress&start_date=${viewDate}&end_date=${viewDate}`
       )
       .then((val) => {
         console.log("progerss", val.data);
         setProgressList(val.data);
       })
       .catch((err) => console.log("er", err));
-    }, [viewDate]);
+  }, [viewDate]);
 
   useEffect(() => {
     axios
@@ -92,7 +110,7 @@ const Todo = () => {
         `http://89.116.30.81:8000/daily_task/status/?status=completed&start_date=${viewDate}&end_date=${viewDate}`
       )
       .then((val) => {
-        console.log("complted", val.data);
+        console.log("completed", val.data);
         setCompletedList(val.data);
       })
       .catch((err) => console.log("er", err));
@@ -105,7 +123,7 @@ const Todo = () => {
     let getmonth = date.$M + 1 < 10 ? "0" + (date.$M + 1) : date.$M + 1;
     let getyear = date.$y;
     console.log(`${getyear}-${getmonth}-${getdate}`);
-      setViewDate(`${getyear}-${getmonth}-${getdate}`);   
+    setViewDate(`${getyear}-${getmonth}-${getdate}`);
   };
 
   const toggleComment = (id, classname, i) => {
@@ -135,12 +153,45 @@ const Todo = () => {
   };
 
   return (
-    <div id="todo" className="position-relative pt-2">
-      <div className="row justify-content-between" id="todo-list" >
+    <div id="todo" className="position-relative py-2">
+      <div
+        className="row justify-content-between position-relative"
+        id="todo-list"
+      >
+        <div title="sort" id="taskFilter" className="position-absolute">
+          <Button aria-describedby={id} onClick={handleClick}>
+            <MoreVertIcon style={{ color: "#787c7f" }} />
+          </Button>
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <Typography sx={{ p: 2 }}>
+              <div>Sort by</div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  //  value={viewDate}
+                  className="datePicker"
+                  onChange={(date) => handleDateChange(date)}
+                ></DatePicker>
+              </LocalizationProvider>
+            </Typography>
+          </Popover>
+        </div>
         {/* progress field --------------------------------*/}
 
         <div className="col-lg-4">
-          <div >
+          <div>
             <div className="progress-Header d-flex justify-content-between align-items-flex-start header">
               <h5 className="text-center">
                 <BuildIcon
@@ -155,70 +206,76 @@ const Todo = () => {
               {/* <MoreVertIcon style={{color:"#787c7f"}}/>          */}
             </div>
             <div className="progress-body body" id="progress-body">
-              {progressList.map((a, i) => {
-                return (
-                  <div className="progressItem-Card card mb-2">
-                    <div className="progressItem-header">
-                       <span>
-                          {a.start_date}
-                        </span> 
-                      <h5>{a.title}</h5>
-                    </div>
-                    <div className="progressItem-body">
-                      <p>{a.description}</p>
-                    </div>
-                    <div className="progressItem-footer text-justify">
-                      <div
-                        onClick={() =>
-                          toggleComment("progress-body", "view-comments", i)
-                        }
-                      >
-                        <CommentIcon
-                          style={{ color: "#1976d2", fontSize: "16px" }}
-                        />
+              {progressList.length < 1 ? (
+                <div className="card">
+                  <p className="noTask">No task to view in progress</p>
+                </div>
+              ) : (
+                progressList.map((a, i) => {
+                  return (
+                    <div className="progressItem-Card card mb-2">
+                      <div className="progressItem-header">
+                        <span>{a.end_date}</span>
+                        <h5>{a.title}</h5>
                       </div>
+                      <div className="progressItem-body">
+                        <p>{a.description}</p>
+                      </div>
+                      <div className="progressItem-footer text-justify">
+                        <div
+                          onClick={() =>
+                            toggleComment("progress-body", "view-comments", i)
+                          }
+                        >
+                          <CommentIcon
+                            style={{ color: "#1976d2", fontSize: "16px" }}
+                          />
+                        </div>
 
-                      <div className="view-comments d-none ">
-                        {a.comments.length > 0 ? (
-                          a.comments.map((b) => {
-                            return (
-                              <div>
-                                <p style={{ margin: 0 }}>{b.comment}</p>
-                                <i style={{ fontSize: "12px", color: "gray" }}>
-                                  {b.name} <span>{b.todate}</span>
-                                </i>
-                              </div>
-                            );
-                          })
-                        ) : (
-                          <p>No comments</p>
-                        )}
-                        <div class="form-floating addComments">
-                          <textarea
-                            class="form-control"
-                            placeholder="Leave a comment here"
-                            // id="floatingTextarea2"
-                          ></textarea>
-                          <label for="floatingTextarea2">Comments</label>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              SubmitComment(
-                                "progress-body",
-                                "textarea",
-                                i,
-                                a.id
-                              )
-                            }
-                          >
-                            OK
-                          </button>
+                        <div className="view-comments d-none ">
+                          {a.comments.length > 0 ? (
+                            a.comments.map((b) => {
+                              return (
+                                <div>
+                                  <p style={{ margin: 0 }}>{b.comment}</p>
+                                  <i
+                                    style={{ fontSize: "12px", color: "gray" }}
+                                  >
+                                    {b.name} <span>{b.todate}</span>
+                                  </i>
+                                </div>
+                              );
+                            })
+                          ) : (
+                            <p>No comments</p>
+                          )}
+                          <div class="form-floating addComments">
+                            <textarea
+                              class="form-control"
+                              placeholder="Leave a comment here"
+                              // id="floatingTextarea2"
+                            ></textarea>
+                            <label for="floatingTextarea2">Comments</label>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                SubmitComment(
+                                  "progress-body",
+                                  "textarea",
+                                  i,
+                                  a.id
+                                )
+                              }
+                            >
+                              OK
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           </div>
         </div>
@@ -240,66 +297,77 @@ const Todo = () => {
               {/* <MoreVertIcon style={{color:""}}/> */}
             </div>
             <div className="review-body body" id="review-body">
-            {reviewList.map((a, i) => {
-                return (
-                  <div className="reviewItem-Card card  ">
-                    <div className="reviewItem-header">
-                      <span>
-                          {a.start_date}
-                        </span> 
-                      <h5>{a.title}</h5>
-                    </div>
-                    <div className="reviewItem-body">
-                      <p>{a.description}</p>
-                    </div>
-                    <div className="reviewItem-footer text-justify">
-                      <div
-                        onClick={() =>
-                          toggleComment("review-body", "view-comments", i, a.id)
-                        }
-                      >
-                        <CommentIcon
-                          style={{ color: "#1976d2", fontSize: "16px" }}
-                        />
+              {reviewList.length < 1 ? (
+                <div className="card">
+                  <p className="noTask">No task to reivew</p>
+                </div>
+              ) : (
+                reviewList.map((a, i) => {
+                  return (
+                    <div className="reviewItem-Card card  ">
+                      <div className="reviewItem-header">
+                        <span>{a.start_date}</span>
+                        <h5>{a.title}</h5>
                       </div>
+                      <div className="reviewItem-body">
+                        <p>{a.description}</p>
+                      </div>
+                      <div className="reviewItem-footer text-justify">
+                        <div
+                          onClick={() =>
+                            toggleComment(
+                              "review-body",
+                              "view-comments",
+                              i,
+                              a.id
+                            )
+                          }
+                        >
+                          <CommentIcon
+                            style={{ color: "#1976d2", fontSize: "16px" }}
+                          />
+                        </div>
 
-                      <div className="view-comments d-none ">
-                        {a.comments.length > 0 ? (
-                          a.comments.map((b) => {
-                            return (
-                              <div>
-                                <p style={{ margin: 0 }}>{b.comment}</p>
-                                <i style={{ fontSize: "12px", color: "gray" }}>
-                                  {b.name} <span>{b.todate}</span>
-                                </i>
-                              </div>
-                            );
-                          })
-                        ) : (
-                          <p>No comments</p>
-                        )}
-                        <div class="form-floating addComments">
-                          <textarea
-                            class="form-control"
-                            placeholder="Leave a comment here"
-                            // id="floatingTextarea2"
-                          ></textarea>
-                          <label for="floatingTextarea2">Comments</label>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              SubmitComment("review-body", "textarea", i)
-                            }
-                            className=""
-                          >
-                            OK
-                          </button>
+                        <div className="view-comments d-none ">
+                          {a.comments.length > 0 ? (
+                            a.comments.map((b) => {
+                              return (
+                                <div>
+                                  <p style={{ margin: 0 }}>{b.comment}</p>
+                                  <i
+                                    style={{ fontSize: "12px", color: "gray" }}
+                                  >
+                                    {b.name} <span>{b.todate}</span>
+                                  </i>
+                                </div>
+                              );
+                            })
+                          ) : (
+                            <p>No comments</p>
+                          )}
+                          <div class="form-floating addComments">
+                            <textarea
+                              class="form-control"
+                              placeholder="Leave a comment here"
+                              // id="floatingTextarea2"
+                            ></textarea>
+                            <label for="floatingTextarea2">Comments</label>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                SubmitComment("review-body", "textarea", i)
+                              }
+                              className=""
+                            >
+                              OK
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )
-              })}
+                  );
+                })
+              )}
             </div>
           </div>
         </div>
@@ -319,120 +387,118 @@ const Todo = () => {
                 />
                 Done{" "}
               </h5>
-              
-              <div id="taskFilter">
+
+              {/* <div id="taskFilter">
                 <button
                   aria-describedby={id}
                   type="button"
                   onClick={handleClick}
-
                 >
                   <MoreVertIcon style={{ color: "#787c7f" }} />
                 </button>
-                <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
-                  <StyledPopperDiv>        
-                   <div>Sort by</div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}  >
-                    
-                  <DatePicker
-                    //  value={viewDate}
-                    className = "datePicker"
-                    onChange={(date) => handleDateChange(date)}></DatePicker>
-                    
-                  
-                </LocalizationProvider>
-                    </StyledPopperDiv>
+                <Popper
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  placement="bottom-end"
+                >
+                  <StyledPopperDiv>
+                    <div>Sort by</div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        //  value={viewDate}
+                        className="datePicker"
+                        onChange={(date) => handleDateChange(date)}
+                      ></DatePicker>
+                    </LocalizationProvider>
+                  </StyledPopperDiv>
                 </Popper>
-              </div>
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}  >
-                  <DatePicker
-                    // value={completedDate}
-                    className = "datePicker"
-                    onChange={(date) => handleDateChange(date, "completed")}
-                    
-                  />
-                </LocalizationProvider>
-               */}
+              </div> */}
             </div>
             <div className="completed-body body" id="completed-body">
-              {completedList.map((a, i) => {
-                return (
-                  <div className="completedItem-Card card mb-2">
-                    <div className="completedItem-header">
-                        <span>
-                          {a.start_date}
-                        </span> 
-                      <h5>{a.title}</h5>
-                    </div>
-                    <div className="completedItem-body">
-                      <p>{a.description}</p>
-                      <p>
-                        {/* <small>
+              {completedList.length < 1 ? (
+                <div className="card">
+                  <p className="noTask">No task to view in completed</p>
+                </div>
+              ) : (
+                completedList.map((a, i) => {
+                  return (
+                    <div className="completedItem-Card card mb-2">
+                      <div className="completedItem-header">
+                        <span>{a.start_date}</span>
+                        <h5>{a.title}</h5>
+                      </div>
+                      <div className="completedItem-body">
+                        <p>{a.description}</p>
+                        <p>
+                          {/* <small>
                           {a.start_date} to {a.end_date}
                         </small> */}
-                      </p>
-                    </div>
-                    <div className="completedItem-footer text-justify">
-                      <div
-                        onClick={() =>
-                          toggleComment("completed-body", "view-comments", i)
-                        }
-                      >
-                        <CommentIcon
-                          style={{ color: "#1976d2", fontSize: "16px" }}
-                        />
+                        </p>
                       </div>
+                      <div className="completedItem-footer text-justify">
+                        <div
+                          onClick={() =>
+                            toggleComment("completed-body", "view-comments", i)
+                          }
+                        >
+                          <CommentIcon
+                            style={{ color: "#1976d2", fontSize: "16px" }}
+                          />
+                        </div>
 
-                      <div className="view-comments d-none ">
-                        {a.comments.length > 0 ? (
-                          a.comments.map((b) => {
-                            return (
-                              <div>
-                                <p style={{ margin: 0 }}>{b.comment}</p>
-                                <i style={{ fontSize: "12px", color: "gray" }}>
-                                  {b.name} <span>{b.todate}</span>
-                                </i>
-                              </div>
-                            );
-                          })
-                        ) : (
-                          <p>No comments</p>
-                        )}
-                        <div class="form-floating addComments">
-                          <textarea
-                            class="form-control"
-                            placeholder="Leave a comment here"
-                            // id="floatingTextarea2"
-                          ></textarea>
-                          <label for="floatingTextarea2">Comments</label>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              SubmitComment(
-                                "completed-body",
-                                "textarea",
-                                i,
-                                a.id
-                              )
-                            }
-                            className="text-end"
-                          >
-                            OK
-                          </button>
+                        <div className="view-comments d-none ">
+                          {a.comments.length > 0 ? (
+                            a.comments.map((b) => {
+                              return (
+                                <div>
+                                  <p style={{ margin: 0 }}>{b.comment}</p>
+                                  <i
+                                    style={{ fontSize: "12px", color: "gray" }}
+                                  >
+                                    {b.name} <span>{b.todate}</span>
+                                  </i>
+                                </div>
+                              );
+                            })
+                          ) : (
+                            <p>No comments</p>
+                          )}
+                          <div class="form-floating addComments">
+                            <textarea
+                              class="form-control"
+                              placeholder="Leave a comment here"
+                              // id="floatingTextarea2"
+                            ></textarea>
+                            <label for="floatingTextarea2">Comments</label>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                SubmitComment(
+                                  "completed-body",
+                                  "textarea",
+                                  i,
+                                  a.id
+                                )
+                              }
+                              className="text-end"
+                            >
+                              OK
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           </div>
         </div>
       </div>
       <>
-      
-              <Newtask />
-       </>
+        <Newtask />
+      </>
     </div>
   );
 };
