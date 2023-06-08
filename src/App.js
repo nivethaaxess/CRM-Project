@@ -14,7 +14,10 @@ import { Box } from '@mui/joy';
  
 function App() {
   return (
+<<<<<<< HEAD
 
+=======
+>>>>>>> 977e5a07f9c36056297bf1c02f4023e75e6bb46e
     <div >
       <div >
         {/* <Dashboard /> */}
@@ -36,8 +39,13 @@ function App() {
       </Box>
       </div>
       </div> 
+<<<<<<< HEAD
       
 
+=======
+
+
+>>>>>>> 977e5a07f9c36056297bf1c02f4023e75e6bb46e
     </div>  
   );
 }

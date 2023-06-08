@@ -16,15 +16,21 @@ function Dashboard()
 
     <div>
      {/* <Box >
+
         <Navbar />
+
+        {/* <Navbr />
+
     
        <Stack direction="row" >
           <Menu />
           <Content />  
        </Stack>
 
+
     </Box>
      */}
+
     </div>
   )
 }
