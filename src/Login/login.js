@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Container, Grid, TextField, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import axios from 'axios';
+
 import {  useNavigate } from 'react-router-dom';
+
+
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -21,7 +24,9 @@ const LoginPage = () => {
   const [signUpOpen, setSignUpOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
+
   const navigate = useNavigate();
+
 
 
   const handleEmailChange = (event) => {
@@ -172,6 +177,10 @@ const LoginPage = () => {
            }else{
                  alert('Fail');
            }
+
+         alert('login successful');
+        console.log(response.data);
+
       }) 
       .catch(error=>{
         alert('Enter correct username and password');

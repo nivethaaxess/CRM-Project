@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import Profile from './Profile/profile';
@@ -70,13 +71,11 @@ function App() {
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
+      </div>
+         );
+        }
+
+        export default App;
     
 
-
-
-
-    </div>
-  );
-}
-
-export default App;
+ 
