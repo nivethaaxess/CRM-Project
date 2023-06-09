@@ -25,7 +25,7 @@ function App() {
         <Box>
       
           <Routes>
-            <Route path="/login" element={<LoginPage />} />
+            {/* <Route path="/login" element={<LoginPage />} /> */}
             {/* <Route path="/dashboard" element={<Dashboard />} />  */}
             <Route path="/profile" element={<Profile />} /> 
              <Route path="/dashboard1" element={<Dashboard1 />} /> 
