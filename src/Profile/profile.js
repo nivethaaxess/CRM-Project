@@ -10,11 +10,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import RatingValue from "./Rating/rating";
 //pdf reader---------
 
-<<<<<<< HEAD
-import { PDFReader } from "reactjs-pdf-reader";
-=======
->>>>>>> 977e5a07f9c36056297bf1c02f4023e75e6bb46e
-
 // header
 import Avatar from "@mui/material/Avatar";
 
