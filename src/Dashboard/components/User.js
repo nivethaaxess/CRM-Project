@@ -16,13 +16,14 @@ import {  useNavigate } from 'react-router-dom';
 import {  Link } from 'react-router-dom';
 
 
+
 const User=({toggleDrawer})=> {
 
  
 
     const [open, setOpen] = useState(false);
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleClick = () => {
       setOpen(!open);
@@ -39,7 +40,7 @@ const handleTwo=()=>
 }
 
 const check=()=>{
-  // navigate('/check');
+  navigate('/profile');
   console.log('dinesh')
 }
 
@@ -47,8 +48,9 @@ const check=()=>{
 
   return (
     <Box sx={{backgroundColor: '#022567',color:'white', width:'200px',marginTop:2,marginLeft:1,}} flex={3} >
-      <Box onClick={check}>
+      <Box >
       </Box>
+      {/* <p onClick={check}>Profile</p> */}
       <List>
         <ListItem onClick={handleClick}>
           <PersonIcon />
@@ -58,8 +60,8 @@ const check=()=>{
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItem >
-              <Link to="/check">
-              <ListItemText primary="Home" />
+              <Link to="/profile">
+              <ListItemText primary="PROFILE" />
               </Link>
             </ListItem>
             <ListItem button onclick={handleTwo}>

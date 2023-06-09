@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Button, Container, Grid, TextField, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import axios from 'axios';
 
+import {  useNavigate } from 'react-router-dom';
+
+
+
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState(false);
@@ -19,6 +23,11 @@ const LoginPage = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [signUpOpen, setSignUpOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+
+
+  const navigate = useNavigate();
+
+
 
   const handleEmailChange = (event) => {
        setEmail(event.target.value);
@@ -161,8 +170,17 @@ const LoginPage = () => {
     
       axios.post("http://89.116.30.81:8000/login/",data)
       .then(response=>{
+        //  alert('login successful');
+        console.log(response.data);
+           if(response.data.message == 'Login successful'){
+            navigate('/dash');
+           }else{
+                 alert('Fail');
+           }
+
          alert('login successful');
         console.log(response.data);
+
       }) 
       .catch(error=>{
         alert('Enter correct username and password');
