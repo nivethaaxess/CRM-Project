@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useEffect } from "react";
 import "./tabs.css";
 import Todo from "./Todo/todo";
 import Skills from "./Skills/skills";
@@ -14,26 +15,30 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import ListAltIcon from "@mui/icons-material/ListAlt";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 // import Box from '@mui/material/Box';--
-import TextField from "@mui/material/TextField";
-import StarIcon from "@mui/icons-material/Star";
+import TextField from '@mui/material/TextField';
+import StarIcon from '@mui/icons-material/Star';
 
 /*  Basic Information------*/
 import InfoIcon from "@mui/icons-material/Info";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import CheckIcon from "@mui/icons-material/Check";
+import CheckIcon from '@mui/icons-material/Check';
 
-import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import axios from "axios";
 
-import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
+
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -68,22 +73,34 @@ function a11yProps(index) {
   };
 }
 
+
+
 /* component starts--------*/
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
-  const [input, setInput] = React.useState("");
-  const [date, setDate] = React.useState("");
-  const [value1, setValue1] = React.useState([
-    {
-      Input: "This is the Workspace",
-      Time: "12:50 AM",
-    },
-    {
-      Input: "This is the Workspace",
-      Time: "12:50 AM",
-    },
-  ]);
+  const [task, setTask] = React.useState('')
+  const [date, setDate] = React.useState('');
+  const [commandGet, setcommandGet] = React.useState([]);
+
+  const [taskReset, settaskRest] = React.useState('');
+  const [timeReset, settimeReset] = React.useState(null);
+
+  const [value1, setValue1] = React.useState(
+    [
+      {
+        id: '1',
+        Input: 'This is the Workspace',
+        Time: '12:50 AM'
+      },
+      {
+        id: '2',
+        Input: 'This is the Workspace',
+        Time: '12:50 AM'
+      }
+
+    ]
+  )
 
   const [activeIndex, setActiveIndex] = React.useState(null); // // Edit mode flag
 
@@ -91,31 +108,74 @@ export default function BasicTabs() {
     setActiveIndex(index); // Enable edit mode
   };
 
+  const resetVal = (id) => {
+
+    const foundObject = commandGet.find(obj => obj.id === id);
+    console.log('foundObject:', foundObject);
+    console.log('foundObject.time:', foundObject.time);
+    console.log('timeReset:',typeof timeReset);
+     let time = ''
+
+    if (foundObject.time == timeReset || timeReset == null) {
+       time = foundObject.time;
+      console.log('Time:', time);
+    } else {
+      time = timeReset
+      console.log('Object not found with the specified ID');
+    }
+
+
+
+    setActiveIndex(null)
+    console.log('ID===>>>>', id)
+    // console.log('commandGet===>>>', commandGet)
+    const data = {
+      task : taskReset ,
+      time : time
+    }
+    
+
+    console.log('data===>>>',data)
+    axios.put(`http://89.116.30.81:8000/comment/update/${id}/`,data).then((RES1) => {
+      console.log('RES1', RES1)
+    }).catch(err => console.log('ERR_++>>', err))
+  }
+
   const handleInputChange = (index, e) => {
-    const updatedValue1 = [...value1];
-    updatedValue1[index].Input = e.target.value;
-    setValue1(updatedValue1);
+    e.preventDefault();
+    const updatedValue1 = [...commandGet];
+    updatedValue1[index].task = e.target.value;
+    setcommandGet(updatedValue1);
+    settaskRest(e.target.value)
   };
 
   const handleTimeChange = (index, e) => {
-    const updatedValue1 = [...value1];
-    updatedValue1[index].Time = e.target.value;
-    setValue1(updatedValue1);
+    e.preventDefault();
+    const updatedValue1 = [...commandGet];
+    updatedValue1[index].time = e.target.value;
+    setcommandGet(updatedValue1);
+    settimeReset(e.target.value);
+   console.log('e.target.value===>>>',e.target.value)
   };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const onSubmitForm = () => {
-    console.log("input===>>>>", input);
+
+  const onSubmitForm = (e) => {
+
+    e.preventDefault()
+  
+    console.log('task===>>>>', task)
+
 
     const getDate = date;
-    const hour = getDate.$H;
-    const minutes = getDate.$m;
+    const hours = getDate.$H
+    const minutes = getDate.$m
 
     let period;
-    if (hour < 12) {
+    if (hours < 12) {
       period = "AM";
     } else {
       period = "PM";
@@ -133,23 +193,45 @@ export default function BasicTabs() {
     // console.log('period===>>>>',period)
 
     const data = {
-      task: input,
-      hours: hour,
+      task: task,
+      hours: hours,
       minutes: minutes,
       period: period,
-      findDate: findDate,
-    };
+      // findDate: findDate,
 
-    axios
-      .post("http://89.116.30.81:8000/comment/insert/", { data })
+    }
+
+    axios.post('http://89.116.30.81:8000/comment/insert/', data)
       .then((response) => {
-        console.log("resss", response);
+        console.log('resss', response);
       })
-      .catch((err) => console.log("err", err));
+      .catch(err => console.log('err', err))
 
-    console.log("data===>>>>", data);
+    console.log('data===>>>>', data)
     // console.log('year===>>>>',year)
-  };
+    setTask('')
+   setDate('');
+
+  }
+
+
+  useEffect(() => {
+    axios.get('http://89.116.30.81:8000/comment/list/').then((RES) => {
+      console.log('RESPONSE', RES);
+      setcommandGet(RES.data)
+      console.log('3333', commandGet)
+    }).catch(err => console.log('ERROR222', err))
+  }, []);
+
+  const commetDelete = (id) =>{
+    console.log('DELETE ID',id);
+    axios.delete(`http://89.116.30.81:8000/comment/delete/${id}/`).then((val)=>{
+
+      console.log('VAL',val)
+    }).catch(err=>console.log('err==>>',err))
+  }
+
+
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -206,7 +288,7 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <TabPanel sx={{ fontSize: "30px" }} value={value} index={0}>
-        {/* <div className="basic-information-section">
+        <section className="basic-information-section">
           <div className="overview-section">
             <div className="d-flex heading justify-content-between">
               <div className="">
@@ -307,7 +389,7 @@ export default function BasicTabs() {
               </div>
             </div>
           </div>
-        </div> */}
+        </section>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Skills />
@@ -326,29 +408,31 @@ export default function BasicTabs() {
           component="form"
           sx={{
             // '& .MuiTextField-root': { m: 1, width: '25ch' },
-            backgroundColor: "#eaf0f7",
-            height: "100vh",
+            backgroundColor: '#eaf0f7',
+            height: '100vh'
           }}
           noValidate
           autoComplete="off"
         >
-              {/* <div>
-            
-          
-            <TextField
-              id="outlined-multiline-static"
-              // label="Multiline"
-              placeholder="welcome"
-              multiline
-              rows={4}
-              // defaultValue="Default Value"
-            />
-          </div> */}
+          {/* <div>
+        
+       
+        <TextField
+          id="outlined-multiline-static"
+          // label="Multiline"
+          placeholder="welcome"
+          multiline
+          rows={4}
+          // defaultValue="Default Value"
+        />
+      </div> */}
 
-          <Box sx={{ backgroundColor: "#eaf0f7", padding: "2%" }}>
+          <Box sx={{ backgroundColor: '#eaf0f7', padding: '2%' }}>
+
             {/* sx={{backgroundColor:'#a18aff'}} */}
 
-            <Box sx={{ marginLeft: "12%", marginTop: "2%" }}>
+            <Box sx={{ marginLeft: '7%', marginTop: '2%' }}>
+
               <Typography variant="h4" gutterBottom>
                 Today main focus
               </Typography>
@@ -356,111 +440,92 @@ export default function BasicTabs() {
               <Typography variant="h3" gutterBottom>
                 Design Team Meeting
               </Typography>
+
             </Box>
 
-            <Box sx={{ marginTop: "2%" }}>
-              <FormControl sx={{ m: 1, width: "80%", marginLeft: "12%" }}>
+
+
+
+            <Box sx={{ marginTop: '2%' }}>
+
+              <FormControl sx={{ m: 1, width: '93%', marginLeft: '7%' }}  >
                 {/* <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel> */}
                 <OutlinedInput
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Design Team Meeting "
+                  onChange={e => setTask(e.target.value)}
+                  value={task}
+                  placeholder='Design Team Meeting '
                   // id="outlined-adornment-password"
-                  type="text"
-                  sx={{
-                    border: "none",
-                    borderRadius: 3,
-                    backgroundColor: "white",
-                  }}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <StarIcon sx={{ color: "red" }} />
-                    </InputAdornment>
-                  }
+                  type='text'
+                  sx={{ border: 'none', borderRadius: 3, backgroundColor: 'white' }}
+                  startAdornment={<InputAdornment position="start"><StarIcon sx={{ color: 'red' }} /></InputAdornment>}
                   endAdornment={
                     <InputAdornment position="end">
+
+
+
+
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoContainer components={["TimePicker"]}>
-                          <TimePicker
-                            label=" "
-                            onChange={(e) => setDate(e)}
-                            sx={{
-                              "& fieldset": { border: "none" },
-                              "&.MuiOutlinedInput-notchedOutline": {
-                                border: "none",
-                              },
-                            }}
-                          />
+                        <DemoContainer components={['TimePicker']}>
+                          <TimePicker value={date} label=" " onChange={e => setDate(e)} sx={{ "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" } }} />
                         </DemoContainer>
                       </LocalizationProvider>
 
-                      <CheckIcon
-                        sx={{
-                          cursor: "pointer",
-                          marginLeft: "10px",
-                          marginTop: "5px",
-                        }}
-                        onClick={onSubmitForm}
-                      />
+
+
+
+                      <CheckIcon sx={{ cursor: 'pointer', marginLeft: '10px', marginTop: '5px' }} onClick={onSubmitForm} />
+
                     </InputAdornment>
                   }
-                  // label="Password"
+                // label="Password"
                 />
+
               </FormControl>
             </Box>
 
+
             <Box>
-              {value1.map((item, index) => (
+              {commandGet?.map((item, index) => (
                 <Box key={index}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      m: 2,
-                      width: "80%",
-                      marginLeft: "12%",
-                      backgroundColor: "white",
-                      borderRadius: 3,
-                    }}
-                  >
+                  <Box sx={{
+                    display: 'flex', alignItems: 'center', m: 3, width: '93%', marginLeft: '7%',
+                    backgroundColor: 'white', borderRadius: 3, border: '2px solid black'
+                  }}>
                     <TextField
                       disabled={activeIndex !== index} // Disable TextField if not active
-                      value={item.Input}
-                      sx={{
-                        padding: "15px",
-                        "& label": { color: "black" },
-                        "& fieldset": { border: "none" },
-                        "&.MuiOutlinedInput-notchedOutline": { border: "none" },
-                      }}
+                      value={item.task}
+                      sx={{ padding: '15px', "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '90%' }}
                       onChange={(e) => handleInputChange(index, e)}
                     />
 
                     <TextField
                       disabled={activeIndex !== index} // Disable TextField if not active
-                      value={item.Time}
-                      sx={{
-                        "& label": { color: "secondary.main" },
-                        "& fieldset": { border: "none" },
-                        "&.MuiOutlinedInput-notchedOutline": { border: "none" },
-                        marginLeft: 43,
-                        width: "130px",
-                      }}
+                      value={item.time}
+                      sx={{ "& label": { color: "secondary.main" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '20%' }}
                       onChange={(e) => handleTimeChange(index, e)}
                     />
 
-                    <Box sx={{}}>
+                    <Box sx={{ width: '10%' }}>
+
                       {activeIndex === index ? (
-                        <CheckIcon onClick={() => setActiveIndex(null)} />
+                        // <CheckIcon onClick={() => setActiveIndex(null)}/>
+                        <CheckIcon sx={{ cursor:'pointer'}} onClick={() => resetVal(item.id)} />
+
                       ) : (
-                        <ModeEditOutlineIcon
-                          onClick={() => handleEdit(index)}
-                        />
+                        <ModeEditOutlineIcon sx={{ cursor:'pointer'}} onClick={() => handleEdit(index, item.id)} />
+
                       )}
+                       
+                       <DeleteForeverIcon onClick={()=>commetDelete(item.id)} sx={{marginLeft:'10px',paddingRight:'5px',color:'red' , cursor:'pointer'}} />
+
                     </Box>
                   </Box>
                 </Box>
               ))}
             </Box>
+
           </Box>
+
         </Box>
       </TabPanel>
       <TabPanel value={value} index={6}>
