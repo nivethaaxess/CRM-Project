@@ -1,4 +1,4 @@
-  import React from 'react';
+  import React, { useState } from 'react';
   import { BrowserRouter, Routes, Route } from 'react-router-dom';
   import Profile from './Profile/profile';
   // import './App.css';
@@ -13,24 +13,27 @@
   import { Box } from '@mui/joy';
   
   function App() {
+    
+    const [login,setLogin] =useState('');
+
     return (
       <div >
         <div >
           {/* <Dashboard /> */}
           <div>
-          {/* <Navbar/> */}
+          <Navbar/>
           </div>
           <div className='box2'>
-          {/* <Menu/> */}
+          <Menu/>
           <Box>
         
             <Routes>
-
-              <Route path="/login" element={<LoginPage />} />
+              
+              {/* <Route path="/login" element={<LoginPage />} /> */}
               {/* <Route path="/dashboard" element={<Dashboard />} />  */}
 
               <Route path="/profile" element={<Profile />} /> 
-              <Route path="/dashboard1" element={<Dashboard1 />} /> 
+              <Route path="/dashboard1" element={<Dashboard1 />} />  
               <Route path="/check" element={<User1 />} /> 
             </Routes>
         
