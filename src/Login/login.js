@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Container, Grid, TextField, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import axios from 'axios';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -149,6 +150,26 @@ const LoginPage = () => {
     setChangePasswordOpen(false);
   };
 
+    const loginClick=()=>{
+    
+    let data =
+      {
+        "email": email,
+        "password": password,
+      }
+    
+    
+      axios.post("http://89.116.30.81:8000/login/",data)
+      .then(response=>{
+         alert('login successful');
+        console.log(response.data);
+      }) 
+      .catch(error=>{
+        alert('Enter correct username and password');
+        console.log(error);
+        });
+      } 
+
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: 'linear-gradient(50deg, #36EAEF, #6B0AC9)' }}>
       <Container maxWidth="md">
@@ -188,7 +209,7 @@ const LoginPage = () => {
                 margin="normal"
                 required
               />
-              <Button type="submit" variant="contained" color="primary" fullWidth>
+              <Button type="submit" onClick={loginClick} variant="contained" color="primary" fullWidth>
                 Log In
               </Button>
             </form>
