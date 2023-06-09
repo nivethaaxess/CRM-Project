@@ -18,23 +18,26 @@ function App() {
       <div >
         {/* <Dashboard /> */}
         <div>
-        <Navbar/>
+        {/* <Navbar/> */}
         </div>
         <div className='box2'>
-        <Menu/>
+        {/* <Menu/> */}
         <Box>
       
           <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            {/* <Route path="/dashboard" element={<Dashboard />} />  */}
+          <Route path="/" element={<Profile />} /> 
+            {/* <Route path="/login" element={<LoginPage />} />
+            <Route path="/dashboard" element={<Dashboard />} /> 
             <Route path="/profile" element={<Profile />} /> 
              <Route path="/dashboard1" element={<Dashboard1 />} /> 
-             <Route path="/check" element={<User1 />} />
+             <Route path="/check" element={<User1 />} /> */}
            </Routes>
        
       </Box>
       </div>
       </div> 
+
+
 
 
     </div>  

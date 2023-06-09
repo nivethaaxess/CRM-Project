@@ -427,7 +427,7 @@ export default function BasicTabs() {
         />
       </div> */}
 
-          <Box sx={{ backgroundColor: 'rgb(185 56 142)', padding: '2%' }}>
+          <Box sx={{ backgroundColor: '#eaf0f7', padding: '2%' }}>
 
             {/* sx={{backgroundColor:'#a18aff'}} */}
 

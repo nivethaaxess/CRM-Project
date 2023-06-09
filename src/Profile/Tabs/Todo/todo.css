@@ -2,32 +2,37 @@
     background-color: #eaf0f7;
 }
 
-
+/* scroll-bar */
 #todo ::-webkit-scrollbar {
-    width:5px;
+    width:2px;
   }
   #todo ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px #1976d2; 
+    box-shadow: inset 0 0 5px  #1976d2;; 
     border-radius: 1px;
   }
    
   /* Handle */
   #todo  ::-webkit-scrollbar-thumb {
-    background: rgb(89, 88, 88); 
+    background: #adb5bd;
     border-radius: 5px;
   }
   
   /* Handle on hover */
-  #todo ::-webkit-scrollbar-thumb:hover {
+  /* #todo ::-webkit-scrollbar-thumb:hover {
     background:blue; 
-  }
+  } */
 
 
 
-#todo-list{
+#todo-list  .body{
     max-height: 300px;
     overflow-y: auto;
 }
+/* #todo-list  .body .noTask{
+    background-color: white;
+    padding:10px;
+    margin:0 10px;
+} */
 #todo .header{
     padding:  10px 10px;
     background-color: #eaf0f7;
@@ -67,9 +72,13 @@
 }
 
 /* taskFilter */
+#taskFilter{
+    right: 0;
+    top: 0;
+    width: auto;
+}
 #taskFilter button{
     padding: 0;
-    border-radius: 50%;
     border: none;
 
 }
@@ -80,44 +89,47 @@ background-color:#6f6f6f29;
 
 /* datePicker------------- */
 
-#simple-popper .datePicker{width: 50%;}
- #simple-popper .datePicker > div {
-       /* flex-direction: row-reverse; */
+/* #simple-popover .datePicker{width: 50%;}
+ #simple-popover .datePicker > div {
         border: none;
-       
+} */
+#simple-popover .css-17ffvgn-MuiTypography-root {
+    padding: 5px;
+    font-size: 14px;
 }
-
-#simple-popper > div{
+#simple-popover .css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root {
+    border-radius: 0%;
+}
+/* 
+#simple-popover > div{
     font-size: 14px;
     font-weight: 600;
     color:#6f6f6f;
     border: none;
     min-width: 100px;
     box-shadow: 0px 8px 10px 1px rgba(0,0,0,.14), 0px 3px 14px 2px rgba(0,0,0,.12), 0px 5px 5px -3px rgba(0,0,0,.2);
-}
-#simple-poppero .datePicker > div input{
+} */
+ #simple-popover .datePicker > div input{
     padding: 0;
-     /* text-align: center; */
     font-size: 14px;
 }
-#simple-popper .datePicker > div input{
+
+#simple-popover .datePicker > div input{
     display: none;
 }
-#simple-popper .datePicker > div div{
+#simple-popover .datePicker > div div{
     height: auto;
 }
-#simple-popper .datePicker > div div button::before{
+#simple-popover .datePicker > div div button::before{
     content: "Date";
     font-size: 14px;
 }
-#simple-popper .datePicker > div div button svg{
+#simple-popover .datePicker > div div button svg{
     font-size: 17px;
 }
-#simple-popper .datePicker > div fieldset{
+#simple-popover .datePicker > div fieldset{
     border: none;
 }
-
-
 
 .addComments button{
     border: 1px solid #367ef5;
@@ -127,7 +139,6 @@ background-color:#6f6f6f29;
     font-size: 10px;
     padding: 0;
 }
-
 
 #todo .addComments .form-control:focus {
     border: 0.5px solid gray;
