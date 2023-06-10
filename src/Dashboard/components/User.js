@@ -16,14 +16,13 @@ import {  useNavigate } from 'react-router-dom';
 import {  Link } from 'react-router-dom';
 
 
-
 const User=({toggleDrawer})=> {
 
  
 
     const [open, setOpen] = useState(false);
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const handleClick = () => {
       setOpen(!open);
@@ -31,7 +30,7 @@ const User=({toggleDrawer})=> {
 const handleOne=()=>
 {
     //  navigate('/User1')
-     setOpen(!open)
+     setOpen(!open) 
     
 }
 const handleTwo=()=>
@@ -40,7 +39,7 @@ const handleTwo=()=>
 }
 
 const check=()=>{
-  navigate('/profile');
+  // navigate('/check');
   console.log('dinesh')
 }
 
@@ -48,9 +47,8 @@ const check=()=>{
 
   return (
     <Box sx={{backgroundColor: '#022567',color:'white', width:'200px',marginTop:2,marginLeft:1,}} flex={3} >
-      <Box >
+      <Box onClick={check}>
       </Box>
-      {/* <p onClick={check}>Profile</p> */}
       <List>
         <ListItem onClick={handleClick}>
           <PersonIcon />
@@ -61,7 +59,7 @@ const check=()=>{
           <List component="div" disablePadding>
             <ListItem >
               <Link to="/profile">
-              <ListItemText primary="PROFILE" />
+              <ListItemText primary="user" />
               </Link>
             </ListItem>
             <ListItem button onclick={handleTwo}>

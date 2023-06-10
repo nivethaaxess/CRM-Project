@@ -66,7 +66,7 @@ function App() {
         
       <div>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          {/* <Route path="/" element={<LoginPage />} /> */}
           <Route path="/dash" element={<DashboardLayout />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>

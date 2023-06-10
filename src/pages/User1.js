@@ -82,9 +82,9 @@ const User1 = () => {
 
   return (
     <Box>
-   
+    
       <TextField
-        sx={{ marginTop: 3, marginLeft: 4 }}
+        sx={{ marginTop: 3, marginLeft: 4, width:350}}
         label="Search"
         variant="outlined"
         size="small"
@@ -99,7 +99,8 @@ const User1 = () => {
           ),
         }}
       />
-         <FormControl sx={{ mt:3, minWidth: 120 }}size='small'>
+     
+         <FormControl sx={{ mt:3, minWidth: 120,marginLeft:60 }}size='small'>       
         <Select
           value={selectedOption}
           onChange={handleOptionChange}

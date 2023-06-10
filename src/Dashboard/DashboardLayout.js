@@ -11,6 +11,7 @@ import Dashboard1 from '../pages/Dashboard1';
 
 import Navbar from './components/Navbar';
 import Menu from './components/Menu';
+import User1 from '../pages/User1';
 
 
 import { Box } from '@mui/joy';
@@ -23,7 +24,7 @@ function DashboardLayout() {
             <Menu />
             <Box>
               <Routes> {/* Wrap nested routes in a separate <Routes> component */}
-                <Route path="/" element={<Dashboard1 />} />
+                <Route path="/" element={<User1 />} />
                 
                 {/* <Route path="/dashboard1" element={<Dashboard1 />} />
                 <Route path="/check" element={<User1 />} /> */}
