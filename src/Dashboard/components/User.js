@@ -48,6 +48,14 @@ const check=()=>{
 
   return (
     <Box sx={{backgroundColor: '#022567',color:'white', width:'200px',marginTop:2,marginLeft:1,}} flex={3} >
+       <Box>
+        {/* <Navbar/> */}
+      </Box>
+      <Box sx={{ display: 'flex' }}>
+        <Box>
+      {/* <Menu /> */}
+      </Box>
+    
       <Box >
       </Box>
       {/* <p onClick={check}>Profile</p> */}
@@ -59,6 +67,11 @@ const check=()=>{
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
+          <ListItem >
+              <Link to="/user">
+              <ListItemText primary="USER" />
+              </Link>
+            </ListItem>
             <ListItem >
               <Link to="/profile">
               <ListItemText primary="PROFILE" />
@@ -79,7 +92,9 @@ const check=()=>{
           </List>
         </Collapse>
       </List>
-       </Box> 
+      </Box>
+      </Box>
+      //  </Box> 
   )
 }
 

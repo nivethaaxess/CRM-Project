@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, FormControl, Select, MenuItem } from '@mui/material';
+import Navbar from "../Dashboard/components/Navbar";
+import Menu from "../Dashboard/components/Menu";
+
+
+
 
 const User1 = () => {
   const [searchText, setSearchText] = useState('');
@@ -82,7 +87,14 @@ const User1 = () => {
 
   return (
     <Box>
-   
+    <Box>
+        <Navbar/>
+      </Box>
+      <Box sx={{ display: 'flex' }}>
+        <Box>
+      <Menu />
+      </Box>
+      <Box>
       <TextField
         sx={{ marginTop: 3, marginLeft: 4 }}
         label="Search"
@@ -173,7 +185,10 @@ const User1 = () => {
           />
         </div>
       )}
-    </Box>
+      </Box>
+      </Box>
+      </Box>
+    // </Box>
   );
 };
 

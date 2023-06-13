@@ -10,13 +10,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import RatingValue from "./Rating/rating";
 //pdf reader---------
 
-<<<<<<< HEAD
-=======
+import Navbar from "../Dashboard/components/Navbar";
+import Menu from "../Dashboard/components/Menu";
+
+
 
 import { PDFReader } from "reactjs-pdf-reader";
 
 
->>>>>>> adbe1cd3942004a25bfed7ad393ca0fa5d2b6912
+
 // header
 import Avatar from "@mui/material/Avatar";
 
@@ -65,7 +67,15 @@ const Profile = () => {
 
   return (
     <div>
-      <div id="profile" className="profile-page ">
+      <Box>
+        {/* <Navbar/> */}
+      </Box>
+      <Box sx={{ display: 'flex' }}>
+        <Box>
+      {/* <Menu /> */}
+      </Box>
+      <Box>
+        <div id="profile" className="profile-page ">
         <div className="container">
           <header className="border-bottom">
             <div className="d-flex align-items-center justify-content-between">
@@ -117,7 +127,7 @@ const Profile = () => {
 
           <main>
             <div className="navigation-section p-2">
-              <div className="container">
+              {/* <div className="container">
                 <div className="d-flex align-items-center">
                   <p className="slash">
                     <b>Freelancers</b>
@@ -127,7 +137,7 @@ const Profile = () => {
                   </p>
                   <p>{userList.name}</p>
                 </div>
-              </div>
+              </div> */}
             </div>
             {/*----------------------------profile section----------------*/}
             <div className="profile-section">
@@ -301,6 +311,9 @@ const Profile = () => {
           </main>
         </div>
       </div>
+      </Box>
+      </Box>
+      
     </div>
   );
 };

@@ -68,6 +68,8 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/dash" element={<DashboardLayout />} />
+          <Route path='/user' element={<User1/>}/>
+       
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
