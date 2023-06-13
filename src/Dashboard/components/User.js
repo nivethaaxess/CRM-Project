@@ -35,59 +35,7 @@ const User = ({ toggleDrawer }) => {
   };
 
   return (
-<<<<<<< HEAD
-    <>
-      <Box
-        sx={{
-          backgroundColor: "#022567",
-          color: "white",
-          width: "200px",
-          marginTop: 2,
-          marginLeft: 1,
-        }}
-        flex={3}
-      >
-        <Box></Box>
-        {/* <p onClick={check}>Profile</p> */}
-        <List>
-          <ListItem onClick={handleClick}>
-            <PersonIcon />
-            <ListItemText sx={{ marginLeft: 3 }} primary="FrondDesk" />
-            {open ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem>
-                <Link to="user1">
-                  <ListItemText primary="user" />
-                </Link>
-              </ListItem>
-              {/* <ListItem >
-              <Link to="profile">
-              <ListItemText primary="Profile" />
-              </Link>
-            </ListItem> */}
-              <ListItem button onclick={handleTwo}>
-                <ListItemText primary="UserGroup" />
-              </ListItem>
-              <ListItem button onclick={handleTwo}>
-                <ListItemText primary="Userroles" />
-              </ListItem>
-              <ListItem button onclick={handleTwo}>
-                <ListItemText primary="Invalid User" />
-              </ListItem>
-              <ListItem button onclick={handleTwo}>
-                <ListItemText primary="Add new user" />
-              </ListItem>
-            </List>
-          </Collapse>
-        </List>
-      </Box>
-      <Outlet />
-    </>
-  );
-};
-=======
+
     <Box sx={{backgroundColor: '#022567',color:'white', width:'200px',marginTop:2,marginLeft:1,}} flex={3} >
        <Box>
         {/* <Navbar/> */}
@@ -138,6 +86,5 @@ const User = ({ toggleDrawer }) => {
       //  </Box> 
   )
 }
->>>>>>> 5321095a6e9c9b1fccb13f425df2f995f84090f2
 
 export default User;

@@ -87,9 +87,7 @@ const User1 = () => {
 
   return (
     <Box>
-<<<<<<< HEAD
-    
-=======
+
     <Box>
         <Navbar/>
       </Box>
@@ -98,7 +96,7 @@ const User1 = () => {
       <Menu />
       </Box>
       <Box>
->>>>>>> 5321095a6e9c9b1fccb13f425df2f995f84090f2
+
       <TextField
         sx={{ marginTop: 3, marginLeft: 4, width:350}}
         label="Search"

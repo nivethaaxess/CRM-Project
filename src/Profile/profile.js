@@ -322,8 +322,7 @@ const Profile = () => {
           </main>
         </div>
       </div>
-      </Box>
-      </Box>
+      
       
     </div>
   );
