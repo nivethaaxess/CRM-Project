@@ -19,6 +19,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Textarea from '@mui/joy/Textarea';
 
 // import Box from '@mui/material/Box';--
 import TextField from '@mui/material/TextField';
@@ -37,6 +38,19 @@ import axios from "axios";
 
 
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+
+import { styled } from '@mui/material/styles';
+// import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 
 
@@ -104,9 +118,20 @@ export default function BasicTabs() {
 
   const [activeIndex, setActiveIndex] = React.useState(null); // // Edit mode flag
 
+  const textareaStyle = {
+    '&:focus': {
+      backgroundColor: 'yellow',
+    },
+  };
+
   const handleEdit = (index) => {
     setActiveIndex(index); // Enable edit mode
   };
+
+  const data = [
+    { id: 1, name: 'Object 1', value: 10 },
+    { id: 2, name: 'Object 2', value: 20 }
+  ];
 
   const resetVal = (id) => {
 
@@ -429,44 +454,34 @@ export default function BasicTabs() {
 
           <Box sx={{ backgroundColor: '#eaf0f7', padding: '2%' }}>
 
-            {/* sx={{backgroundColor:'#a18aff'}} */}
-
-            <Box sx={{ marginLeft: '7%', marginTop: '2%' }}>
-
-              <Typography variant="h4" gutterBottom>
-                Today main focus
-              </Typography>
-
-              <Typography variant="h3" gutterBottom>
-                Design Team Meeting
-              </Typography>
-
-            </Box>
+           
 
 
 
 
             <Box sx={{ marginTop: '2%' }}>
 
-              <FormControl sx={{ m: 1, width: '93%', marginLeft: '7%' }}  >
+              <FormControl sx={{  marginLeft: '7%',   backgroundColor: 'white' }}  >
                 {/* <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel> */}
                 <OutlinedInput
-                  onChange={e => setTask(e.target.value)}
+                   sx={{  backgroundColor: '#eaf0f7' }}
+                  startAdornment={<Textarea onChange={e => setTask(e.target.value)}
                   value={task}
                   placeholder='Design Team Meeting '
-                  // id="outlined-adornment-password"
+                  style={textareaStyle}
+                  id="outlined-adornment-password"
                   type='text'
-                  sx={{ border: 'none', borderRadius: 3, backgroundColor: 'white' }}
-                  startAdornment={<InputAdornment position="start"><StarIcon sx={{ color: 'red' }} /></InputAdornment>}
+                  disableUnderline={false}
+                  sx={{ border: '2px solid white', marginLeft:'-11.7px',   backgroundColor: 'white' , width:'1000%', padding:'15px',   "& fieldset": { border: 'none' },}} size="md" name="Size"  position="start"/>}
                   endAdornment={
-                    <InputAdornment position="end">
+                    <InputAdornment sx={{   backgroundColor: 'white' }} position="end">
 
 
 
 
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['TimePicker']}>
-                          <TimePicker value={date} label=" " onChange={e => setDate(e)} sx={{ "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" } }} />
+                          <TimePicker value={date} label=" " onChange={e => setDate(e)} sx={{ "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" },   backgroundColor: 'white'  }} />
                         </DemoContainer>
                       </LocalizationProvider>
 
@@ -484,7 +499,7 @@ export default function BasicTabs() {
             </Box>
 
 
-            <Box>
+            {/* <Box>
               {commandGet?.map((item, index) => (
                 <Box key={index}>
                   <Box sx={{
@@ -522,6 +537,104 @@ export default function BasicTabs() {
                   </Box>
                 </Box>
               ))}
+            </Box> */}
+
+            {/* <Box>
+            <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={3}>
+      
+        <Grid item xs={6}>
+          <Item>{commandGet?.map((item, index) => (
+                <Box key={index}>
+                  <Box sx={{
+                    display: 'flex', alignItems: 'center', m: 3, width: '93%', marginLeft: '7%',
+                    backgroundColor: 'white', borderRadius: 3, border: '2px solid black'
+                  }}>
+                    <TextField
+                      disabled={activeIndex !== index} // Disable TextField if not active
+                      value={item.task}
+                      sx={{ padding: '15px', "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '90%' }}
+                      onChange={(e) => handleInputChange(index, e)}
+                    />
+
+                    <TextField
+                      disabled={activeIndex !== index} // Disable TextField if not active
+                      value={item.time}
+                      sx={{ "& label": { color: "secondary.main" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '20%' }}
+                      onChange={(e) => handleTimeChange(index, e)}
+                    />
+
+                    <Box sx={{ width: '10%' }}>
+
+                      {activeIndex === index ? (
+                        // <CheckIcon onClick={() => setActiveIndex(null)}/>
+                        <CheckIcon sx={{ cursor:'pointer'}} onClick={() => resetVal(item.id)} />
+
+                      ) : (
+                        <ModeEditOutlineIcon sx={{ cursor:'pointer'}} onClick={() => handleEdit(index, item.id)} />
+
+                      )}
+                       
+                       <DeleteForeverIcon onClick={()=>commetDelete(item.id)} sx={{marginLeft:'10px',paddingRight:'5px',color:'red' , cursor:'pointer'}} />
+
+                    </Box>
+                  </Box>
+                </Box>
+              ))}</Item>
+        </Grid>
+        
+      </Grid>
+    </Box>
+            </Box> */}
+
+            <Box sx={{ marginTop:'45px',marginLeft:'30px'}}>
+            <Grid  container spacing={3}>
+        {commandGet.map((object,index) => (
+          <Grid   item xs={6} key={object.id}>
+            <Grid sx={{backgroundColor:'white',border:'1px solid black'}} container >
+            <Grid   disabled={activeIndex !== index}  item xs={14}>
+                <Box sx={{display:'flex',alignItems:'center' }}>
+                  <Box>
+                <TextField
+                      disabled={activeIndex !== index} // Disable TextField if not active
+                      value={object.time}
+                      sx={{ padding: '15px', "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '90%' }}
+                      onChange={(e) => handleInputChange(index, e)}
+                    />
+                    </Box>
+                    <Box>
+
+                    <Box sx={{ width: '10%',display:'flex'}}>
+
+{activeIndex === index ? (
+  // <CheckIcon onClick={() => setActiveIndex(null)}/>
+  <CheckIcon sx={{ cursor:'pointer'}} onClick={() => resetVal(object.id)} />
+
+) : (
+  <ModeEditOutlineIcon sx={{ cursor:'pointer'}} onClick={() => handleEdit(index, object.id)} />
+
+)}
+ 
+ <DeleteForeverIcon onClick={()=>commetDelete(object.id)} sx={{marginLeft:'10px',paddingRight:'5px',color:'red' , cursor:'pointer'}} />
+
+</Box>
+                    </Box>
+                    </Box>
+              </Grid>
+              <Grid  disabled={activeIndex !== index} item xs={12}>
+              <TextField
+                      disabled={activeIndex !== index} // Disable TextField if not active
+                      value={object.task}
+                      sx={{ padding: '15px', "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '90%' }}
+                      onChange={(e) => handleInputChange(index, e)}
+                    />
+              </Grid>
+              
+            </Grid>
+            
+          </Grid>
+        ))}
+      </Grid>
             </Box>
 
           </Box>
