@@ -2,7 +2,6 @@ import React from "react";
 import "./profile.css";
 
 
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Tabs from "./Tabs/tabs";
@@ -10,10 +9,13 @@ import RightTabs from "./RightTab/rightTab";
 import InputIcon from "@mui/icons-material/Input";
 import SearchIcon from "@mui/icons-material/Search";
 import RatingValue from "./Rating/rating";
-//pdf reader---------
 
 
-// header
+import { PDFReader } from "reactjs-pdf-reader";
+
+
+
+
 import Avatar from "@mui/material/Avatar";
 
 /* profile-dropdown-----------*/
@@ -24,8 +26,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-
-/* current-status-----------*/
 
 import CheckIcon from "@mui/icons-material/Check";
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
@@ -81,7 +81,7 @@ const Profile = () => {
 
   return (
     <div>
-      <div id = "profile" className="profile-page ">
+      <div id="profile" className="profile-page ">
         <div className="container">
           <header className="border-bottom">
             <div className="d-flex align-items-center justify-content-between">
@@ -136,7 +136,7 @@ const Profile = () => {
 
           <main>
             <div className="navigation-section p-2">
-              <div className="container">
+              {/* <div className="container">
                 <div className="d-flex align-items-center">
                   <p className="slash">
                     <b>Freelancers</b>
@@ -146,7 +146,7 @@ const Profile = () => {
                   </p>
                   <p>{userList?.name}</p>
                 </div>
-              </div>
+              </div> */}
             </div>
             {/*----------------------------profile section----------------*/}
             <div className="profile-section">
@@ -322,6 +322,9 @@ const Profile = () => {
           </main>
         </div>
       </div>
+      </Box>
+      </Box>
+      
     </div>
   );
 };

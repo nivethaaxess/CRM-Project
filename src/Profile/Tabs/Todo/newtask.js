@@ -16,7 +16,6 @@ import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 // import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 
-
 //date
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -35,23 +34,21 @@ export default function ModalDemo() {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [comment,setComment] = useState("")
+
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-
-console.log(comment)
 
   //date
   let today = new Date();
   let todayDate = today.getDate();
   let todayMonth = today.getMonth() + 1;
   let todayYear = today.getFullYear();
-    todayDate = todayDate < 10 ? "0" + todayDate : todayDate;
-    todayMonth = todayMonth < 10 ? "0" + todayMonth : todayMonth;
-    today = `${todayYear}-${todayMonth}-${todayDate}`;
-  console.log(today);
+  todayDate = todayDate < 10 ? "0" + todayDate : todayDate;
+  todayMonth = todayMonth < 10 ? "0" + todayMonth : todayMonth;
+  today = `${todayYear}-${todayMonth}-${todayDate}`;
+
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
 
@@ -63,86 +60,87 @@ console.log(comment)
   };
   console.log(title, description, startDate, endDate);
 
-  const getDate = (e) => {
-    let date = e[0];
+  const handleDateChange = (date, name) => {
     let getdate = date.$D < 10 ? "0" + date.$D : date.$D;
     let getmonth = date.$M + 1 < 10 ? "0" + (date.$M + 1) : date.$M + 1;
     let getyear = date.$y;
-
-    setStartDate(`${getyear}-${getmonth}-${getdate}`);
-
-    date = e[1];
-    getdate = date.$D < 10 ? "0" + date.$D : date.$D;
-    getmonth = date.$M + 1 < 10 ? "0" + (date.$M + 1) : date.$M + 1;
-    getyear = date.$y;
-
-    setEndDate(`${getyear}-${getmonth}-${getdate}`);
+    console.log(`${getyear}-${getmonth}-${getdate}`);
+    
+    if (name == "startDate") setStartDate(`${getyear}-${getmonth}-${getdate}`);
+    if (name == "endDate") setEndDate(`${getyear}-${getmonth}-${getdate}`);
   };
 
   const addNewTask = () => {
+    if (title.trim() === "" || description.trim() === "") {
+      return;
+    }
+    console.log(startDate,endDate)
     const data = {
-      title: title,
-      description: description,
+      title: title.trim(),
+      description: description.trim(),
       start_date: startDate,
       end_date: endDate,
-      status : "in progress",
-
+      status: "in progress",
     };
-    console.log(data)
+    console.log(data);
     axios
       .post("http://89.116.30.81:8000/daily_task/insert/", data)
       .then((response) => {
-         setComment(response.data);
-         console.log("set new task")
+        //  setComment(response.data);
+        console.log(response);
       })
       .catch((err) => console.log("er", err));
-  };
 
+    setTitle("");
+    setDescription("");
+  };
 
   return (
     <div id="newTask">
-    <div className="align">
-      <TriggerButton type="button" onClick={handleOpen}>
-        Add Task
-      </TriggerButton>
-      <StyledModal
-        aria-labelledby="unstyled-modal-title"
-        aria-describedby="unstyled-modal-description"
-        open={open}
-        onClose={handleClose}
-        slots={{ backdrop: StyledBackdrop }}
-        style={style1}
-        id="addtaskpopup"
-      >
-        <Box sx={style} style={style2} >
-          <h6 className="text-center">NEW TASK</h6>
-          <Box
-            component="form"
-            sx={{
-              "& > :not(style)": { m: 1 },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="standard-basic"
-              label="Title"
-              variant="standard"
-              fullWidth
-              onChange={(e) => setTitle(e.target.value)}
-              sx={{marginTop:1}}
-            />
-            <TextField
-              id="standard-basic"
-              label="Description"
-              variant="standard"
-              fullWidth
-              multiline
-              onChange={(e) => setDescription(e.target.value)}
-              sx={{marginTop:1}}
-              // maxRows={8}
-            />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <div className="align">
+        <TriggerButton type="button" onClick={handleOpen}>
+          Add Task
+        </TriggerButton>
+        <StyledModal
+          aria-labelledby="unstyled-modal-title"
+          aria-describedby="unstyled-modal-description"
+          open={open}
+          onClose={handleClose}
+          slots={{ backdrop: StyledBackdrop }}
+          style={style1}
+          id="addtaskpopup"
+        >
+          <Box sx={style} style={style2}>
+            <h6 className="text-center">NEW TASK</h6>
+            <Box
+              component="form"
+              sx={{
+                "& > :not(style)": { m: 1 },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-basic"
+                label="Title"
+                variant="standard"
+                fullWidth
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                sx={{ marginTop: 1 }}
+              />
+              <TextField
+                id="standard-basic"
+                label="Description"
+                variant="standard"
+                value={description}
+                fullWidth
+                multiline
+                onChange={(e) => setDescription(e.target.value)}
+                sx={{ marginTop: 1 }}
+                 maxRows={8}
+              />
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DateRangePicker"]}>
                 <DemoItem
                   // label=""
@@ -157,32 +155,36 @@ console.log(comment)
                   />
                 </DemoItem>
               </DemoContainer>
-            </LocalizationProvider>
-          
-        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                  id = "datepicker"
-                    // value={progressDate}
-                    className = "datePicker"
-                    // onChange={(date) => handleDateChange(date, "progress")}
-                  />
-        </LocalizationProvider> */}
-        
-          </Box>
-          <Stack direction="row" spacing={2}>
-            <Button
-              variant="contained"
-              endIcon={<SendIcon />}
-              onClick={addNewTask}
-              sx={{marginTop:1,fontSize:"14px",padding:0}}
-            >
-              Add
-            </Button>
-          </Stack>
-        </Box>
-      </StyledModal>
-    </div>
+            </LocalizationProvider> */}
 
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  id="datepicker"
+                  className="datePicker"
+                  onChange={(date) => handleDateChange(date, "startDate")}
+                />
+              </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  id="datepicker"
+                  className="datePicker"
+                  onChange={(date) => handleDateChange(date, "endDate")}
+                />
+              </LocalizationProvider>
+            </Box>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="contained"
+                endIcon={<SendIcon />}
+                onClick={addNewTask}
+                sx={{ marginTop: 1, fontSize: "14px", padding: 0 }}
+              >
+                Add
+              </Button>
+            </Stack>
+          </Box>
+        </StyledModal>
+      </div>
     </div>
   );
 }
