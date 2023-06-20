@@ -168,15 +168,15 @@ const Profile = () => {
                                 <li>Name</li>
                                 <li>Date of Birth</li>
                                 <li>Email</li>
-                                <li>Jobs</li>
-                                <li>Specifications</li>
+                                {/* <li>Jobs</li>
+                                <li>Specifications</li> */}
                               </ul>
                               <ul className="profile-values">
                                 <li>{userList.name || ""}</li>
                                 <li>{userList.date_of_birth || ""}</li>
                                 <li>{userList.email_address || ""}</li>
-                                <li>{userList.job || ""}</li>
-                                <li>{userList.specification || ""}</li>
+                                {/* <li>{userList.job || ""}</li> */}
+                                {/* <li>{userList.specification || ""}</li> */}
                               </ul>
                             </div>
                           </div>
@@ -185,27 +185,27 @@ const Profile = () => {
                               <ul className="profile-labels">
                                 <li>Job Success</li>
                                 <li>Total earned</li>
-                                <li>Hour Rate</li>
+                                {/* <li>Hour Rate</li>
                                 <li>Hours Worked</li>
-                                <li>Skills</li>
+                                <li>Skills</li> */}
                               </ul>
                               <ul className="profile-values">
-                                <li>
+                                {/* <li>
                                   {
                                     <RatingValue
                                       rating={userList.job_success_rate}
                                       lab="pro"
                                     />
                                   }
-                                </li>
+                                </li> */}
                                 <li>{userList.total_earned}</li>
                                 <li>{userList.hourly_rate}</li>
-                                <li>{userList.hours_worked}</li>
-                                <li>{userList.skills}</li>
+                                {/* <li>{userList.hours_worked}</li>
+                                <li>{userList.skills}</li> */}
                               </ul>
                             </div>
                           </div>
-                          <div className="col-md-12">
+                          {/* <div className="col-md-12">
                             <div className="d-flex attachments">
                               <p className="profile-labels">Attachments</p>
                               <p className="file">
@@ -214,9 +214,9 @@ const Profile = () => {
                                 <div style={{overflow:'scroll',height:600}}>
                                    <PDFReader url="http://localhost:3000/test.pdf"/>
                                  </div> */}
-                              </p>
+                              {/* </p>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -299,3 +299,4 @@ const Profile = () => {
 };
 
 export default Profile;
+  
