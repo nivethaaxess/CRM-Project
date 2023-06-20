@@ -1,0 +1,13 @@
+Border-Style {
+
+       display: flex;
+       flex-direction: column;
+       background: rgba(255, 255, 255, 0.06);
+       box-shadow: 0 20px 32px 15px rgba(31, 38, 135, .37);
+   
+   
+   }
+   
+   .Register-icon {
+       color: blueviolet;
+   }

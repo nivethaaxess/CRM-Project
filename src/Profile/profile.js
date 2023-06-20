@@ -122,8 +122,8 @@ const Profile = () => {
                 <div className="d-flex header-name align-items-center justify-content-between">
                   {Object.keys(userList).length > 0 ? (
                     <>
-                      <Avatar>{userList.name[0]}</Avatar>
-                      <p>{userList?.name}</p>
+                      {/* <Avatar>{userList.name[0]}</Avatar> */}
+                      {/* <p>{userList?.name}</p> */}
                     </>
                   ) : null}
 
@@ -266,13 +266,13 @@ const Profile = () => {
                         <div className="others d-flex">
                           <div className="">
                             <div className="person-logo">
-                              {othersList[0].name[0]}
+                              {/* {othersList[0].name[0]} */}
                             </div>
                           </div>
                           <div className=" person-status">
                             <p>
-                              <b>{othersList[0].name}</b> status changed as{" "}
-                              <span>{othersList[0].available}</span>
+                              {/* <b>{othersList[0].name}</b> status changed as{" "} */}
+                              {/* <span>{othersList[0].available}</span> */}
                             </p>
                             <div>
                               <QueryBuilderIcon /> {"10 mins ago"}
@@ -282,13 +282,13 @@ const Profile = () => {
                         <div className="others d-flex">
                           <div className="">
                             <div className="person-logo">
-                              {othersList[1].name[0]}
+                              {/* {othersList[1].name[0]} */}
                             </div>
                           </div>
                           <div className=" person-status">
                             <p>
-                              <b>{othersList[1].name}</b> status changed as{" "}
-                              <span>{othersList[1].available}</span>
+                              {/* <b>{othersList[1].name}</b> status changed as{" "} */}
+                              {/* <span>{othersList[1].available}</span> */}
                             </p>
                             <div>
                               <QueryBuilderIcon /> {"10 mins ago"}
