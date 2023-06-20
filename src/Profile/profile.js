@@ -122,7 +122,7 @@ const Profile = () => {
                 <div className="d-flex header-name align-items-center justify-content-between">
                   {Object.keys(userList).length > 0 ? (
                     <>
-                      <Avatar>{userList.name[0]}</Avatar>
+                      {/* <Avatar>{userList.name[0]}</Avatar> */}
                       <p>{userList?.name}</p>
                     </>
                   ) : null}
@@ -322,8 +322,6 @@ const Profile = () => {
           </main>
         </div>
       </div>
-      </Box>
-      </Box>
       
     </div>
   );
