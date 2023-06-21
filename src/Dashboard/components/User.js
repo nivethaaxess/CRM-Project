@@ -35,57 +35,55 @@ const User = ({ toggleDrawer }) => {
   };
 
   return (
-
-    <>
-      <Box
-        sx={{
-          backgroundColor: "#022567",
-          color: "white",
-          width: "200px",
-          marginTop: 2,
-          marginLeft: 1,
-        }}
-        flex={3}
-      >
-        <Box></Box>
-        {/* <p onClick={check}>Profile</p> */}
-        <List>
-          <ListItem onClick={handleClick}>
-            <PersonIcon />
-            <ListItemText sx={{ marginLeft: 3 }} primary="FrondDesk" />
-            {open ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem>
-                <Link to="user">
-                  <ListItemText primary="user" />
-                </Link>
-              </ListItem>
-              {/* <ListItem >
-              <Link to="profile">
-              <ListItemText primary="Profile" />
-              </Link>
-            </ListItem> */}
-              <ListItem button onclick={handleTwo}>
-                <ListItemText primary="UserGroup" />
-              </ListItem>
-              <ListItem button onclick={handleTwo}>
-                <ListItemText primary="Userroles" />
-              </ListItem>
-              <ListItem button onclick={handleTwo}>
-                <ListItemText primary="Invalid User" />
-              </ListItem>
-              <ListItem button onclick={handleTwo}>
-                <ListItemText primary="Add new user" />
-              </ListItem>
-            </List>
-          </Collapse>
-        </List>
+     
+    <Box sx={{backgroundColor: '#022567',color:'white', width:'200px',marginTop:2,marginLeft:1,}} flex={3} >
+       <Box>
+        {/* <Navbar/> */}
+      </Box>
+      <Box sx={{ display: 'flex' }}>
+        <Box>
+      {/* <Menu /> */}
       </Box>
     
-    </>
-  );
-};
+      <Box >
+      </Box>
+      {/* <p onClick={check}>Profile</p> */}
+      <List>
+        <ListItem onClick={handleClick}>
+          <PersonIcon />
+          <ListItemText sx={{ marginLeft: 3 }} primary="FrondDesk" />
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+          <ListItem >
+              <Link to="/user">
+              <ListItemText primary="USER" />
+              </Link>
+            </ListItem>
+            <ListItem >
+              <Link to="/profile">
+              <ListItemText primary="PROFILE" />
+              </Link>
+            </ListItem>
+            <ListItem button onclick={handleTwo}>
+              <ListItemText primary="UserGroup" />
+            </ListItem>
+            <ListItem button onclick={handleTwo}>
+              <ListItemText primary="Userroles" />
+            </ListItem>
+            <ListItem button onclick={handleTwo}>
+              <ListItemText primary="Invalid User" />
+            </ListItem>
+            <ListItem button onclick={handleTwo}>
+              <ListItemText primary="Add new user" />
+            </ListItem>
+          </List>
+        </Collapse>
+      </List>
+      </Box>
+      </Box>)
+}
+
 
 export default User;
