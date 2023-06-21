@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { Button, Container, Grid, TextField, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import axios from 'axios';
+// import "./login.css"
 
-import {  useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import { styled } from '@mui/system';
 
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
-  const [emails, setEmails] = useState(false);
+  const [emails, setEmails] = useState('');
+  const [userName, setUserName] = useState('')
+  const [verifyEmails, setVerifyEmails] = useState('')
   const [password, setPassword] = useState('');
   const [credentials, setCredentials] = useState(null);
   const [registerPassword, setRegisterPassword] = useState('');
@@ -23,22 +26,45 @@ const LoginPage = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [signUpOpen, setSignUpOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
-
+  const [otpVerificationOpen, setOtpVerificationOpen] = useState(false);
 
   const navigate = useNavigate();
+
+  const LoginButton = styled(Button)(({ theme }) => ({
+    //backgroundColor: '#2979ff',
+    color: '#2979ff',
+    width: '100%',
+    height: '40px',
+    borderRadius: '5px',
+    marginTop: '10px',
+    transition: 'background-color 0.3s ease',
+    '&:hover': {
+      backgroundColor: '#2979ff',
+      color: "white"
+    },
+  }));
 
 
 
   const handleEmailChange = (event) => {
-       setEmail(event.target.value);
+    setEmail(event.target.value);
     //  checkCompletion();
   };
 
   const handleEmailChanges = (event) => {
-    console.log("em",event.target.value)
+    console.log("em", event.target.value)
     setEmails(event.target.value);
     // checkCompletion();
   };
+
+const handleUserName = (event) => {
+  setUserName (event.target.value);
+  checkCompletion();
+}
+
+  const handleVerifyEmails = (event) => {
+    setVerifyEmails(event.target.value);
+  }
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -61,7 +87,7 @@ const LoginPage = () => {
   };
 
   const handlePhonenumberChange = (event) => {
-    console.log(event.target.value,'phone==>>')
+    console.log(event.target.value, 'phone==>>')
     setPhonenumber(event.target.value);
     // checkCompletion();
   };
@@ -110,23 +136,25 @@ const LoginPage = () => {
   };
 
   const checkCompletion = () => {
+    console.log()
     console.log('Emails===>>>:', emails);
     console.log('registerPassword===>>>:', registerPassword);
     console.log('confirmPassword===>>>:', confirmPassword);
     console.log('phonenumber===>>>:', phonenumber);
     // console.log("email",emails,"pass", password,"cpass",confirmPassword,"num", phonenumber);
-    console.log(Boolean(emails && password && confirmPassword && phonenumber));
-    if (email && password && confirmPassword && phonenumber) {
+    console.log(Boolean(userName && emails && password && confirmPassword && phonenumber));
+    if (userName && email && password && confirmPassword && phonenumber) {
       setIsComplete(true);
     } else {
       setIsComplete(false);
     }
   };
-  console.log("email",emails,"pass", registerPassword,"cpass",confirmPassword,"num", phonenumber);
+  console.log("email", emails, "pass", registerPassword, "cpass", confirmPassword, "num", phonenumber);
   const handleForgotPassword = (event) => {
     event.preventDefault();
     console.log('Email:', email);
     setForgotPasswordOpen(false);
+    setOtpVerificationOpen(true);
   };
 
   const handleEnteredOtpChange = (event) => {
@@ -144,6 +172,7 @@ const LoginPage = () => {
   const handleVerifyOTP = () => {
     console.log('Entered OTP:', enteredOtp);
     setEnteredOtp('');
+    setOtpVerificationOpen(false);
     setNewPassword('');
     setConfirmNewPassword('');
     setForgotPasswordOpen(false);
@@ -159,97 +188,144 @@ const LoginPage = () => {
     setChangePasswordOpen(false);
   };
 
-    const loginClick=()=>{
-    
+  const loginClick = () => {
+
     let data =
-      {
-        "email": email,
-        "password": password,
-      }
-    
-    
-      axios.post("http://89.116.30.81:8000/login/",data)
-      .then(response=>{
+    {
+      "email": email,
+      "password": password,
+    }
+
+
+    axios.post("http://89.116.30.81:8000/login/", data)
+      .then(response => {
         //  alert('login successful');
         console.log(response.data);
-           if(response.data.message == 'Login successful'){
-            navigate('/dash');
-           }else{
-                 alert('Fail');
-           }
+        if (response.data.message == 'Login successful') {
+          navigate('/dash');
+        } else {
+          alert('Fail');
+        }
 
-         alert('login successful');
+        alert('login successful');
         console.log(response.data);
 
-      }) 
-      .catch(error=>{
+      })
+      .catch(error => {
         alert('Enter correct username and password');
         console.log(error);
-        });
-      } 
+      });
+  }
 
+  const data = {
+   "newPassword": newPassword,
+   "ConfirmPassword": confirmNewPassword,
+  };
+  
+  axios.post("http://89.116.30.81:8000/forgot/password/reset/", data)
+    .then(response => {
+      console.log('Password reset request successful');
+      console.log(response.data); 
+    })
+    .catch(error => {
+      console.error('Error occurred while making the password reset request');
+      console.error(error);
+    });
+
+   
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: 'linear-gradient(50deg, #36EAEF, #6B0AC9)' }}>
-      <Container maxWidth="md">
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Grid item xs={12} md={6}>
-            <img src="https://img.freepik.com/free-vector/privacy-policy-concept-illustration_114360-7853.jpg?size=338&ext=jpg&ga=GA1.2.2080928637.1684840052&semt=sph" alt="Login" style={{ width: '100%' }} />
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', backgroundImage: 'url("")', backgroundPosition: "center", backgroundSize: 'cover' }}>
+
+
+
+      <div className='Border-Style'>
+        <Container maxWidth="md">
+          <Grid container spacing={2} justifyContent="center" alignItems="center">
+            <Grid item xs={12} md={6}>
+              <img src="https://img.freepik.com/free-vector/privacy-policy-concept-illustration_114360-7853.jpg?size=338&ext=jpg&ga=GA1.2.2080928637.1684840052&semt=sph" alt="Login" style={{ width: '100%', opacity: .8 }} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h4" align="center" gutterBottom style={{
+                // backgroundImage: "linear-gradient(to right, #3399ff, #ff0000)",
+                fontWeight: "bold"
+              }}
+              >
+                <div style={{ display: 'flex',justifyContent: 'center',alignItems: 'center' }}>
+                <span style={{
+                    fontSize: 35,
+                    background: "-webkit-linear-gradient(141deg, #3f5efb 30%, #fc466b 90%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  //  textShadow: "2px 2px #FF0000",
+                    
+                  }}>
+                   Welcome Back!{'\u00A0'}
+                  </span>
+                  <span style={{ fontSize: 35 }}>😊</span>
+                </div>
+              </Typography>
+              <form onSubmit={handleLogin}>
+                <TextField
+                  color="warning"
+                  label="Email"
+                  type="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  variant="filled"
+                  fullWidth
+                  margin="normal"
+                  required
+                  inputProps={{ style: { color: 'white' } }}
+                />
+                <TextField 
+                  color="warning"
+                  label="Password"
+                  type="password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                  variant="filled"
+                  disableUnderline={false}
+                  fullWidth
+                  margin="normal"
+                  required
+                />
+                <LoginButton type="submit" onClick={loginClick} variant="outlined" color="primary" fullWidth>
+                  Log In
+                </LoginButton>
+
+              </form>
+              <LoginButton variant="outlined" color="primary" fullWidth onClick={handleSignUp} style={{ marginTop: "5px", }} >
+                Sign Up
+              </LoginButton>
+              <LoginButton variant="outlined" fullWidth onClick={handleForgotPasswordClick} style={{ marginTop: '10px', LoginButton }}>
+                Forgot Password?
+              </LoginButton>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h4" align="center" gutterBottom style={{
-              backgroundImage: "linear-gradient(to right, #3399ff, #ff0000)",
-              fontWeight: "bold"
-            }}
-            >
-              Log In
-            </Typography>
-            <form onSubmit={handleLogin}>
-              <TextField
-                color="primary"
-                label="Email"
-                type="email"
-                value={email}
-                onChange={handleEmailChange}
-                variant="filled"
-                fullWidth
-                margin="normal"
-                required
-              />
-              <TextField
-                color="warning"
-                label="Password"
-                type="password"
-                value={password}
-                onChange={handlePasswordChange}
-                variant="filled"
-                disableUnderline={false}
-                fullWidth
-                margin="normal"
-                required
-              />
-              <Button type="submit" onClick={loginClick} variant="contained" color="primary" fullWidth>
-                Log In
-              </Button>
-            </form>
-            <Button variant="outlined" color="primary" fullWidth onClick={handleSignUp}>
-              Sign Up
-            </Button>
-            <Button fullWidth onClick={handleForgotPasswordClick} style={{ marginTop: '10px' }}>
-              Forgot Password?
-            </Button>
-          </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </div>
       <Dialog open={signUpOpen} onClose={handleCloseSignUp}>
-        <DialogTitle>Register</DialogTitle>
+        <DialogTitle className='Register-icon'>Register</DialogTitle>
         <DialogContent>
           <form onSubmit={handleRegister}>
+
+          <TextField
+              color="warning"
+              label="Username"
+              type='text'
+              value={userName}
+              onChange={(e) => handleUserName(e)}
+              variant="filled"
+              fullWidth
+              margin="normal"
+              required
+            />
             <TextField
               color="warning"
               label="Email"
               type="email"
               value={emails}
-              onChange={(e)=>handleEmailChanges(e)}
+              onChange={(e) => handleEmailChanges(e)}
               variant="filled"
               fullWidth
               margin="normal"
@@ -260,7 +336,7 @@ const LoginPage = () => {
               label="Password"
               type="password"
               value={registerPassword}
-              onChange={(e)=>handleRegisterPasswordChange(e)}
+              onChange={(e) => handleRegisterPasswordChange(e)}
               variant="filled"
               disableUnderline={false}
               fullWidth
@@ -272,7 +348,7 @@ const LoginPage = () => {
               label="Confirm Password"
               type="password"
               value={confirmPassword}
-              onChange={(e)=>handleConfirmPasswordChanges(e)}
+              onChange={(e) => handleConfirmPasswordChanges(e)}
               variant="filled"
               disableUnderline={false}
               fullWidth
@@ -283,9 +359,9 @@ const LoginPage = () => {
               color="warning"
               label="Phone No:"
               type="tel"
-             pattern='[0-9]{10}'
+              pattern='[0-9]{10}'
               value={phonenumber}
-              onChange={(e)=>handlePhonenumberChange(e)}
+              onChange={(e) => handlePhonenumberChange(e)}
               variant="filled"
               disableUnderline={false}
               fullWidth
@@ -297,9 +373,9 @@ const LoginPage = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseSignUp}>Cancel</Button>
-          {console.log(emails == '', registerPassword == '' , confirmPassword == '' , phonenumber == " ")}
-          <Button onClick={handleRegister} color="primary" disabled={emails == "" || registerPassword == "" || confirmPassword == "" || phonenumber == "" || registerPassword != confirmPassword   ? true : false}>
-            Register 111
+          {console.log(userName =='',emails == '', registerPassword == '', confirmPassword == '', phonenumber == " ")}
+          <Button onClick={handleRegister} color="primary" disabled={userName == "" || emails == "" || registerPassword == "" || confirmPassword == "" || phonenumber == "" || registerPassword != confirmPassword ? true : false}>
+            Register
           </Button>
         </DialogActions>
       </Dialog>
@@ -311,13 +387,27 @@ const LoginPage = () => {
               color="warning"
               label="Email"
               type="email"
-              value={email}
-              onChange={handleEmailChange}
+              value={verifyEmails}
+              onChange={handleVerifyEmails}
               variant="filled"
               fullWidth
               margin="normal"
               required
             />
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setForgotPasswordOpen(false)}>Cancel</Button>
+          <Button onClick={handleForgotPassword} color="primary" disabled={!verifyEmails}>
+            Submit
+          </Button>
+
+        </DialogActions>
+      </Dialog>
+      <Dialog open={otpVerificationOpen} onClose={() => setOtpVerificationOpen(false)}>
+        <DialogTitle>OTP Verification</DialogTitle>
+        <DialogContent>
+          <form>
             <TextField
               label="Enter OTP"
               type="text"
@@ -331,11 +421,8 @@ const LoginPage = () => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setForgotPasswordOpen(false)}>Cancel</Button>
-          <Button onClick={handleForgotPassword} color="primary">
-            Submit
-          </Button>
-          <Button onClick={handleVerifyOTP} color="primary">
+          <Button onClick={() => setOtpVerificationOpen(false)}>Cancel</Button>
+          <Button onClick={handleVerifyOTP} color="primary" disabled={!enteredOtp}>
             Verify OTP
           </Button>
         </DialogActions>
@@ -370,12 +457,13 @@ const LoginPage = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setChangePasswordOpen(false)}>Cancel</Button>
-          <Button onClick={handleResetPassword} color="primary" disabled={!isComplete}>
+          <Button onClick={handleResetPassword} color="primary" disabled={!(newPassword === confirmNewPassword && newPassword !== "")}>
             Reset Password
           </Button>
         </DialogActions>
       </Dialog>
     </div>
+
   );
 };
 

@@ -116,8 +116,7 @@ const User1 = () => {
   const paginatedRows = filteredAndSearchedRows.slice(startIndex, endIndex);
 
   return (
-     <div className='btn'>
-    
+    <div>
     <TextField
       sx={{ marginTop: 3, marginLeft: 4, width:350}}
       label="Search"
@@ -213,6 +212,7 @@ const User1 = () => {
 
     
     </div>
+
   );
 };
 
