@@ -48,7 +48,7 @@ export default function ModalDemo() {
   todayDate = todayDate < 10 ? "0" + todayDate : todayDate;
   todayMonth = todayMonth < 10 ? "0" + todayMonth : todayMonth;
   today = `${todayYear}-${todayMonth}-${todayDate}`;
-  
+
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
 
@@ -61,11 +61,11 @@ export default function ModalDemo() {
   console.log(title, description, startDate, endDate);
 
   const handleDateChange = (date, name) => {
-    // let date = e[0];
     let getdate = date.$D < 10 ? "0" + date.$D : date.$D;
     let getmonth = date.$M + 1 < 10 ? "0" + (date.$M + 1) : date.$M + 1;
     let getyear = date.$y;
     console.log(`${getyear}-${getmonth}-${getdate}`);
+    
     if (name == "startDate") setStartDate(`${getyear}-${getmonth}-${getdate}`);
     if (name == "endDate") setEndDate(`${getyear}-${getmonth}-${getdate}`);
   };
