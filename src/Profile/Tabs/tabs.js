@@ -171,6 +171,7 @@ export default function BasicTabs() {
 
   const [activeIndex, setActiveIndex] = React.useState(null); // // Edit mode flag
   const [daterange, setDaterange] =  React.useState([new Date(), new Date()]);
+  const [deleteCheck,setDeleteCheck] = React.useState('');
 
   const textareaStyle = {
     '&:focus': {
@@ -333,13 +334,14 @@ export default function BasicTabs() {
       console.log('RES.data===>>>', RES.data)
       console.log('3333', commandGet)
     }).catch(err => console.log('ERROR222', err))
-  }, [empty]);
+  }, [empty,deleteCheck]);
 
   const commetDelete = (id) => {
     console.log('DELETE ID', id);
     axios.delete(`http://89.116.30.81:8000/comment/delete/${id}/`).then((val) => {
 
       console.log('VAL', val)
+      setDeleteCheck(val)
     }).catch(err => console.log('err==>>', err))
   }
 
@@ -665,11 +667,11 @@ setDaterange('')
            
 
              <Box sx={{ marginTop: '45px'}}>
-              {dateTernry ? <Box sx={{  flexGrow: 1, width: '102%',marginLeft:'-5px' ,height:'290px',overflowY:'scroll' }}>
-              <Grid container spacing={2} columns={26}>
+              {dateTernry ? <Box sx={{  flexGrow: 1, width: '103%',marginLeft:'-5px' ,height:'290px',overflowY:'scroll' }}>
+              <Grid container spacing={1} columns={27}>
                 {getDateval.map((object, index) => (
-                  <Grid sx={{ marginTop: '45px', }} item xs={6} key={object.id}>
-                    <Grid className="zoom-effect" sx={{ backgroundColor: 'white', border: '1px solid black', width: '100%', height: '150%', borderRadius: '10px' }} container >
+                  <Grid  sx={{ marginBottom: '45px', marginTop:'7px' }} item xs={6.7} key={object.id}>
+                    <Grid className="zoom-effect" sx={{ backgroundColor: 'white', border: '1px solid black', width: '98%', height: '150%', borderRadius: '10px' }} container >
                       <Grid disabled={activeIndex !== index} >
                         <Box  sx={{ display: 'flex', alignItems: 'center', marginTop: 1 }}>
                           <Box  >
@@ -730,10 +732,10 @@ setDaterange('')
             </Box> 
             :
             
-            <Box sx={{ flexGrow: 1, width: '102%',marginLeft:'-5px' ,height:'290px',overflowY:'scroll',}}>
-            <Grid container spacing={2} columns={26}>
+            <Box sx={{ flexGrow: 1, width: '103%',marginLeft:'-5px' ,height:'290px',overflowY:'scroll',}}>
+            <Grid container spacing={2} columns={27}>
               { commandGet.map((object, index) => (
-                <Grid sx={{ marginBottom: '45px', marginTop:'7px' }} item xs={6.4} key={object.id}>
+                <Grid sx={{ marginBottom: '45px', marginTop:'7px' }} item xs={6.7} key={object.id}>
                   <Grid className="zoom-effect" sx={{ backgroundColor: 'white', border: '1px solid black',width: '100%',  height: '150%', borderRadius: '10px' }} container >
                     <Grid disabled={activeIndex !== index} >
                       <Box  sx={{ display: 'flex', alignItems: 'center', marginTop: 1 }}>
