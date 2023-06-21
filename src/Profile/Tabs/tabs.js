@@ -20,6 +20,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Textarea from '@mui/joy/Textarea';
+import Option from "@mui/joy/Option";
+import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
+import Select, { selectClasses } from "@mui/joy/Select";
 
 // import Box from '@mui/material/Box';--
 import TextField from '@mui/material/TextField';
@@ -30,19 +33,54 @@ import InfoIcon from "@mui/icons-material/Info";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import CheckIcon from '@mui/icons-material/Check';
 
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+// import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+
 import axios from "axios";
 
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+
+import { List, ListItem, ListItemText } from '@mui/material';
+
+import { TextareaAutosize } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+
+
+import MenuItem from '@mui/material/MenuItem';
 
 import { styled } from '@mui/material/styles';
 // import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+// import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+
+
+
+// import AdapterDateFns from '@mui/lab/AdapterDateFns';
+// import Stack from '@mui/material/Stack';
+// import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
+// import DesktopDateRangePicker from '@mui/lab/DesktopDateRangePicker';
+
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+// import DatePicker from 'react-datepicker';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
+import 'react-calendar/dist/Calendar.css';
+
+import SendIcon from '@mui/icons-material/Send';
+
+
+
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -100,6 +138,21 @@ export default function BasicTabs() {
   const [taskReset, settaskRest] = React.useState('');
   const [timeReset, settimeReset] = React.useState(null);
 
+  const [startDate, setStartDate] = React.useState(null);
+  const [empty, setEmpty] = React.useState('');
+
+  const [dateTernry , setDateTernry] = React.useState(false);
+  const [getDateval,setGetDateVal] = React.useState([]);
+
+
+  // const handleStartDateChange = (date) => {
+  //   setStartDate(date);
+  // };
+
+  // const handleEndDateChange = (date) => {
+  //   setEndDate(date);
+  // };
+
   const [value1, setValue1] = React.useState(
     [
       {
@@ -117,12 +170,34 @@ export default function BasicTabs() {
   )
 
   const [activeIndex, setActiveIndex] = React.useState(null); // // Edit mode flag
+  const [daterange, setDaterange] =  React.useState([new Date(), new Date()]);
 
   const textareaStyle = {
     '&:focus': {
       backgroundColor: 'yellow',
     },
   };
+
+  const textFieldStyle = {
+    fontSize: '13px', // Adjust the font size as per your requirement
+    padding: '-11px -11px', 
+  };
+
+  const textareaStyle1 = {
+    border: 'none',
+    resize: 'none',
+    outline: 'none',
+     width: '1000%'
+    // Add any additional styling you need
+  };
+
+  const dateRangePickerStyle = {
+    padding: '16px', // Adjust the padding value according to your preference
+    border: 'none',
+  };
+
+
+
 
   const handleEdit = (index) => {
     setActiveIndex(index); // Enable edit mode
@@ -138,11 +213,11 @@ export default function BasicTabs() {
     const foundObject = commandGet.find(obj => obj.id === id);
     console.log('foundObject:', foundObject);
     console.log('foundObject.time:', foundObject.time);
-    console.log('timeReset:',typeof timeReset);
-     let time = ''
+    console.log('timeReset:', typeof timeReset);
+    let time = ''
 
     if (foundObject.time == timeReset || timeReset == null) {
-       time = foundObject.time;
+      time = foundObject.time;
       console.log('Time:', time);
     } else {
       time = timeReset
@@ -155,13 +230,13 @@ export default function BasicTabs() {
     console.log('ID===>>>>', id)
     // console.log('commandGet===>>>', commandGet)
     const data = {
-      task : taskReset ,
-      time : time
+      task: taskReset,
+      time: time
     }
-    
 
-    console.log('data===>>>',data)
-    axios.put(`http://89.116.30.81:8000/comment/update/${id}/`,data).then((RES1) => {
+
+    console.log('data===>>>', data)
+    axios.put(`http://89.116.30.81:8000/comment/update/${id}/`, data).then((RES1) => {
       console.log('RES1', RES1)
     }).catch(err => console.log('ERR_++>>', err))
   }
@@ -180,7 +255,7 @@ export default function BasicTabs() {
     updatedValue1[index].time = e.target.value;
     setcommandGet(updatedValue1);
     settimeReset(e.target.value);
-   console.log('e.target.value===>>>',e.target.value)
+    console.log('e.target.value===>>>', e.target.value)
   };
 
   const handleChange = (event, newValue) => {
@@ -190,14 +265,32 @@ export default function BasicTabs() {
 
   const onSubmitForm = (e) => {
 
-    e.preventDefault()
-  
+    e.preventDefault();
+    // window.location.reload();
+
     console.log('task===>>>>', task)
+    console.log('date======>>>>>>', date)
 
 
     const getDate = date;
     const hours = getDate.$H
     const minutes = getDate.$m
+    const ChooseDate = getDate.$d
+
+    // const setDate = new Date(ChooseDate);
+    // const extractedDate = setDate.toUTCString().slice(0, -4);
+  // const formattedDate = extractedDate.toLocaleDateString('en-GB');
+  const dateString = ChooseDate.toString();
+  // const extractedDate =dateString.substring(0, dateString.lastIndexOf(')') + 1);
+
+  const extractedDate = dateString.replace(' (India Standard Time)', '');
+
+  console.log('extractedDate======>>>>>>', extractedDate)
+
+//     const convertDate = ChooseDate.map(date => date.toDateString());
+
+//     const dateConvert = new Date(convertDate);
+// const perfectDate = dateConvert.toLocaleDateString('en-GB');
 
     let period;
     if (hours < 12) {
@@ -206,23 +299,15 @@ export default function BasicTabs() {
       period = "PM";
     }
 
-    const findDate = getDate.$d;
-    // console.log('findDate===>>>>',findDate)
 
-    // const date = findDate.getDate(); // Get the date value (24)
-    // const month = findDate.getMonth() + 1; // Get the month value (May is represented as 4, so add 1 to get 5)
-    // const year = findDate.getFullYear();
-
-    // console.log('hour===>>>>',hour)
-    // console.log('minutes===>>>>',minutes)
-    // console.log('period===>>>>',period)
+  
 
     const data = {
       task: task,
       hours: hours,
       minutes: minutes,
       period: period,
-      // findDate: findDate,
+      findDate: extractedDate,
 
     }
 
@@ -230,12 +315,13 @@ export default function BasicTabs() {
       .then((response) => {
         console.log('resss', response);
       })
-      .catch(err => console.log('err', err))
+      .catch(err => console.log('err===>>>>>', err))
 
     console.log('data===>>>>', data)
     // console.log('year===>>>>',year)
     setTask('')
-   setDate('');
+    setDate('');
+    setEmpty(data)
 
   }
 
@@ -244,18 +330,47 @@ export default function BasicTabs() {
     axios.get('http://89.116.30.81:8000/comment/list/').then((RES) => {
       console.log('RESPONSE', RES);
       setcommandGet(RES.data)
+      console.log('RES.data===>>>', RES.data)
       console.log('3333', commandGet)
     }).catch(err => console.log('ERROR222', err))
-  }, []);
+  }, [empty]);
 
-  const commetDelete = (id) =>{
-    console.log('DELETE ID',id);
-    axios.delete(`http://89.116.30.81:8000/comment/delete/${id}/`).then((val)=>{
+  const commetDelete = (id) => {
+    console.log('DELETE ID', id);
+    axios.delete(`http://89.116.30.81:8000/comment/delete/${id}/`).then((val) => {
 
-      console.log('VAL',val)
-    }).catch(err=>console.log('err==>>',err))
+      console.log('VAL', val)
+    }).catch(err => console.log('err==>>', err))
   }
 
+  const filterDate = () =>{
+    console.log('Date===>>>',daterange)
+    const [startDateString, endDateString] = daterange.map(date => date.toDateString());
+    console.log('startDateString===..>>>',startDateString); // Output: "Thu Jun 01 2023"
+console.log('endDateString===>>>',endDateString); 
+
+const startDate_check = new Date(startDateString);
+const endDate_check = new Date(endDateString);
+const startDate = startDate_check.toLocaleDateString('en-GB');
+const endDate = endDate_check.toLocaleDateString('en-GB');
+// console.log('formattedDate===..>>>',formattedDate); 
+console.log('startDate===..>>>',startDate); 
+console.log('endDate===..>>>',endDate); 
+const date = {
+  startDate : startDate,
+  endDate : endDate
+} 
+// console.log('date===>>>',date); 
+axios.get(`http://89.116.30.81:8000/comment/list/filter/?startDate=${startDate}&endDate=${endDate}`).then((res)=>{
+  console.log('res===>>>',res.data);
+  setGetDateVal(res.data);
+  setDateTernry(true);
+}).catch(err=>console.log('err===>>',err))
+
+setDaterange('')
+
+  }
+ 
 
 
   return (
@@ -312,110 +427,112 @@ export default function BasicTabs() {
           />
         </Tabs>
       </Box>
-      <TabPanel sx={{ fontSize: "30px" }} value={value} index={0}>
-        <section className="basic-information-section">
-          <div className="overview-section">
-            <div className="d-flex heading justify-content-between">
-              <div className="">
-                <b>Additional overview</b>
-              </div>
-              <div>
-                <a href="#">
-                  info <InfoIcon />
-                </a>
-              </div>
-            </div>
-            <div className="overview-content content">
-              <div className="row">
-                <div className="col-md-4">
-                  <div className="row">
-                    <div className="col-md-6">Team members</div>
-                    <div className="col-md-6">{""}</div>
-                    <div className="col-md-6">Background</div>
-                    <div className="col-md-6">{"Not "}</div>
-                    <div className="col-md-6">Demand Salary</div>
-                    <div className="col-md-6">{"$3000-$4000"}</div>
-                  </div>
+      <Box sx={{ marginLeft: '30px' }}>
+        <TabPanel sx={{ fontSize: "30px" }} value={value} index={0}>
+          <section className="basic-information-section">
+            <div className="overview-section">
+              <div className="d-flex heading justify-content-between">
+                <div className="">
+                  <b>Additional overview</b>
                 </div>
-                <div className="col-md-8">
-                  <div className="row">
-                    <div className="col-md-6 link-color">Links</div>
-                    <div className="col-md-6"></div>
-                    <div className="col-md-6">On-Required</div>
-                    <div className="col-md-6">{"On site required"}</div>
-                    <div className="col-md-6">Remote Frienfdly</div>
-                    <div className="col-md-6">{"Available"}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="post-interview-section">
-            <div className="d-flex heading justify-content-between">
-              <div className="">
-                <b>Post Interview skill Assessment</b>
-              </div>
-              <div>
-                <a href="#">View Full Feedback</a>
-              </div>
-            </div>
-            <div className="post-interview-content content">
-              <div className="row">
-                <div className="col-md-6">
-                  <div className="row">
-                    <div className="col-md-4">Responsive web Design</div>
-                    <div className="col-md-8 d-flex">
-                      <RatingValue rating={5} />({5} out of 5)
-                    </div>
-                    <div className="col-md-4">Corporate Brand Identity</div>
-                    <div className="col-md-8 d-flex">
-                      <RatingValue rating={2.5} />({2.5} out of 5)
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="row">
-                    <div className="col-md-5">User Interface Design</div>
-                    <div className="col-md-7 d-flex">
-                      <RatingValue rating={3} />({3} out of 5)
-                    </div>
-                    <div className="col-md-5">Label and Package Design</div>
-                    <div className="col-md-7 d-flex">
-                      <RatingValue rating={4.5} />({4.5} out of 5)
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="attachments-documents-section">
-            <div className="d-flex heading justify-content-between">
-              <div className="">
-                <b>Attachments Documents</b>({3} in total)
-              </div>
-              <div>
-                <a href="#">View All</a>
-              </div>
-            </div>
-            <div className="attachments-documents-content content">
-              <div className="row">
-                <div className="col-md-6">
+                <div>
                   <a href="#">
-                    <PictureAsPdfIcon />
-                    {"kjkfj"}
-                  </a>
-                </div>
-                <div className="col-md-6">
-                  <a href="#">
-                    <PictureAsPdfIcon />
-                    {"vkfdjvkjdk"}
+                    info <InfoIcon />
                   </a>
                 </div>
               </div>
+              <div className="overview-content content">
+                <div className="row">
+                  <div className="col-md-4">
+                    <div className="row">
+                      <div className="col-md-6">Team members</div>
+                      <div className="col-md-6">{""}</div>
+                      <div className="col-md-6">Background</div>
+                      <div className="col-md-6">{"Not "}</div>
+                      <div className="col-md-6">Demand Salary</div>
+                      <div className="col-md-6">{"$3000-$4000"}</div>
+                    </div>
+                  </div>
+                  <div className="col-md-8">
+                    <div className="row">
+                      <div className="col-md-6 link-color">Links</div>
+                      <div className="col-md-6"></div>
+                      <div className="col-md-6">On-Required</div>
+                      <div className="col-md-6">{"On site required"}</div>
+                      <div className="col-md-6">Remote Frienfdly</div>
+                      <div className="col-md-6">{"Available"}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </section>
-      </TabPanel>
+            <div className="post-interview-section">
+              <div className="d-flex heading justify-content-between">
+                <div className="">
+                  <b>Post Interview skill Assessment</b>
+                </div>
+                <div>
+                  <a href="#">View Full Feedback</a>
+                </div>
+              </div>
+              <div className="post-interview-content content">
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="row">
+                      <div className="col-md-4">Responsive web Design</div>
+                      <div className="col-md-8 d-flex">
+                        <RatingValue rating={5} />({5} out of 5)
+                      </div>
+                      <div className="col-md-4">Corporate Brand Identity</div>
+                      <div className="col-md-8 d-flex">
+                        <RatingValue rating={2.5} />({2.5} out of 5)
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="row">
+                      <div className="col-md-5">User Interface Design</div>
+                      <div className="col-md-7 d-flex">
+                        <RatingValue rating={3} />({3} out of 5)
+                      </div>
+                      <div className="col-md-5">Label and Package Design</div>
+                      <div className="col-md-7 d-flex">
+                        <RatingValue rating={4.5} />({4.5} out of 5)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="attachments-documents-section">
+              <div className="d-flex heading justify-content-between">
+                <div className="">
+                  <b>Attachments Documents</b>({3} in total)
+                </div>
+                <div>
+                  <a href="#">View All</a>
+                </div>
+              </div>
+              <div className="attachments-documents-content content">
+                <div className="row">
+                  <div className="col-md-6">
+                    <a href="#">
+                      <PictureAsPdfIcon />
+                      {"kjkfj"}
+                    </a>
+                  </div>
+                  <div className="col-md-6">
+                    <a href="#">
+                      <PictureAsPdfIcon />
+                      {"vkfdjvkjdk"}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </TabPanel>
+      </Box>
       <TabPanel value={value} index={1}>
         <Skills />
       </TabPanel>
@@ -433,8 +550,10 @@ export default function BasicTabs() {
           component="form"
           sx={{
             // '& .MuiTextField-root': { m: 1, width: '25ch' },
-            backgroundColor: '#eaf0f7',
-            height: '100vh'
+            // backgroundColor: '#6ab4f64a',
+            backgroundImage: "linear-gradient(to right, #3399ff, #ff0000)",
+            // height: '100vh',
+            paddingBottom:'30px'
           }}
           noValidate
           autoComplete="off"
@@ -452,43 +571,70 @@ export default function BasicTabs() {
         />
       </div> */}
 
-          <Box sx={{ backgroundColor: '#eaf0f7', padding: '2%' }}>
-
-           
+          <Box sx={{ padding: '2%' }}>
 
 
 
 
-            <Box sx={{ marginTop: '2%' }}>
+              <Box sx={{display:'flex', alignItems:'center',justifyContent:'space-between'}}>
 
-              <FormControl sx={{  marginLeft: '7%',   backgroundColor: 'white' }}  >
+            <Box sx={{ marginTop: '2%',  }}>
+
+              <FormControl sx={{ width:'97%',
+                borderRadius: '10px', border: '1px solid black', backgroundColor: 'white', "& .MuiOutlinedInput-root": {
+                  "& > fieldset": {
+                    border: "none"
+                  }
+                },
+              }}  >
                 {/* <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel> */}
                 <OutlinedInput
-                   sx={{  backgroundColor: '#eaf0f7' }}
-                  startAdornment={<Textarea onChange={e => setTask(e.target.value)}
-                  value={task}
-                  placeholder='Design Team Meeting '
-                  style={textareaStyle}
-                  id="outlined-adornment-password"
-                  type='text'
-                  disableUnderline={false}
-                  sx={{ border: '2px solid white', marginLeft:'-11.7px',   backgroundColor: 'white' , width:'1000%', padding:'15px',   "& fieldset": { border: 'none' },}} size="md" name="Size"  position="start"/>}
+                  sx={{}}
+                  startAdornment={<TextareaAutosize onChange={e => setTask(e.target.value)}
+                  style={textareaStyle1}
+                    value={task}
+                    label="outlined"
+                    placeholder='Design Team Meeting '
+                    // style={textareaStyle}
+                    InputProps={{
+                      classes: {
+                        input: 'no-border',
+                      },
+                    }}
+                    id="outlined-adornment-password"
+                    type='text'
+                    disableUnderline={true}
+                    sx={{
+                      border: '0px solid white', marginLeft: '-11.7px', backgroundColor: 'white', padding: '15px', "& .MuiOutlinedInput-root": {
+                        "& > fieldset": {
+                          border: "none"
+                        }
+                      }
+                    }} size="md" name="Size" position="start" />}
                   endAdornment={
-                    <InputAdornment sx={{   backgroundColor: 'white' }} position="end">
+                    <InputAdornment sx={{ backgroundColor: 'white' }} position="end">
 
 
 
+
+                      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={['DateTimePicker']}>
+                          <DateTimePicker value={date} label=" " onChange={e => setDate(e)} sx={{ "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, backgroundColor: 'white',marginBottom:1 }} />
+                        </DemoContainer>
+                      </LocalizationProvider> */}
 
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoContainer components={['TimePicker']}>
-                          <TimePicker value={date} label=" " onChange={e => setDate(e)} sx={{ "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" },   backgroundColor: 'white'  }} />
+                        <DemoContainer components={['DateTimePicker']}>
+                          <DateTimePicker value={date} label=" " onChange={e => setDate(e)} />
                         </DemoContainer>
                       </LocalizationProvider>
 
+                      {/* <IonDatetime></IonDatetime>; */}
 
 
 
-                      <CheckIcon sx={{ cursor: 'pointer', marginLeft: '10px', marginTop: '5px' }} onClick={onSubmitForm} />
+
+                      <SendIcon sx={{ cursor: 'pointer', marginLeft: '10px', marginTop: '5px' }} onClick={onSubmitForm}  />
 
                     </InputAdornment>
                   }
@@ -498,144 +644,160 @@ export default function BasicTabs() {
               </FormControl>
             </Box>
 
+            {/* <Box sx={{marginTop:'20px' , width:'50%'}}>
+           
 
-            {/* <Box>
-              {commandGet?.map((item, index) => (
-                <Box key={index}>
-                  <Box sx={{
-                    display: 'flex', alignItems: 'center', m: 3, width: '93%', marginLeft: '7%',
-                    backgroundColor: 'white', borderRadius: 3, border: '2px solid black'
-                  }}>
-                    <TextField
-                      disabled={activeIndex !== index} // Disable TextField if not active
-                      value={item.task}
-                      sx={{ padding: '15px', "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '90%' }}
-                      onChange={(e) => handleInputChange(index, e)}
-                    />
-
-                    <TextField
-                      disabled={activeIndex !== index} // Disable TextField if not active
-                      value={item.time}
-                      sx={{ "& label": { color: "secondary.main" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '20%' }}
-                      onChange={(e) => handleTimeChange(index, e)}
-                    />
-
-                    <Box sx={{ width: '10%' }}>
-
-                      {activeIndex === index ? (
-                        // <CheckIcon onClick={() => setActiveIndex(null)}/>
-                        <CheckIcon sx={{ cursor:'pointer'}} onClick={() => resetVal(item.id)} />
-
-                      ) : (
-                        <ModeEditOutlineIcon sx={{ cursor:'pointer'}} onClick={() => handleEdit(index, item.id)} />
-
-                      )}
-                       
-                       <DeleteForeverIcon onClick={()=>commetDelete(item.id)} sx={{marginLeft:'10px',paddingRight:'5px',color:'red' , cursor:'pointer'}} />
-
-                    </Box>
-                  </Box>
-                </Box>
-              ))}
+<LocalizationProvider   dateAdapter={AdapterDayjs}>
+      <DemoContainer  components={['DateRangePicker']}>
+        <DateRangePicker    style={dateRangePickerStyle} sx={{padding:'30px',width:'100%',marginBottom:'30px'}}  calendars={1} localeText={{ start: 'Check-in', end: 'Check-out' }} />
+      </DemoContainer>
+    </LocalizationProvider>
             </Box> */}
-
-            {/* <Box>
-            <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={3}>
-      
-        <Grid item xs={6}>
-          <Item>{commandGet?.map((item, index) => (
-                <Box key={index}>
-                  <Box sx={{
-                    display: 'flex', alignItems: 'center', m: 3, width: '93%', marginLeft: '7%',
-                    backgroundColor: 'white', borderRadius: 3, border: '2px solid black'
-                  }}>
-                    <TextField
-                      disabled={activeIndex !== index} // Disable TextField if not active
-                      value={item.task}
-                      sx={{ padding: '15px', "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '90%' }}
-                      onChange={(e) => handleInputChange(index, e)}
-                    />
-
-                    <TextField
-                      disabled={activeIndex !== index} // Disable TextField if not active
-                      value={item.time}
-                      sx={{ "& label": { color: "secondary.main" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '20%' }}
-                      onChange={(e) => handleTimeChange(index, e)}
-                    />
-
-                    <Box sx={{ width: '10%' }}>
-
-                      {activeIndex === index ? (
-                        // <CheckIcon onClick={() => setActiveIndex(null)}/>
-                        <CheckIcon sx={{ cursor:'pointer'}} onClick={() => resetVal(item.id)} />
-
-                      ) : (
-                        <ModeEditOutlineIcon sx={{ cursor:'pointer'}} onClick={() => handleEdit(index, item.id)} />
-
-                      )}
-                       
-                       <DeleteForeverIcon onClick={()=>commetDelete(item.id)} sx={{marginLeft:'10px',paddingRight:'5px',color:'red' , cursor:'pointer'}} />
-
-                    </Box>
-                  </Box>
-                </Box>
-              ))}</Item>
-        </Grid>
-        
-      </Grid>
-    </Box>
-            </Box> */}
-
-            <Box sx={{ marginTop:'45px',marginLeft:'30px'}}>
-            <Grid  container spacing={3}>
-        {commandGet.map((object,index) => (
-          <Grid   item xs={6} key={object.id}>
-            <Grid sx={{backgroundColor:'white',border:'1px solid black'}} container >
-            <Grid   disabled={activeIndex !== index}  item xs={14}>
-                <Box sx={{display:'flex',alignItems:'center' }}>
-                  <Box>
-                <TextField
-                      disabled={activeIndex !== index} // Disable TextField if not active
-                      value={object.time}
-                      sx={{ padding: '15px', "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '90%' }}
-                      onChange={(e) => handleInputChange(index, e)}
-                    />
-                    </Box>
-                    <Box>
-
-                    <Box sx={{ width: '10%',display:'flex'}}>
-
-{activeIndex === index ? (
-  // <CheckIcon onClick={() => setActiveIndex(null)}/>
-  <CheckIcon sx={{ cursor:'pointer'}} onClick={() => resetVal(object.id)} />
-
-) : (
-  <ModeEditOutlineIcon sx={{ cursor:'pointer'}} onClick={() => handleEdit(index, object.id)} />
-
-)}
- 
- <DeleteForeverIcon onClick={()=>commetDelete(object.id)} sx={{marginLeft:'10px',paddingRight:'5px',color:'red' , cursor:'pointer'}} />
-
-</Box>
-                    </Box>
-                    </Box>
-              </Grid>
-              <Grid  disabled={activeIndex !== index} item xs={12}>
-              <TextField
-                      disabled={activeIndex !== index} // Disable TextField if not active
-                      value={object.task}
-                      sx={{ padding: '15px', "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '90%' }}
-                      onChange={(e) => handleInputChange(index, e)}
-                    />
-              </Grid>
-              
-            </Grid>
-            
-          </Grid>
-        ))}
-      </Grid>
+              <Box sx={{marginTop:'20px' , backgroundColor:'white',borderRadius:'10px', border:'1px solid black',width:'55%' }}>
+            <DateRangePicker onChange={setDaterange} value={daterange} localeText={{ start: 'Check-in', end: 'Check-out' }} />
+            <CheckIcon onClick={filterDate}/>
             </Box>
+           
+           
+
+            </Box>
+
+           
+
+             <Box sx={{ marginTop: '45px'}}>
+              {dateTernry ? <Box sx={{  flexGrow: 1, width: '102%',marginLeft:'-5px' ,height:'290px',overflowY:'scroll' }}>
+              <Grid container spacing={2} columns={26}>
+                {getDateval.map((object, index) => (
+                  <Grid sx={{ marginTop: '45px', }} item xs={6} key={object.id}>
+                    <Grid className="zoom-effect" sx={{ backgroundColor: 'white', border: '1px solid black', width: '100%', height: '150%', borderRadius: '10px' }} container >
+                      <Grid disabled={activeIndex !== index} >
+                        <Box  sx={{ display: 'flex', alignItems: 'center', marginTop: 1 }}>
+                          <Box  >
+                            <TextField
+                              InputProps={{
+                                style: textFieldStyle,
+                              }}
+                              size="small"
+                              disabled={activeIndex !== index} // Disable TextField if not active
+                              value={object.time}
+                              sx={{  marginLeft:'5px', "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '55%', backgroundColor: "#6ab4f64a", borderRadius: '10px' }}
+                              onChange={(e) => handleInputChange(index, e)}
+                            />
+                          </Box>
+                          <Box>
+
+                            <Box sx={{ display: 'flex', padding: '5px', width: '100%' }}>
+                              <Box sx={{ width: '50%' }}>
+                                {activeIndex === index ? (
+                                  // <CheckIcon onClick={() => setActiveIndex(null)}/>
+                                  <CheckIcon sx={{ cursor: 'pointer', padding: '5px' }} onClick={() => resetVal(object.id)} />
+
+                                ) : (
+                                  <ModeEditOutlineIcon sx={{ cursor: 'pointer', padding: '5px' }} onClick={() => handleEdit(index, object.id)} />
+
+                                )}
+                              </Box >
+                              <Box sx={{ width: '50%' }}>
+
+                                <DeleteForeverIcon onClick={() => commetDelete(object.id)} sx={{ marginLeft: '3px', paddingRight: '5px', cursor: 'pointer' }} />
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Box>
+                      </Grid>
+                      <Grid disabled={activeIndex !== index} item xs={12}>
+                        <Textarea
+                          className="disabledTextarea"
+                          disabled={activeIndex !== index} // Disable TextField if not active
+                          value={object.task}
+                          sx={{
+                            marginLeft:'8px',
+                            "& label": { color: "black" }, "& fieldset": { border: 'none' }, "& .MuiOutlinedInput-root": {
+                              "& > fieldset": {
+                                border: "none"
+                              }
+                            }, "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '90%'
+                          }}
+                          onChange={(e) => handleInputChange(index, e)}
+                        />
+                      </Grid>
+
+                    </Grid>
+
+                  </Grid>
+                ))}
+              </Grid>
+            </Box> 
+            :
+            
+            <Box sx={{ flexGrow: 1, width: '102%',marginLeft:'-5px' ,height:'290px',overflowY:'scroll',}}>
+            <Grid container spacing={2} columns={26}>
+              { commandGet.map((object, index) => (
+                <Grid sx={{ marginBottom: '45px', marginTop:'7px' }} item xs={6.4} key={object.id}>
+                  <Grid className="zoom-effect" sx={{ backgroundColor: 'white', border: '1px solid black',width: '100%',  height: '150%', borderRadius: '10px' }} container >
+                    <Grid disabled={activeIndex !== index} >
+                      <Box  sx={{ display: 'flex', alignItems: 'center', marginTop: 1 }}>
+                        <Box  >
+                          <TextField
+                            InputProps={{
+                              style: textFieldStyle,
+                            }}
+                            size="small"
+                            disabled={activeIndex !== index} // Disable TextField if not active
+                            value={object.time}
+                            sx={{  marginLeft:'5px', "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '55%', backgroundColor: "#6ab4f64a", borderRadius: '10px' }}
+                            onChange={(e) => handleInputChange(index, e)}
+                          />
+                        </Box>
+                        <Box>
+
+                          <Box sx={{ display: 'flex', padding: '5px', width: '100%' }}>
+                            <Box sx={{ width: '50%' }}>
+                              {activeIndex === index ? (
+                                // <CheckIcon onClick={() => setActiveIndex(null)}/>
+                                <CheckIcon sx={{ cursor: 'pointer', padding: '5px' }} onClick={() => resetVal(object.id)} />
+
+                              ) : (
+                                <ModeEditOutlineIcon sx={{ cursor: 'pointer', padding: '5px' }} onClick={() => handleEdit(index, object.id)} />
+
+                              )}
+                            </Box >
+                            <Box sx={{ width: '50%' }}>
+
+                              <DeleteForeverIcon onClick={() => commetDelete(object.id)} sx={{ marginLeft: '3px', paddingRight: '5px', cursor: 'pointer' }} />
+                            </Box>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Grid>
+                    <Grid disabled={activeIndex !== index} item xs={12}>
+                      <Textarea
+                        className="disabledTextarea"
+                        disabled={activeIndex !== index} // Disable TextField if not active
+                        value={object.task}
+                        sx={{
+                          marginLeft:'8px',
+                          "& label": { color: "black" }, "& fieldset": { border: 'none' }, "& .MuiOutlinedInput-root": {
+                            "& > fieldset": {
+                              border: "none"
+                            }
+                          }, "& label": { color: "black" }, "& fieldset": { border: 'none' }, "&.MuiOutlinedInput-notchedOutline": { border: "none" }, width: '90%'
+                        }}
+                        onChange={(e) => handleInputChange(index, e)}
+                      />
+                    </Grid>
+
+                  </Grid>
+
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+            
+            }
+             </Box>
+
+           
 
           </Box>
 

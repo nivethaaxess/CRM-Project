@@ -20,57 +20,16 @@ import Profile from './Profile/profile';
 function App() {
   return (
     <div >
-      {/* <div >
-        <div>
-          <Navbar />
-        </div>
-        <div className='box2'>
-          <Menu />
-          <Box>
-
-            <Routes>
-              <Route path="/" element={<Profile />} /> 
-              <Route path="/" element={<LoginPage />} />
-              <Route path="/dashboard" element={<Dashboard />} /> 
-            <Route path="/profile" element={<Profile />} /> 
-             <Route path="/dashboard1" element={<Dashboard1 />} /> 
-             <Route path="/check" element={<User1 />} />
-            </Routes>
-
-          </Box>
-        </div>
-      </div> */}
-
-{/* <Routes>
-          <Route path="/" element={
-            <>
-              <LoginPage />
-            </>
-          } />
-          <Route path="/dash" element={
-            <>
-              <Navbar />
-              <Box sx={{display:'flex'}}>
-                <Menu />
-                <Box>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/dashboard1" element={<Dashboard1 />} />
-                  <Route path="/check" element={<User1 />} />
-                </Box>
-              </Box>
-            </>
-          } />
-        </Routes> */}
+     
 
         
       <div>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          {/* <Route path="/" element={<LoginPage />} />
           <Route path="/dash" element={<DashboardLayout />} />
-          <Route path='/user' element={<User1/>}/>
+          <Route path='/user' element={<User1/>}/> */}
        
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/" element={<Profile />} />
         </Routes>
       </div>
       </div>

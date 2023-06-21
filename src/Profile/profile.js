@@ -67,16 +67,10 @@ const Profile = () => {
 
   return (
     <div>
-      <Box>
-        {/* <Navbar/> */}
-      </Box>
-      <Box sx={{ display: 'flex' }}>
-        <Box>
-      {/* <Menu /> */}
-      </Box>
-      <Box>
+      
+      
         <div id="profile" className="profile-page ">
-        <div className="container">
+        <div className="">
           <header className="border-bottom">
             <div className="d-flex align-items-center justify-content-between">
               <div className="d-flex">
@@ -141,7 +135,7 @@ const Profile = () => {
             </div>
             {/*----------------------------profile section----------------*/}
             <div className="profile-section">
-              <div className="container">
+              <div className="">
                 <div className="row ">
                   <div className="col-lg-9 ">
                     <div className="profile row section-border">
@@ -293,10 +287,10 @@ const Profile = () => {
             </div>
             {/**--------------------------tab-section starts----------------------------- */}
             <div className="tab-section">
-              <div className="container">
+              <div className="">
                 <div className="row">
                   <div className="col-lg-9">
-                    <Box sx={{ width: "100%" }}>
+                    <Box sx={{ width: "103%",marginLeft:'-1%' }}>
                       <Tabs />
                     </Box>
                   </div>
@@ -311,8 +305,8 @@ const Profile = () => {
           </main>
         </div>
       </div>
-      </Box>
-      </Box>
+     
+     
       
     </div>
   );
