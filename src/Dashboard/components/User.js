@@ -35,7 +35,7 @@ const User = ({ toggleDrawer }) => {
   };
 
   return (
-     
+
     <Box sx={{backgroundColor: '#022567',color:'white', width:'200px',marginTop:2,marginLeft:1,}} flex={3} >
        <Box>
         {/* <Navbar/> */}
@@ -66,25 +66,25 @@ const User = ({ toggleDrawer }) => {
               <ListItemText primary="PROFILE" />
               </Link>
             </ListItem>
-            <ListItem button onclick={handleTwo}>
+            <ListItemButton onclick={handleTwo}>
               <ListItemText primary="UserGroup" />
-            </ListItem>
-            <ListItem button onclick={handleTwo}>
+            </ListItemButton>
+            <ListItemButton onclick={handleTwo}>
               <ListItemText primary="Userroles" />
-            </ListItem>
-            <ListItem button onclick={handleTwo}>
+            </ListItemButton>
+            <ListItemButton onclick={handleTwo}>
               <ListItemText primary="Invalid User" />
-            </ListItem>
-            <ListItem button onclick={handleTwo}>
+            </ListItemButton>
+            <ListItemButton onclick={handleTwo}>
               <ListItemText primary="Add new user" />
-            </ListItem>
+            </ListItemButton>
           </List>
         </Collapse>
       </List>
       </Box>
-      </Box>)
+      </Box>
+      //  </Box> 
+  )
 }
- 
-
 
 export default User;

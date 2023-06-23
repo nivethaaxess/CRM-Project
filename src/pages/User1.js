@@ -223,28 +223,26 @@ const User1 = ({ rows, columns }) => {
   //     })
   // }, [])
 
-  let qaColumns = []
+  let qaColumns = [];
 
+if (api.length > 0) {
+  console.log(api);
+  qaColumns = Object.keys(api[0]).map((a) => {
+    return { field: a };
+  });
+  console.log(qaColumns);
+}
 
-  if (api.length > 0) {
-    console.log(api)
-    qaColumns = Object.keys(api[0]).map((a) => {
-      return { field: a }
+let enquiryColumns = [];
 
-    })
-    console.log(qaColumns)
-  }
-
-  let enquiryColumns= [];
-
-  if(enapi.length > 0)
-  {
-    console.log('kkk',enapi)
-    enquiryColumns= Object.keys(enapi[0]).map((b) => {
-         return { field: b }
-  })
+if (enapi.length > 0) {
+  console.log('kkk', enapi);
+  enquiryColumns = Object.keys(enapi[0]).map((b) => {
+    return { field: b };
+  });
   // console.log(enquiryColumns);
 }
+
   
 
 
@@ -416,13 +414,12 @@ const User1 = ({ rows, columns }) => {
             </div>
           ) : (
             <div style={{ height: 400, width: '100%', marginTop: 20, marginLeft: 30 }}>
-              <TableContainer className={classes.tableContainer}>
+              <TableContainer>
                 <Table>
-                  <TableHead >
+                  <TableHead sx={{}}>
                     <TableRow>
                       {enquiryColumns.map((column) => (
-                        <TableCell key={column.field} sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5', color: '#000000' }} >
-                        {column.field}</TableCell>
+                        <TableCell key={column.field}>{column.field}</TableCell>
                       ))}
                     </TableRow>
                   </TableHead>
@@ -437,7 +434,7 @@ const User1 = ({ rows, columns }) => {
                   </TableBody>
                 </Table>
               </TableContainer>
-              {/* <TablePagination
+              <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={filteredRows.length}
@@ -445,7 +442,7 @@ const User1 = ({ rows, columns }) => {
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-              /> */}
+              />
             </div>
           )}
         </Box>
