@@ -7,6 +7,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { NativeSelect } from "@mui/material";
 
 //icons---
 // import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
@@ -24,15 +25,25 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 //popper
 import Popper from "@mui/base/Popper";
-import { styled } from "@mui/system";
+import { margin, styled } from "@mui/system";
 //search
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 //popover
+
+import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { EmojiEmotions } from "@mui/icons-material";
+//edit task
+
+import PropTypes from "prop-types";
+// import { styled } from '@mui/material/styles';
+import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+
 // component starts--------------------------------/
 
 const Todo = () => {
@@ -41,7 +52,8 @@ const Todo = () => {
   const [completedList, setCompletedList] = useState([]);
   const [newTask, setNewTask] = useState({});
   const [comment, setComment] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [commentList, setCommentList] = useState([]);
+  const [filter, setFilter] = useState("");
   // const [search, setSearch] = useState("")
   const [taskList, setTaskList] = useState([]);
 
@@ -69,14 +81,161 @@ const Todo = () => {
       .catch((err) => console.log("er", err));
   }, []);
 
-
   const getTaskList = (b) => {
+    // console.log(document.getElementById(":r1d:"))
+    // document.getElementById(":r1d:").value = ""
     let filteredDetails = taskList;
-    // if (b.length > 0) {
+    filteredDetails = taskList.filter((task) => {
+      return task.title.toLowerCase().includes(b.toLowerCase());
+    });
+    setProgressList(
+      filteredDetails.filter((a) => {
+        return a.status === "inprogress";
+      })
+    );
+    setReviewList(
+      filteredDetails.filter((a) => {
+        return a.status === "review";
+      })
+    );
+    setCompletedList(
+      filteredDetails.filter((a) => {
+        return a.status === "completed";
+      })
+    );
+  };
+
+  //task list--------------
+  useEffect(() => {
+    console.log("data change");
+    console.log(
+      "progress",
+      `http://89.116.30.81:8000/todo/filterlist/2/?status=inprogress&start_date=${viewDate}&end_date=${viewDate}`
+    );
+    axios
+      .get(
+        `http://89.116.30.81:8000/todo/filterlist/2/?status=inprogress&start_date=${viewDate}&end_date=${viewDate}`
+      )
+      .then((val) => {
+        console.log("progress", val.data);
+        setProgressList(val.data);
+      })
+      .catch((err) => console.log("er", err));
+    console.log("setprogresslist update task");
+  }, [viewDate, newTask]);
+
+  useEffect(() => {
+    console.log(
+      "review",
+      `http://89.116.30.81:8000/todo/filterlist/2/?status=review&start_date=${viewDate}&end_date=${viewDate}`
+    );
+    axios
+      .get(
+        `http://89.116.30.81:8000/todo/filterlist/2/?status=review&start_date=${viewDate}&end_date=${viewDate}`
+      )
+      .then((val) => {
+        console.log("review", val.data);
+        setReviewList(val.data);
+      })
+      .catch((err) => console.log("er", err));
+  }, [viewDate]);
+
+  useEffect(() => {
+    console.log(
+      "completed",
+      `http://89.116.30.81:8000/todo/filterlist/2/?status=completed&start_date=${viewDate}&end_date=${viewDate}`
+    );
+    axios
+      .get(
+        `http://89.116.30.81:8000/todo/filterlist/2/?status=completed&start_date=${viewDate}&end_date=${viewDate}`
+      )
+      .then((val) => {
+        console.log("completed", val.data);
+        setCompletedList(val.data);
+      })
+      .catch((err) => console.log("er", err));
+  }, [viewDate]);
+  console.log(
+    "progressList",
+    progressList,
+    "revielist",
+    reviewList,
+    "completed",
+    completedList
+  );
+  // date change---------->
+
+  const handleDateChange = (date) => {
+    let getdate = date.$D < 10 ? "0" + date.$D : date.$D;
+    let getmonth = date.$M + 1 < 10 ? "0" + (date.$M + 1) : date.$M + 1;
+    let getyear = date.$y;
+    console.log(`${getyear}-${getmonth}-${getdate}`);
+    setViewDate(`${getyear}-${getmonth}-${getdate}`);
+  };
+
+  //get Comments
+  const getComments = (taskId) => {
+    console.log("render get comments", taskId);
+    axios
+      .get(`http://89.116.30.81:8000/todo/comments/${taskId}/`)
+      .then((val) => {
+        console.log("getCommentList", val.data);
+        setCommentList(val.data);
+      })
+      .catch((err) => console.log("er", err));
+  };
+
+  //getcomment dates
+  const getCommentDates = (commentdate) => {
+    const date = new Date(commentdate);
+    const formattedDate = date.toDateString();
+    const formattedTime = date.toTimeString().slice(0, 8);
+
+    if (formattedDate == new Date().toDateString()) {
+      return formattedTime;
+    } else return formattedDate;
+  };
+  //open comment starts------------
+  const toggleComment = (UIid, classname, i, taskId) => {
+    console.log(UIid, classname, i, taskId);
+    let idElement = document.getElementById(UIid);
+    let element = idElement.getElementsByClassName(classname)[i];
+    element.classList.toggle("d-none");
+    getComments(taskId);
+  };
+  //open comment ends------------
+
+  //submit comment starts------------
+  const SubmitComment = (taskId) => {
+    console.log(comment);
+    console.log(`http://89.116.30.81:8000/todo/comments/insert/${taskId}/`);
+    let data = {
+      content: comment,
+      sender: 2,
+      receiver: null,
+    };
+    console.log(data);
+    axios
+      .post(`http://89.116.30.81:8000/todo/comments/insert/${taskId}/`, data)
+      .then((response) => {
+        console.log("entered comment", response);
+      })
+      .catch((err) => console.log("er", err));
+    setComment("");
+    getComments(taskId);
+  };
+  //submit comment ends------------
+
+  const handleFilterChange = (event) => {
+    console.log(event.target.value);
+    let filter = event.target.value;
+    let filteredDetails = taskList;
+
+    if (filter === "back-end" || filter === "front-end") {
       filteredDetails = taskList.filter((task) => {
-        return task.title.toLowerCase().includes(b.toLowerCase());
+        return task.team === filter;
       });
-    // }
+    }
     console.log(filteredDetails);
     setProgressList(
       filteredDetails.filter((a) => {
@@ -95,104 +254,68 @@ const Todo = () => {
     );
   };
 
-  // console.log("search",search)
-
-  //task list--------------
-  useEffect(() => {
-    console.log("data change")
-    console.log("progress",`http://89.116.30.81:8000/todo/filterlist/2/?status=inprogress&start_date=${viewDate}&end_date=${viewDate}`
-    )
-    axios
-      // .get(
-      //   `http://89.116.30.81:8000/daily_task/status/?status=in progress&start_date=${viewDate}&end_date=${viewDate}`
-      // )
-      .get(
-        `http://89.116.30.81:8000/todo/filterlist/2/?status=inprogress&start_date=${viewDate}&end_date=${viewDate}`
-      )
-      .then((val) => {
-
-        console.log("progress", val.data);
-        setProgressList(val.data);
-      })  
-      .catch((err) => console.log("er", err));
-    console.log("setprogresslist update task");
-  }, [viewDate, newTask]);
-
-  useEffect(() => {
-    console.log("review",`http://89.116.30.81:8000/todo/filterlist/2/?status=review&start_date=${viewDate}&end_date=${viewDate}`
-    )
-    axios
-      .get(
-        `http://89.116.30.81:8000/todo/filterlist/2/?status=review&start_date=${viewDate}&end_date=${viewDate}`
-      )
-      .then((val) => {
-        console.log("review", val.data);
-        setReviewList(val.data);
-      })
-      .catch((err) => console.log("er", err));
-  }, [viewDate]);
-
-  useEffect(() => {
-    console.log("completed",`http://89.116.30.81:8000/todo/filterlist/2/?status=completed&start_date=${viewDate}&end_date=${viewDate}`
-    )
-    axios
-      .get(
-        `http://89.116.30.81:8000/todo/filterlist/2/?status=completed&start_date=${viewDate}&end_date=${viewDate}`
-      )
-      .then((val) => {
-        console.log("completed", val.data);
-        setCompletedList(val.data);
-      })
-      .catch((err) => console.log("er", err));
-  }, [viewDate]);
-console.log("progressList",progressList,"revielist",reviewList,"completed",completedList)
-  // date change---------->
-
-  const handleDateChange = (date) => {
-    let getdate = date.$D < 10 ? "0" + date.$D : date.$D;
-    let getmonth = date.$M + 1 < 10 ? "0" + (date.$M + 1) : date.$M + 1;
-    let getyear = date.$y;
-    console.log(`${getyear}-${getmonth}-${getdate}`);
-    setViewDate(`${getyear}-${getmonth}-${getdate}`);
-  };
-
-  const toggleComment = (id, classname, i) => {
-    let idElement = document.getElementById(id);
-    let element = idElement.getElementsByClassName(classname)[i];
-    element.classList.toggle("d-none");
-  };
-
-  const SubmitComment = (id, tagname, i, taskId) => {
-    let idElement = document.getElementById(id);
-    let element = idElement.getElementsByTagName(tagname)[i];
-    let value = element.value;
-
-    console.log(taskId, value);
-    element.value = "";
-    const data = {
-      task_id: taskId,
-      comment: value,
-    };
-    axios
-      .post("http://89.116.30.81:8000/task/comments/", data)
-      .then((response) => {
-        setComment(response.data);
-        console.log("entered comment");
-      })
-      .catch((err) => console.log("er", err));
-  };
-  //task filter
-
-  const handleFilterChange = (event) => {
-    console.log(event.target.value);
-    // setFilter(event.target.value);
-  };
-
   //updateTask from newTask
 
   const updateTask = (a) => {
     setNewTask(a);
   };
+
+  //  edit task starts---
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
+  //  edit task ----
+  const StyledFormControlLabel = styled((props) => (
+    <FormControlLabel {...props} />
+  ))(({ theme, checked }) => ({
+    ".MuiFormControlLabel-label": checked && {
+      // color: theme.palette.primary.main,
+      color: "primary",
+    },
+  }));
+
+  function MyFormControlLabel(props) {
+    const radioGroup = useRadioGroup();
+    let checked = false;
+
+    if (radioGroup) {
+      checked = radioGroup.value === props.value;
+    }
+    return <StyledFormControlLabel checked={checked} {...props} />;
+  }
+
+  MyFormControlLabel.propTypes = {
+    /**
+     * The value of the component.
+     */
+    value: PropTypes.any,
+  };
+  const handleRadioChange = (event, id) => {
+    const selectedValue = event.target.value;
+
+    let data = { status: selectedValue };
+    console.log(data);
+    axios
+      .put(`http://89.116.30.81:8000/todo/update/${id}/`, data)
+      .then((response) => {
+        console.log(response);
+        console.log("edited success");
+      })
+      .catch((err) => console.log("er", err));
+  };
+
+  //edit task ends--------
+
   return (
     <div id="todo" className="position-relative p-2">
       <div
@@ -226,25 +349,27 @@ console.log("progressList",progressList,"revielist",reviewList,"completed",compl
         <div>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
+              id="tododatefilter"
               className="todo-dateFilter"
+              // value={viewDate}
               onChange={(date) => handleDateChange(date)}
             ></DatePicker>
           </LocalizationProvider>
-          <FormControl
-            sx={{ m: 1, minWidth: 120, margin: "0 2px", padding: 0 }}
-            size="small"
-          >
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              value={filter}
-              //style={{}}
+
+          <FormControl>
+            <NativeSelect
+              defaultValue={"all"}
+              inputProps={{
+                name: "age",
+                id: "uncontrolled-native",
+              }}
               onChange={handleFilterChange}
+              sx={{ margin: "0 5px" }}
             >
-              <MenuItem value={"all"}>All Project</MenuItem>
-              <MenuItem value={"back-end"}>Back-end</MenuItem>
-              <MenuItem value={"front-end"}>Front-end</MenuItem>
-            </Select>
+              <option value={"all"}>All</option>
+              <option value={"back-end"}>Back-end</option>
+              <option value={"front-end"}>Front-end</option>
+            </NativeSelect>
           </FormControl>
         </div>
       </div>
@@ -254,7 +379,7 @@ console.log("progressList",progressList,"revielist",reviewList,"completed",compl
         className="row justify-content-between position-relative"
         id="todo-list"
       >
-        <div className="col-lg-4">
+        <div className="col-lg-4 col-md-6">
           <div className="progress-list list">
             <div className="progress-Header d-flex justify-content-between align-items-flex-start header">
               <h5 className="text-center">
@@ -279,9 +404,60 @@ console.log("progressList",progressList,"revielist",reviewList,"completed",compl
                     <div className="progressItem-Card card ">
                       <div className="progressItem-header d-flex justify-content-between align-team-center">
                         <h5>{a.title[0].toUpperCase() + a.title.slice(1)}</h5>
-                        <EditIcon
-                          style={{ color: "#787c7f", fontSize: "14px" }}
-                        />
+
+                        <PopupState
+                          variant="popover"
+                          popupId="demo-popup-popover"
+                        >
+                          {(popupState) => (
+                            <div>
+                              <Button
+                                // variant="contained"
+                                className="editTaskIcon"
+                                {...bindTrigger(popupState)}
+                              >
+                                <EditIcon
+                                  style={{ color: "#787c7f", fontSize: "14px" }}
+                                />
+                              </Button>
+                              <Popover
+                                {...bindPopover(popupState)}
+                                anchorOrigin={{
+                                  vertical: "bottom",
+                                  horizontal: "center",
+                                }}
+                                transformOrigin={{
+                                  vertical: "top",
+                                  horizontal: "center",
+                                }}
+                              >
+                                <Typography sx={{ p: 2 }}>
+                                  <RadioGroup
+                                    name="use-radio-group"
+                                    defaultValue={a.status}
+                                    onChange={(e) => handleRadioChange(e, a.id)}
+                                  >
+                                    <MyFormControlLabel
+                                      value="inprogress"
+                                      label="Inprogress"
+                                      control={<Radio />}
+                                    />
+                                    <MyFormControlLabel
+                                      value="review"
+                                      label="Review"
+                                      control={<Radio />}
+                                    />
+                                    <MyFormControlLabel
+                                      value="completed"
+                                      label="Completed"
+                                      control={<Radio />}
+                                    />
+                                  </RadioGroup>
+                                </Typography>
+                              </Popover>
+                            </div>
+                          )}
+                        </PopupState>
                       </div>
                       <div className="progressItem-body">
                         <p>{a.description}</p>
@@ -291,56 +467,85 @@ console.log("progressList",progressList,"revielist",reviewList,"completed",compl
                           <CommentIcon
                             className="footer-icon"
                             onClick={() =>
-                              toggleComment("progress-body", "view-comments", i)
+                              toggleComment(
+                                "progress-body",
+                                "view-comments",
+                                i,
+                                a.id
+                              )
                             }
                           />
                           <AttachFileIcon className="footer-icon" />
                           <p className="task-date">{a.end_date}</p>
-                          <p className="priority mx-2"> {a.priority} </p>
+                          <p className="priority mx-1"> {a.priority} </p>
                           <p className="assignedBy">
-                            {" "}
-                            {"Mathew"[0].toUpperCase() + "mathew".slice(1)}
+                            {a.create_user_name[0].toUpperCase() +
+                              a.create_user_name.slice(1)}
                           </p>
                         </div>
-                        {/* <div className="view-comments d-none ">
-                          {a.comments.length > 0 ? (
-                            a.comments.map((b) => {
-                              return (
-                                <div>
-                                  <p style={{ margin: 0 }}>{b.comment}</p>
-                                  <i
-                                    style={{ fontSize: "12px", color: "gray" }}
-                                  >
-                                    {b.name} <span>{b.todate}</span>
-                                  </i>
-                                </div>
-                              );
-                            })
+                        <div className="view-comments d-none ">
+                          <hr></hr>
+                          {commentList.length > 0 ? (
+                            <div
+                              className="commentBox"
+                              style={{ maxHeight: "75px", overflowY: "scroll" }}
+                            >
+                              {commentList.map((b) => {
+                                console.log(b);
+                                return (
+                                  <div>
+                                    <p
+                                      style={{
+                                        margin: 0,
+                                        backgroundColor: "#e5e5e5",
+                                        padding: "2px 4px",
+                                        display: "inline-block",
+                                        borderRadius: "8px 5px 5px 0",
+                                      }}
+                                    >
+                                      {b.content}
+                                    </p>
+                                    <p style={{ margin: 0 }}>
+                                      <i
+                                        style={{
+                                          fontSize: "9px",
+                                          color: "gray",
+                                        }}
+                                      >
+                                        {b.sender_name}{" "}
+                                        <span>
+                                          {getCommentDates(b.created_at)}
+                                        </span>
+                                      </i>
+                                    </p>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           ) : (
                             <p>No comments</p>
                           )}
-                          <div class="form-floating addComments">
+                          <div class="addComments">
                             <textarea
-                              class="form-control"
+                              value={comment}
                               placeholder="Leave a comment here"
-                              // id="floatingTextarea2"
+                              onChange={(e) => {
+                                setComment(e.target.value);
+                              }}
+                              style={{
+                                width: "100%",
+                                display: "block",
+                                fontSize: "14px",
+                              }}
                             ></textarea>
-                            <label for="floatingTextarea2">Comments</label>
                             <button
                               type="button"
-                              onClick={() =>
-                                SubmitComment(
-                                  "progress-body",
-                                  "textarea",
-                                  i,
-                                  a.id
-                                )
-                              }
+                              onClick={() => SubmitComment(a.id)}
                             >
                               OK
                             </button>
                           </div>
-                        </div> */}
+                        </div>
                       </div>
                     </div>
                   );
@@ -351,13 +556,13 @@ console.log("progressList",progressList,"revielist",reviewList,"completed",compl
         </div>
         {/* review field starts----------------------------------- */}
 
-        <div className="col-lg-4">
+        <div className="col-lg-4 col-md-6">
           <div className="review-list list">
             <div className="review-Header d-flex justify-content-between align-items-flex-start header">
               <h5 className="text-center">
                 <ReviewsIcon
                   style={{
-                    color: "#aa34ed",
+                    color: "#dc3545",
                     fontSize: "20px",
                     marginRight: "6px",
                   }}
@@ -377,10 +582,59 @@ console.log("progressList",progressList,"revielist",reviewList,"completed",compl
                     <div className="reviewItem-Card card  ">
                       <div className="reviewItem-header d-flex justify-content-between align-team-center">
                         <h5>{a.title[0].toUpperCase() + a.title.slice(1)}</h5>
-                        <EditIcon
-                          style={{ color: "#787c7f", fontSize: "14px" }}
-                          // onClick= {editTask}
-                        />
+                        <PopupState
+                          variant="popover"
+                          popupId="demo-popup-popover"
+                        >
+                          {(popupState) => (
+                            <div>
+                              <Button
+                                // variant="contained"
+                                className="editTaskIcon"
+                                {...bindTrigger(popupState)}
+                              >
+                                <EditIcon
+                                  style={{ color: "#787c7f", fontSize: "14px" }}
+                                />
+                              </Button>
+                              <Popover
+                                {...bindPopover(popupState)}
+                                anchorOrigin={{
+                                  vertical: "bottom",
+                                  horizontal: "center",
+                                }}
+                                transformOrigin={{
+                                  vertical: "top",
+                                  horizontal: "center",
+                                }}
+                              >
+                                <Typography sx={{ p: 2 }}>
+                                  <RadioGroup
+                                    name="use-radio-group"
+                                    defaultValue={a.status}
+                                    onChange={(e) => handleRadioChange(e, a.id)}
+                                  >
+                                    <MyFormControlLabel
+                                      value="inprogress"
+                                      label="Inprogress"
+                                      control={<Radio />}
+                                    />
+                                    <MyFormControlLabel
+                                      value="review"
+                                      label="Review"
+                                      control={<Radio />}
+                                    />
+                                    <MyFormControlLabel
+                                      value="completed"
+                                      label="Completed"
+                                      control={<Radio />}
+                                    />
+                                  </RadioGroup>
+                                </Typography>
+                              </Popover>
+                            </div>
+                          )}
+                        </PopupState>
                       </div>
                       <div className="reviewItem-body">
                         <p>{a.description}</p>
@@ -390,7 +644,12 @@ console.log("progressList",progressList,"revielist",reviewList,"completed",compl
                           <CommentIcon
                             className="footer-icon"
                             onClick={() =>
-                              toggleComment("progress-body", "view-comments", i)
+                              toggleComment(
+                                "review-body",
+                                "view-comments",
+                                i,
+                                a.id
+                              )
                             }
                           />
                           <AttachFileIcon className="footer-icon" />
@@ -398,45 +657,73 @@ console.log("progressList",progressList,"revielist",reviewList,"completed",compl
                           <p className="priority mx-2"> {a.priority} </p>
                           <p className="assignedBy">
                             {" "}
-                            {"Mathew"[0].toUpperCase() + "mathew".slice(1)}
+                            {a.create_user_name[0].toUpperCase() +
+                              a.create_user_name.slice(1)}
                           </p>
                         </div>
-
-                        {/* <div className="view-comments d-none ">
-                          {a.comments.length > 0 ? (
-                            a.comments.map((b) => {
-                              return (
-                                <div>
-                                  <p style={{ margin: 0 }}>{b.comment}</p>
-                                  <i
-                                    style={{ fontSize: "12px", color: "gray" }}
-                                  >
-                                    {b.name} <span>{b.todate}</span>
-                                  </i>
-                                </div>
-                              );
-                            })
+                        <div className="view-comments d-none ">
+                          <hr></hr>
+                          {commentList.length > 0 ? (
+                            <div
+                              className="commentBox"
+                              style={{ maxHeight: "75px", overflowY: "scroll" }}
+                            >
+                              {commentList.map((b) => {
+                                console.log(b);
+                                return (
+                                  <div>
+                                    <p
+                                      style={{
+                                        margin: 0,
+                                        backgroundColor: "#e5e5e5",
+                                        padding: "2px 4px",
+                                        display: "inline-block",
+                                        borderRadius: "8px 5px 5px 0",
+                                      }}
+                                    >
+                                      {b.content}
+                                    </p>
+                                    <p style={{ margin: 0 }}>
+                                      <i
+                                        style={{
+                                          fontSize: "9px",
+                                          color: "gray",
+                                        }}
+                                      >
+                                        {b.sender_name}{" "}
+                                        <span>
+                                          {getCommentDates(b.created_at)}
+                                        </span>
+                                      </i>
+                                    </p>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           ) : (
                             <p>No comments</p>
                           )}
-                          <div class="form-floating addComments">
+                          <div class="addComments">
                             <textarea
-                              class="form-control"
+                              value={comment}
                               placeholder="Leave a comment here"
-                              // id="floatingTextarea2"
+                              onChange={(e) => {
+                                setComment(e.target.value);
+                              }}
+                              style={{
+                                width: "100%",
+                                display: "block",
+                                fontSize: "14px",
+                              }}
                             ></textarea>
-                            <label for="floatingTextarea2">Comments</label>
                             <button
                               type="button"
-                              onClick={() =>
-                                SubmitComment("review-body", "textarea", i)
-                              }
-                              className=""
+                              onClick={() => SubmitComment(a.id)}
                             >
                               OK
                             </button>
                           </div>
-                        </div> */}
+                        </div>
                       </div>
                     </div>
                   );
@@ -448,7 +735,7 @@ console.log("progressList",progressList,"revielist",reviewList,"completed",compl
 
         {/* completed field starts-------------------------------- */}
 
-        <div className="col-lg-4">
+        <div className="col-lg-4 col-md-6">
           <div className="completed-list list">
             <div className="completed-Header d-flex justify-content-between align-items-flex-start header">
               <h5 className="text-center">
@@ -473,9 +760,59 @@ console.log("progressList",progressList,"revielist",reviewList,"completed",compl
                     <div className="completedItem-Card card mb-2">
                       <div className="completedItem-header d-flex justify-content-between align-team-center">
                         <h5>{a.title[0].toUpperCase() + a.title.slice(1)}</h5>
-                        <EditIcon
-                          style={{ color: "#787c7f", fontSize: "14px" }}
-                        />
+                        <PopupState
+                          variant="popover"
+                          popupId="demo-popup-popover"
+                        >
+                          {(popupState) => (
+                            <div>
+                              <Button
+                                // variant="contained"
+                                className="editTaskIcon"
+                                {...bindTrigger(popupState)}
+                              >
+                                <EditIcon
+                                  style={{ color: "#787c7f", fontSize: "14px" }}
+                                />
+                              </Button>
+                              <Popover
+                                {...bindPopover(popupState)}
+                                anchorOrigin={{
+                                  vertical: "bottom",
+                                  horizontal: "center",
+                                }}
+                                transformOrigin={{
+                                  vertical: "top",
+                                  horizontal: "center",
+                                }}
+                              >
+                                <Typography sx={{ p: 2 }}>
+                                  <RadioGroup
+                                    name="use-radio-group"
+                                    defaultValue={a.status}
+                                    onChange={(e) => handleRadioChange(e, a.id)}
+                                  >
+                                    <MyFormControlLabel
+                                      value="inprogress"
+                                      label="Inprogress"
+                                      control={<Radio />}
+                                    />
+                                    <MyFormControlLabel
+                                      value="review"
+                                      label="Review"
+                                      control={<Radio />}
+                                    />
+                                    <MyFormControlLabel
+                                      value="completed"
+                                      label="Completed"
+                                      control={<Radio />}
+                                    />
+                                  </RadioGroup>
+                                </Typography>
+                              </Popover>
+                            </div>
+                          )}
+                        </PopupState>
                       </div>
                       <div className="completedItem-body">
                         <p>{a.description}</p>
@@ -485,58 +822,86 @@ console.log("progressList",progressList,"revielist",reviewList,"completed",compl
                           <CommentIcon
                             className="footer-icon"
                             onClick={() =>
-                              toggleComment("progress-body", "view-comments", i)
+                              toggleComment(
+                                "completed-body",
+                                "view-comments",
+                                i,
+                                a.id
+                              )
                             }
                           />
                           <AttachFileIcon className="footer-icon" />
                           <p className="task-date">{a.end_date}</p>
                           <p className="priority mx-2"> {a.priority} </p>
                           <p className="assignedBy">
-                            {" "}
-                            {"Mathew"[0].toUpperCase() + "mathew".slice(1)}
+                            {a.create_user_name[0].toUpperCase() +
+                              a.create_user_name.slice(1)}
                           </p>
                         </div>
 
-                        {/* <div className="view-comments d-none ">
-                          {a.comments.length > 0 ? (
-                            a.comments.map((b) => {
-                              return (
-                                <div>
-                                  <p style={{ margin: 0 }}>{b.comment}</p>
-                                  <i
-                                    style={{ fontSize: "12px", color: "gray" }}
-                                  >
-                                    {b.name} <span>{b.todate}</span>
-                                  </i>
-                                </div>
-                              );
-                            })
+                        <div className="view-comments d-none ">
+                          <hr></hr>
+                          {commentList.length > 0 ? (
+                            <div
+                              className="commentBox"
+                              style={{ maxHeight: "75px", overflowY: "scroll" }}
+                            >
+                              {commentList.map((b) => {
+                                console.log(b);
+                                return (
+                                  <div>
+                                    <p
+                                      style={{
+                                        margin: 0,
+                                        backgroundColor: "#e5e5e5",
+                                        padding: "2px 4px",
+                                        display: "inline-block",
+                                        borderRadius: "8px 5px 5px 0",
+                                      }}
+                                    >
+                                      {b.content}
+                                    </p>
+                                    <p style={{ margin: 0 }}>
+                                      <i
+                                        style={{
+                                          fontSize: "9px",
+                                          color: "gray",
+                                        }}
+                                      >
+                                        {b.sender_name}{" "}
+                                        <span>
+                                          {getCommentDates(b.created_at)}
+                                        </span>
+                                      </i>
+                                    </p>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           ) : (
                             <p>No comments</p>
                           )}
-                          <div class="form-floating addComments">
+                          <div class="addComments">
                             <textarea
-                              class="form-control"
+                              value={comment}
                               placeholder="Leave a comment here"
-                              // id="floatingTextarea2"
+                              onChange={(e) => {
+                                setComment(e.target.value);
+                              }}
+                              style={{
+                                width: "100%",
+                                display: "block",
+                                fontSize: "14px",
+                              }}
                             ></textarea>
-                            <label for="floatingTextarea2">Comments</label>
                             <button
                               type="button"
-                              onClick={() =>
-                                SubmitComment(
-                                  "completed-body",
-                                  "textarea",
-                                  i,
-                                  a.id
-                                )
-                              }
-                              className="text-end"
+                              onClick={() => SubmitComment(a.id)}
                             >
                               OK
                             </button>
                           </div>
-                        </div> */}
+                        </div>
                       </div>
                     </div>
                   );

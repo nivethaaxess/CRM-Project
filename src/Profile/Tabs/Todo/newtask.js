@@ -76,7 +76,6 @@ export default function ModalDemo(props) {
 
     setTitle("");
     setDescription("");
-
     props.updateTask(data);
   };
 
