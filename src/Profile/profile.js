@@ -11,7 +11,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import RatingValue from "./Rating/rating";
 
 
-import { PDFReader } from "reactjs-pdf-reader";
+
 
 
 
