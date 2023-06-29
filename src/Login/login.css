@@ -1,13 +1,37 @@
-Border-Style {
+.Border-Style {
 
-       display: flex;
-       flex-direction: column;
-       background: rgba(255, 255, 255, 0.06);
-       box-shadow: 0 20px 32px 15px rgba(31, 38, 135, .37);
-   
-   
-   }
-   
-   .Register-icon {
-       color: blueviolet;
-   }
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 20px 32px 15px rgba(31, 38, 135, .37);
+    text-decoration: double !important;
+
+}
+
+.Register-icon {
+    color: blueviolet;
+}
+
+.Text-color {
+    color: white;
+}
+
+/* .Marquee-style {
+
+    color: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%); ;
+    animation-name: example;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes example {
+    from {
+        color: rgb(131, 58, 180);
+
+    }
+
+    to {
+
+        color: linear-gradient(141deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+    }
+} */

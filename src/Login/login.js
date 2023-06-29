@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Container, Grid, TextField, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import axios from 'axios';
-// import "./login.css"
+import "./login.css"
 
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/system';
-
-
 
 
 const LoginPage = () => {
@@ -29,8 +27,12 @@ const LoginPage = () => {
   const [signUpOpen, setSignUpOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [otpVerificationOpen, setOtpVerificationOpen] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [otpError, setOtpError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const navigate = useNavigate();
+
   const LoginButton = styled(Button)(({ theme }) => ({
     //backgroundColor: '#2979ff',
     color: '#2979ff',
@@ -47,8 +49,6 @@ const LoginPage = () => {
 
 
 
-  
-
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
     //  checkCompletion();
@@ -60,13 +60,14 @@ const LoginPage = () => {
     // checkCompletion();
   };
 
-const handleUserName = (event) => {
-  setUserName (event.target.value);
-  checkCompletion();
-}
+  const handleUserName = (event) => {
+    setUserName(event.target.value);
+    checkCompletion();
+  }
 
   const handleVerifyEmails = (event) => {
     setVerifyEmails(event.target.value);
+    setEmailError("");
   }
 
   const handlePasswordChange = (event) => {
@@ -130,10 +131,42 @@ const handleUserName = (event) => {
 
   const handleRegister = (event) => {
     event.preventDefault();
+
+    const data = {
+      "name": userName,
+      "email": emails,
+      "password": registerPassword,
+      "confirm_password": confirmPassword,
+      "mobile_number": phonenumber,
+    };
+  
+    console.log(data);
+    axios
+      .post("http://89.116.30.81:8000/user/insert/", data)
+      .then(response => {
+        console.log("Register Successful");
+        console.log(response.data);
+  
+        // Clear form fields after successful registration
+        setUserName("");
+        setEmails("");
+        setRegisterPassword("");
+        setConfirmPassword("");
+        setPhonenumber("");
+      })
+      .catch(error => {
+        console.error("Registration Failed");
+        console.error(error);
+      })
+
+
     console.log('Email:', emails);
     console.log('Password:', registerPassword);
     console.log('confirmPassword===>>>:', confirmPassword);
     console.log('phonenumber===>>>:', phonenumber);
+
+
+   
     // setOpen(false);
     setSignUpOpen(false);
   };
@@ -153,27 +186,83 @@ const handleUserName = (event) => {
     }
   };
   console.log("email", emails, "pass", registerPassword, "cpass", confirmPassword, "num", phonenumber);
+
   const handleForgotPassword = (event) => {
     event.preventDefault();
     console.log('Email:', email);
-    setForgotPasswordOpen(false);
-    setOtpVerificationOpen(true);
+
+    const data = {
+      "email": verifyEmails,
+    };
+    console.log(data)
+    axios.post("http://89.116.30.81:8000/forgot/password/", data)
+      .then(response => {
+        console.log('Email is Verified');
+        console.log(response.data)
+        setForgotPasswordOpen(false);
+        setOtpVerificationOpen(true);
+        setOtpError("");
+
+      })
+      .catch(error => {
+        console.error(' Your Email is Wrong');
+        console.error(error);
+        setEmailError("Invalid email address")
+      });
+    // const isEmailValid = verifyEmailFunction(verifyEmails);
+
+    // if (isEmailValid) {
+    //   setForgotPasswordOpen(false);
+    //    setOtpVerificationOpen(true);
+    //   setOtpError("");
+    // } else {
+    //   setEmailError("Invalid email address");
+    // }
+    // setForgotPasswordOpen(false);
+    // setOtpVerificationOpen(true);
   };
 
   const handleEnteredOtpChange = (event) => {
     setEnteredOtp(event.target.value);
+    setOtpError("");
+
   };
 
   const handleNewPasswordChange = (event) => {
     setNewPassword(event.target.value);
+    setPasswordError("");
   };
 
   const handleConfirmNewPasswordChange = (event) => {
     setConfirmNewPassword(event.target.value);
+    setPasswordError("");
   };
 
   const handleVerifyOTP = () => {
     console.log('Entered OTP:', enteredOtp);
+    const data = {
+      "email": verifyEmails,
+      "verification_code": enteredOtp
+    }
+    console.log(data)
+    axios.post("http://89.116.30.81:8000/verify_verification_code/", data)
+      .then(response => {
+        console.log("OTP is Verified")
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.error('Entered OTP Is Wrong');
+        console.error(error);
+      });
+    const isOTPValid = verifyOTPFunction(enteredOtp);
+
+    if (isOTPValid) {
+      setOtpVerificationOpen(false);
+      setChangePasswordOpen(true);
+      setOtpError("");
+    } else {
+      setOtpError("Invalid OTP");
+    }
     setEnteredOtp('');
     setOtpVerificationOpen(false);
     setNewPassword('');
@@ -182,10 +271,47 @@ const handleUserName = (event) => {
     setChangePasswordOpen(true);
   };
 
+  const verifyEmailFunction = (email) => {
+    // Perform email verification logic here
+    // Return true if the email is valid, otherwise false
+    // You can use a regular expression or any other validation method
+    // For simplicity, let's assume any non-empty email is considered valid
+    return email.trim() !== "";
+  };
+
+  const verifyOTPFunction = (otp) => {
+    // Perform OTP verification logic here
+    // Return true if the OTP is valid, otherwise false
+    // You can compare the entered OTP with the expected OTP stored in your system
+    // For simplicity, let's assume any non-empty OTP is considered valid
+    return otp.trim() !== "";
+  };
+
+
   const handleResetPassword = (event) => {
     event.preventDefault();
     console.log('New Password:', newPassword);
     console.log('Confirm New Password:', confirmNewPassword);
+
+    const data = {
+      "newPassword": newPassword,
+      "ConfirmPassword": confirmNewPassword,
+    };
+    if (newPassword === confirmNewPassword && newPassword !== "") {
+      axios.post("http://89.116.30.81:8000/forgot/password/reset/", data)
+        .then(response => {
+          console.log('Password reset request successful');
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error('Error occurred while making the password reset request');
+          console.error(error);
+        });
+      setPasswordError("");
+      setChangePasswordOpen(false);
+    } else {
+      setPasswordError("Passwords do not match");
+    }
     setNewPassword('');
     setConfirmNewPassword('');
     setChangePasswordOpen(false);
@@ -220,22 +346,7 @@ const handleUserName = (event) => {
       });
   }
 
-  const data = {
-   "newPassword": newPassword,
-   "ConfirmPassword": confirmNewPassword,
-  };
-  
-  axios.post("http://89.116.30.81:8000/forgot/password/reset/", data)
-    .then(response => {
-      console.log('Password reset request successful');
-      console.log(response.data); 
-    })
-    .catch(error => {
-      console.error('Error occurred while making the password reset request');
-      console.error(error);
-    });
 
-   
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', backgroundImage: 'url("")', backgroundPosition: "center", backgroundSize: 'cover' }}>
 
@@ -253,16 +364,16 @@ const handleUserName = (event) => {
                 fontWeight: "bold"
               }}
               >
-                <div style={{ display: 'flex',justifyContent: 'center',alignItems: 'center' }}>
-                <span style={{
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <span style={{
                     fontSize: 35,
                     background: "-webkit-linear-gradient(141deg, #3f5efb 30%, #fc466b 90%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
-                  //  textShadow: "2px 2px #FF0000",
-                    
+                    //  textShadow: "2px 2px #FF0000",
+
                   }}>
-                   Welcome Back!{'\u00A0'}
+                    Welcome Back!{'\u00A0'}
                   </span>
                   <span style={{ fontSize: 35 }}>😊</span>
                 </div>
@@ -278,9 +389,9 @@ const handleUserName = (event) => {
                   fullWidth
                   margin="normal"
                   required
-                  inputProps={{ style: { color: 'white' } }}
+                  // inputProps={{ style: { color: 'white' } }}
                 />
-                <TextField 
+                <TextField
                   color="warning"
                   label="Password"
                   type="password"
@@ -303,7 +414,6 @@ const handleUserName = (event) => {
               <LoginButton variant="outlined" fullWidth onClick={handleForgotPasswordClick} style={{ marginTop: '10px', LoginButton }}>
                 Forgot Password?
               </LoginButton>
-
             </Grid>
           </Grid>
         </Container>
@@ -313,7 +423,7 @@ const handleUserName = (event) => {
         <DialogContent>
           <form onSubmit={handleRegister}>
 
-          <TextField
+            <TextField
               color="warning"
               label="Username"
               type='text'
@@ -377,7 +487,7 @@ const handleUserName = (event) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseSignUp}>Cancel</Button>
-          {console.log(userName =='',emails == '', registerPassword == '', confirmPassword == '', phonenumber == " ")}
+          {console.log(userName == '', emails == '', registerPassword == '', confirmPassword == '', phonenumber == " ")}
           <Button onClick={handleRegister} color="primary" disabled={userName == "" || emails == "" || registerPassword == "" || confirmPassword == "" || phonenumber == "" || registerPassword != confirmPassword ? true : false}>
             Register
           </Button>
@@ -397,11 +507,13 @@ const handleUserName = (event) => {
               fullWidth
               margin="normal"
               required
+              error={Boolean(emailError)}
+              helperText={emailError}
             />
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setForgotPasswordOpen(false)}>Cancel</Button>
+          <Button onClick={() => { setVerifyEmails(""); setForgotPasswordOpen(false) }}>Cancel</Button>
           <Button onClick={handleForgotPassword} color="primary" disabled={!verifyEmails}>
             Submit
           </Button>
@@ -421,6 +533,8 @@ const handleUserName = (event) => {
               fullWidth
               margin="normal"
               required
+              error={Boolean(otpError)}
+              helperText={otpError}
             />
           </form>
         </DialogContent>
@@ -445,6 +559,9 @@ const handleUserName = (event) => {
               fullWidth
               margin="normal"
               required
+              error={Boolean(passwordError)}
+              helperText={passwordError}
+
             />
             <TextField
               label="Confirm New Password"
@@ -456,11 +573,12 @@ const handleUserName = (event) => {
               fullWidth
               margin="normal"
               required
+              error={Boolean(passwordError)}
             />
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setChangePasswordOpen(false)}>Cancel</Button>
+          <Button onClick={() => { setChangePasswordOpen(false) }}>Cancel</Button>
           <Button onClick={handleResetPassword} color="primary" disabled={!(newPassword === confirmNewPassword && newPassword !== "")}>
             Reset Password
           </Button>

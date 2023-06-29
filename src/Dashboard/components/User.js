@@ -35,7 +35,6 @@ const User = ({ toggleDrawer }) => {
   };
 
   return (
-
     <Box sx={{backgroundColor: '#022567',color:'white', width:'200px',marginTop:2,marginLeft:1,}} flex={3} >
        <Box>
         {/* <Navbar/> */}
@@ -88,3 +87,4 @@ const User = ({ toggleDrawer }) => {
 }
 
 export default User;
+

@@ -23,23 +23,26 @@
     padding: 4px 13px !important;
 }
 #addtaskpopup h6{
-    font-family: 'Poppins,san-serif';
-    font-weight: 600;
+    font-weight: bold;
     color: #1976d2;
 }
-#addtaskpopup div:first-child{
+#addtaskpopup > div:first-child{
     background-color: transparent;
 }
 #addtaskpopup .css-9tj150-MuiButton-endIcon>*:nth-of-type(1) {
     font-size: 14px;
 }
 
-
+.react-daterange-picker__wrapper{
+    margin-top: 4px;
+    font-size: 10px;
+    border: thin solid #ffc107 !important;
+    border-radius: 10px;
+}
 
 /* date */
 #addtaskpopup .datePicker{width: 50%;}
 #addtaskpopup .datePicker > div {
-        /* flex-direction: row-reverse; */
         border: none;
        
 }

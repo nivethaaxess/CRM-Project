@@ -10,47 +10,39 @@ import Modal from "@mui/base/Modal";
 import TextField from "@mui/material/TextField";
 
 // date
-import dayjs from "dayjs";
-import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 
-//date
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
+import "react-calendar/dist/Calendar.css";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 
 //add button
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
 import Stack from "@mui/material/Stack";
 import axios from "axios";
-import { Margin } from "@mui/icons-material";
 
 // component
 
-export default function ModalDemo() {
+export default function ModalDemo(props) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-
-
+  const [dateRange, setDateRange] = useState([new Date(), new Date()]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  console.log(dateRange);
 
   //date
-  let today = new Date();
-  let todayDate = today.getDate();
-  let todayMonth = today.getMonth() + 1;
-  let todayYear = today.getFullYear();
-  todayDate = todayDate < 10 ? "0" + todayDate : todayDate;
-  todayMonth = todayMonth < 10 ? "0" + todayMonth : todayMonth;
-  today = `${todayYear}-${todayMonth}-${todayDate}`;
+  const getDateFormat = (date) => {   
+    var year = date.getFullYear();
+    var month = String(date.getMonth() + 1).padStart(2, "0");
+    var day = String(date.getDate()).padStart(2, "0");
+    var formattedDate = year + "-" + month + "-" + day;
+    console.log("formatdate", formattedDate);
+    return formattedDate;
+  };
 
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(today);
 
   const style1 = {
     borderRadius: "3px 0 3px 3px",
@@ -58,41 +50,33 @@ export default function ModalDemo() {
   const style2 = {
     boxShadow: "1px 0px 4px 0px #383838",
   };
-  console.log(title, description, startDate, endDate);
-
-  const handleDateChange = (date, name) => {
-    let getdate = date.$D < 10 ? "0" + date.$D : date.$D;
-    let getmonth = date.$M + 1 < 10 ? "0" + (date.$M + 1) : date.$M + 1;
-    let getyear = date.$y;
-    console.log(`${getyear}-${getmonth}-${getdate}`);
-    
-    if (name == "startDate") setStartDate(`${getyear}-${getmonth}-${getdate}`);
-    if (name == "endDate") setEndDate(`${getyear}-${getmonth}-${getdate}`);
-  };
 
   const addNewTask = () => {
     if (title.trim() === "" || description.trim() === "") {
       return;
     }
-    console.log(startDate,endDate)
     const data = {
-      title: title.trim(),
-      description: description.trim(),
-      start_date: startDate,
-      end_date: endDate,
-      status: "in progress",
+      create_user: 2,
+      assign_user: 2,
+      team: null,
+      title: title,
+      description: description,
+      status: "inprogress",
+      attachments: null,
+      start_date:getDateFormat(dateRange[0]) ,
+      end_date: getDateFormat(dateRange[1]),
     };
     console.log(data);
     axios
-      .post("http://89.116.30.81:8000/daily_task/insert/", data)
+      .post("http://89.116.30.81:8000/todo/insert/", data)
       .then((response) => {
-        //  setComment(response.data);
-        console.log(response);
+          console.log("add new task success")
       })
-      .catch((err) => console.log("er", err));
+      .catch((err) => console.log("error in add new task", err));
 
     setTitle("");
     setDescription("");
+    props.updateTask(data);
   };
 
   return (
@@ -138,39 +122,9 @@ export default function ModalDemo() {
                 multiline
                 onChange={(e) => setDescription(e.target.value)}
                 sx={{ marginTop: 1 }}
-                 maxRows={8}
+                maxRows={8}
               />
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DateRangePicker"]}>
-                <DemoItem
-                  // label=""
-                  component="DateRangePicker"
-                >
-                  <DateRangePicker
-                    defaultValue={[dayjs(startDate), dayjs(endDate)]}
-                    // value={ste}
-                    onChange={(e) => getDate(e)}
-                    // className = "datePicker"
-                    sx={{marginTop:1}}
-                  />
-                </DemoItem>
-              </DemoContainer>
-            </LocalizationProvider> */}
-
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  id="datepicker"
-                  className="datePicker"
-                  onChange={(date) => handleDateChange(date, "startDate")}
-                />
-              </LocalizationProvider>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  id="datepicker"
-                  className="datePicker"
-                  onChange={(date) => handleDateChange(date, "endDate")}
-                />
-              </LocalizationProvider>
+              <DateRangePicker onChange={setDateRange} value={dateRange} />
             </Box>
             <Stack direction="row" spacing={2}>
               <Button

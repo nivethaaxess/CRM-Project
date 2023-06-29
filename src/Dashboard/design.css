@@ -12,7 +12,6 @@
 .align1
 {
        margin-top:2px;
-
 }
 
 .MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation16.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.css-4t3x6l-MuiPaper-root-MuiDrawer-paper
@@ -22,8 +21,7 @@
        height: 400px;
        margin-top: 65px;
        overflow-x: hidden;
-       
-       
+ 
 }
 .box2
 {
@@ -39,9 +37,9 @@
         display: block;
 
 }
-.css-3bmhjh-MuiPaper-root-MuiPopover-paper
+/* .css-3bmhjh-MuiPaper-root-MuiPopover-paper
 {
        margin-top:-400px;
        margin-left:235px;
        color:red;
-}
+} */
