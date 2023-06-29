@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, FormControl, Select, MenuItem, IconButton, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Box, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, FormControl, Select, MenuItem, IconButton, Typography, Dialog, DialogTitle, DialogContent, DialogActions, InputLabel } from '@mui/material';
 import Navbar from "../Dashboard/components/Navbar";
 import Menu from "../Dashboard/components/Menu";
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,6 +11,8 @@ import Button from '@mui/material/Button';
 import '../Dashboard/design.css';
 import { DataGrid } from '@mui/x-data-grid';
 import DangerousRoundedIcon from '@mui/icons-material/DangerousRounded';
+import './style.css';
+
 
 
 // import Dialog from '@mui/material/Dialog';
@@ -68,6 +70,13 @@ const User1 = ({ rows, columns }) => {
       overflow: 'auto',
 
     },
+
+   
+    textField: {
+      '& .MuiOutlinedInput-root': {
+        borderRadius: '5px', // Set border radius
+      },
+    },
     blackrow: {
       backgroundColor: '#000000',
       colmor: '#ffffff',
@@ -81,12 +90,22 @@ const User1 = ({ rows, columns }) => {
         backgroundColor: 'lightblue',
         // transition: 'background-Color 0.5s ease',
 
-      }
+      },
+      roundedElement: {
+        borderRadius: '8px', // Set the desired radius value
+      },
+
+      coloredDialogContent: {
+        backgroundColor: 'lightblue', // Set your desired background color
+        color: 'white', // Set the text color
+        // Add any other custom styles as needed
+      },
     },
   }))
 
 
-
+  
+  
 
   const tablestyle =
   {
@@ -106,31 +125,76 @@ const User1 = ({ rows, columns }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [selectedOption, setSelectedOption] = useState('QA');
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorE2, setAnchorE2] = React.useState(null);
   const [open1, setOpen] = React.useState(false);
+  const [getdata, setData] = React.useState(false);
   const [api, setApi] = useState([]);
-  const [getapi, showApi] = useState([]);
+  const [getapi, showApi] = useState([{ key1: "value1", key2: "value2" }]);
   const [enapi, setEnapi] = useState([]);
+  const [getEnapi, showEnapi] = useState([{ key1: "value1", key2: "value2" }])
+  const [inputValues, setInputValues] = useState([]);
+  const [getedit, setEdit] = useState(true);
+  const [editRow, setEditRow] = useState()
+  const [geteditRow, seteditRow] = useState()
+  const [getrefresh, setrefresh] = useState();
+  const [getskills, setskills] = React.useState('');
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const fullScreens = useMediaQuery(theme.breakpoints.down('md'));
+
+
+  // const handleInputChange = (key, value) => {
+  //   setInputValues((prevInputValues) => ({
+  //     ...prevInputValues,
+  //     [key]: value,
+  //   }));
+  // };
+
+   const handleskillsChange = (event)=>{
+      setskills(event.target.value)
+   }
 
   const handleClickOpen = (id) => {
-   // setGetId( event.currentTarget.getElementsByTagName("td")[0].innerText)
+    setEditRow(id)
     setOpen(true);
     axios.get(`http://89.116.30.81:8000/qa/${id}/`)
-    .then(response => {
-      console.log('res1', response.data)
-      showApi([response.data]);
-
-    })
-    .catch(error => {
-      console.log(error)
-    })
-
+      .then(response => {
+        console.log('res1', response.data);
+        showApi([response.data]);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
+
+  const handleOpen = (id) => {
+    seteditRow(id)
+    setData(true);
+    axios.get(`http://89.116.30.81:8000/enquiry/${id}/`)
+      .then(response => {
+        console.log('ress', response.data);
+        showEnapi([response.data]);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
 
   const handleClose1 = () => {
     setOpen(false);
   };
+
+  const handleCloseClick1 = () => {
+    setData(false);
+  }
+
+  const handleChangePage1 = () => {
+
+    setInputValues()
+  }
+
 
 
   const handleSearchChange = (event) => {
@@ -170,6 +234,59 @@ const User1 = ({ rows, columns }) => {
     setAnchorEl(null);
   };
 
+  const handleCloseClick = () => {
+    setAnchorE2(null);
+  }
+
+  const handleInputChange = (e, key, ID) => {
+    // console.log('handleInputChange', .join(''))
+    const newValue = e.target.value;
+    showApi((prevGetApi) => {
+      const updatedApi = [...prevGetApi];
+      updatedApi[0][key] = newValue;
+      return updatedApi;
+    });
+  };
+
+  const handleInputOnChange = (e, key, ID) => {
+    const newValue = e.target.value;
+    showEnapi((prevGetApi) => {
+      const updateApi = [...prevGetApi];
+      updateApi[0][key] = newValue;
+      return updateApi;
+    });
+  }
+
+
+
+  const handleEditClick = (e) => {
+    // console.log('handleEditClick',e);
+    setEdit(!getedit);
+    // {console.log('id3',id)}
+    console.log('api1', `http://89.116.30.81:8000/qa/${editRow}/`, getapi[0])
+    axios.put(`http://89.116.30.81:8000/qa/${editRow}/`, getapi[0])
+      .then(response => {
+        console.log('success', response.data);
+        setrefresh(response.data);
+
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  const handleEditOnClick = () => {
+    setEdit(!getedit);
+    axios.put(`http://89.116.30.81:8000/enquiry/${geteditRow}/`, getEnapi[0])
+      .then(response => {
+        console.log('success1', response.data);
+
+      })
+
+
+
+  }
+
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
@@ -190,19 +307,19 @@ const User1 = ({ rows, columns }) => {
         console.log(error)
       })
 
-  }, [selectedOption])
+  }, [selectedOption, getrefresh])
 
-  useEffect(()=>{
+  useEffect(() => {
     axios.get('http://89.116.30.81:8000/enquiry/')
-      .then(response =>{
-          console.log('res2',response.data);  
-          setEnapi(response.data);
+      .then(response => {
+        console.log('res2', response.data);
+        setEnapi(response.data);
       })
-      .catch(error=>{
+      .catch(error => {
         console.log(error);
       })
-  
-  },[selectedOption])
+
+  }, [selectedOption])
 
 
 
@@ -225,25 +342,25 @@ const User1 = ({ rows, columns }) => {
 
   let qaColumns = [];
 
-if (api.length > 0) {
-  console.log(api);
-  qaColumns = Object.keys(api[0]).map((a) => {
-    return { field: a };
-  });
-  console.log(qaColumns);
-}
+  if (api.length > 0) {
+    console.log(api);
+    qaColumns = Object.keys(api[0]).map((a) => {
+      return { field: a };
+    });
+    console.log(qaColumns);
+  }
 
-let enquiryColumns = [];
+  let enquiryColumns = [];
 
-if (enapi.length > 0) {
-  console.log('kkk', enapi);
-  enquiryColumns = Object.keys(enapi[0]).map((b) => {
-    return { field: b };
-  });
-  // console.log(enquiryColumns);
-}
+  if (enapi.length > 0) {
+    console.log('kkk', enapi);
+    enquiryColumns = Object.keys(enapi[0]).map((b) => {
+      return { field: b };
+    });
+    // console.log(enquiryColumns);
+  }
 
-  
+
 
 
   // const qaColumns = [
@@ -283,7 +400,7 @@ if (enapi.length > 0) {
   //   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
   // ];
 
-    const enquiryRows = enapi;
+  const enquiryRows = enapi;
 
   // const enquiryRows = [
   //   { id: 1, subject: 'Question 1', message: 'Lorem ipsum dolor sit amet.', status: 'Open' },
@@ -375,14 +492,14 @@ if (enapi.length > 0) {
                   <TableBody>
                     {paginatedRows.map((row, index) => (
                       <TableRow
-                        onClick={()=>handleClickOpen(row.id)}
-                      
+                        onClick={() => handleClickOpen(row.id)}
+
                         key={row.id}
-                       
+
 
                         // aria-describedby={id}
                         className={`${classes.hoverRow} ${index === 0 ? classes.firstRow : ''}`}>
-                           {console.log('row',row.id)}
+                        {console.log('row', row.id)}
                         {/* <Button aria-describedby={id} variant="contained"  onMouseEnter={handleClick}>
                           Open Popover
                         </Button> */}
@@ -414,27 +531,36 @@ if (enapi.length > 0) {
             </div>
           ) : (
             <div style={{ height: 400, width: '100%', marginTop: 20, marginLeft: 30 }}>
-              <TableContainer>
+              <TableContainer className={classes.tableContainer}>
                 <Table>
-                  <TableHead sx={{}}>
+                  <TableHead>
                     <TableRow>
                       {enquiryColumns.map((column) => (
-                        <TableCell key={column.field}>{column.field}</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5', color: '#000000' }} key={column.field}>{column.field}</TableCell>
                       ))}
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {paginatedRows.map((row) => (
-                      <TableRow key={row.id}>
+                    {paginatedRows.map((row1, index) => (
+                      <TableRow onClick={() => handleOpen(row1.id)}
+
+                        key={row1.id}
+
+
+                        // aria-describedby={id}
+                        className={`${classes.hoverRow} ${index === 0 ? classes.firstRow : ''}`}>
+                        {console.log('row', row1.id)}
+
                         {enquiryColumns.map((column) => (
-                          <TableCell key={column.field}>{row[column.field]}</TableCell>
+
+                          <TableCell key={column.field}>{row1[column.field]}</TableCell>
                         ))}
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </TableContainer>
-              <TablePagination
+              {/* <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={filteredRows.length}
@@ -442,53 +568,158 @@ if (enapi.length > 0) {
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+              /> */}
             </div>
           )}
         </Box>
       </Box>
-      <div>
 
-        <Dialog
-          fullScreen={fullScreen}
-          open={open1}
-          onClose={handleClose}
-          aria-labelledby="responsive-dialog-title"
-        >
-          <DialogTitle id="responsive-dialog-title">
-            {"Form"}   <Button sx={{ml:16}} autoFocus onClick={handleClose1}>
-             <DangerousRoundedIcon/>
-            </Button>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              
-                {getapi.map((item, index) => (
-                  <ul>
-                  <li key={index}>Id:{item.id}</li>
-                   <li>Name:{item.Name}</li>
-                   <li>Number:{item.Number}</li>
-                   <li>EmailId:{item.Emailid}</li>
-                   <li>Skills:{item.Skills}</li>
-                   <li>Domain:{item.Domain}</li>
-                   <li>Experience:{item.Experience}</li>
+      <div className='row justify-content-around '>
+        <div className='col-6 '>
+          <div className='col-3'>
+            <Dialog
+              fullScreen={fullScreen}
+              open={open1}
+              onClose={handleClose}
+              aria-labelledby="responsive-dialog-title"
+            >
+              <DialogTitle id="responsive-dialog-title" className='d-flex justify-content-between design'>
+                {"Form"}   <Button sx={{ color: 'black' }} autoFocus onClick={handleClose1}>
+                  <DangerousRoundedIcon />
+                </Button>
+              </DialogTitle>
 
-                   </ul>
-                ))}
-              
-            </DialogContentText>
-          </DialogContent>
-           
-          <DialogActions>
-              <Button>
-                  Edit
-              </Button>
-              <Button>
+              <DialogContent className='abd'>
+                <DialogContentText >
+                  <div className='d-flex flex-wrap'>
+                    {getapi.length > 0 &&
+                      Object.keys(getapi[0]).map((b) => {
+                        if (b === 'id') {
+                          return
+
+                        }
+                        if (b === 'Skills')
+                        { 
+                          return(
+                            <FormControl sx={{ mt: 2.3, ml:3, minWidth: 230 }} size="small" >
+                            <InputLabel  id="demo-select-small-label">Skills</InputLabel>
+                            <Select
+                              labelId="demo-select-small-label"
+                              id="demo-select-small"
+                              value={getskills}
+                              label="Skills"
+                              disabled={getedit}
+                              onChange={handleskillsChange}
+                            >
+                              <MenuItem value="">
+                                <em>None</em>
+                              </MenuItem>
+                              <MenuItem value={10}>React</MenuItem>
+                              <MenuItem value={20}>python</MenuItem>
+                              <MenuItem value={30}>Html</MenuItem>
+                            </Select>
+                          </FormControl>
+                          )
+                        }
+                        // if (b === 'Name')
+                        // {
+                        //    return(
+                        //     <TextField id="filled-basic" label={b} variant="filled" />
+                        //    )
+
+                        // }
+                        const value = getapi[0][b];
+                        { console.log('value====>>>>>>>', getapi.map(a => a.id)) }
+                        const ID = getapi.map(a => a.id);
+                        { console.log('getapi====>>>>>>>', ID) }
+                        return (
+                          <div className='col-6 text-center p-1' >
+                            <TextField className={classes.textField}  sx={{ mt: 2, }} id="outlined-basic"
+                              onChange={(e) => handleInputChange(e, b, ID)}
+                              label={b}
+                              disabled={getedit}
+                              size="small"
+                              variant='outlined'/>
+                          </div>
+                        );
+                      })}
+
+                  </div>
+                </DialogContentText>
+              </DialogContent>
+
+
+              <DialogActions className='abd' >
+                {getedit ?
+                  <button className="btn btn-primary" onClick={() => setEdit(!getedit)}>Edit</button> :
+                  <button className="btn btn-success" onClick={() => handleEditClick(id)}>Update</button>
+
+                }
+
+                <button className='btn btn-danger'>
                   Delete
-              </Button>
-          </DialogActions>
-        </Dialog>
+                </button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        </div>
       </div>
+
+      <Dialog
+        fullScreen={fullScreens}
+        open={getdata}
+        onClose={handleCloseClick}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Form"}   <Button sx={{ ml: 16 }} autoFocus onClick={handleCloseClick1}>
+            <DangerousRoundedIcon />
+          </Button>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <table>
+              <thead>
+                <tr>
+                  <th>TITLE</th>
+                  <th>BODY</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getEnapi.length > 0 &&
+                  Object.keys(getEnapi[0]).map((b) => {
+                    const value = getEnapi[0][b];
+                    { console.log('value====>>>>>>>', getEnapi.map(a => a.id)) }
+                    const ID = getEnapi.map(a => a.id);
+                    { console.log('getapi====>>>>>>>', ID) }
+                    return (
+                      <tr key={b}>
+                        <td>{b}</td>
+                        <td>
+                          <input
+                            type="text"
+                            value={value || ""}
+                            disabled={getedit}
+                            onChange={(e) => handleInputOnChange(e, b, ID)}
+                          />
+                        </td>
+                      </tr>
+
+                    );
+                  })}
+
+              </tbody>
+            </table>
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          {getedit ?
+            <Button onClick={() => setEdit(!getedit)}>Edit</Button> :
+            <Button onClick={() => handleEditOnClick(id)}>Update</Button>
+          }
+        </DialogActions>
+      </Dialog>
     </Box >
     // </Box>
   );
