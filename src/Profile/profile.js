@@ -85,7 +85,7 @@ const Profile = () => {
         {/* <Navbar/> */}
       </Box>
       <Box sx={{ display: 'flex' }}>
-        <Box>
+        
       {/* <Menu /> */}
       </Box>
       <Box>
@@ -131,7 +131,10 @@ const Profile = () => {
                   {Object.keys(userList).length > 0 ? (
                     <>
                       {/* <Avatar>{userList.name[0]}</Avatar> */}
+
                       <p>{userList?.name}</p>
+
+                      {/* <p>{userList?.name}</p> */}
                     </>
                   ) : null}
 
@@ -274,13 +277,13 @@ const Profile = () => {
                         <div className="others d-flex">
                           <div className="">
                             <div className="person-logo">
-                              {othersList[0].name[0]}
+                              {/* {othersList[0].name[0]} */}
                             </div>
                           </div>
                           <div className=" person-status">
                             <p>
-                              <b>{othersList[0].name}</b> status changed as{" "}
-                              <span>{othersList[0].available}</span>
+                              {/* <b>{othersList[0].name}</b> status changed as{" "} */}
+                              {/* <span>{othersList[0].available}</span> */}
                             </p>
                             <div>
                               <QueryBuilderIcon /> {"10 mins ago"}
@@ -290,13 +293,13 @@ const Profile = () => {
                         <div className="others d-flex">
                           <div className="">
                             <div className="person-logo">
-                              {othersList[1].name[0]}
+                              {/* {othersList[1].name[0]} */}
                             </div>
                           </div>
                           <div className=" person-status">
                             <p>
-                              <b>{othersList[1].name}</b> status changed as{" "}
-                              <span>{othersList[1].available}</span>
+                              {/* <b>{othersList[1].name}</b> status changed as{" "} */}
+                              {/* <span>{othersList[1].available}</span> */}
                             </p>
                             <div>
                               <QueryBuilderIcon /> {"10 mins ago"}
@@ -331,10 +334,9 @@ const Profile = () => {
         </div>
       </div>
       </Box>
-      </Box>
       
     </div>
   );
-};
+  }
 
 export default Profile;
