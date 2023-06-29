@@ -17,8 +17,8 @@ background: linear-gradient(90deg, rgba(131,58,180,1) 7%, rgba(252,176,69,1) 73%
 
 /* .abd
 {
-       background-image: url(download.png);
-       background-position: center;
-       opacity: 
+       background: rgb(2,0,36);
+       background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(101,9,121,1) 35%, rgba(0,212,255,1) 100%);
        
 } */
+

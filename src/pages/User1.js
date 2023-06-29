@@ -634,7 +634,7 @@ const User1 = ({ rows, columns }) => {
                         { console.log('getapi====>>>>>>>', ID) }
                         return (
                           <div className='col-6 text-center p-1' >
-                            <TextField className={classes.textField}  sx={{ mt: 2, }} id="outlined-basic"
+                            <TextField className={classes.textField}  sx={{ mt: 2, border:'none' }} id="outlined-basic"
                               onChange={(e) => handleInputChange(e, b, ID)}
                               label={b}
                               disabled={getedit}
