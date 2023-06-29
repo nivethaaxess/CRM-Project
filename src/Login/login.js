@@ -133,7 +133,7 @@ const LoginPage = () => {
     event.preventDefault();
 
     const data = {
-      "name": userName,
+    "username": userName,
       "email": emails,
       "password": registerPassword,
       "confirm_password": confirmPassword,
