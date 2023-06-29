@@ -224,16 +224,11 @@ const Profile = () => {
                   <div className="col-lg-3 ">
                     {/*---------------------------current status-----------------*/}
                     <div className="current-status-section section-border ">
-                      <div className="row align-items-center">
-                        <p className="col-6 current-status">
+                      <div className="">
+                        <p className=" current-status">
                           <b>Current Status</b>
                         </p>
-                        <div className=" col-6 status-box position-relative">
-                          current status{" "}
-                          <span className=" check position-absolute ">
-                            <CheckIcon />
-                          </span>
-                        </div>
+
                       </div>
                       <div className="">
                         <div className="others d-flex">

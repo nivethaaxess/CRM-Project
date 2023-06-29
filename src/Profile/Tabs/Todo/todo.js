@@ -67,6 +67,8 @@ const Todo = () => {
 
   const [viewDate, setViewDate] = useState(today);
 
+  let userid = 2;
+
   //search box
   useEffect(() => {
     axios
@@ -82,8 +84,7 @@ const Todo = () => {
   }, []);
 
   const getTaskList = (b) => {
-    // console.log(document.getElementById(":r1d:"))
-    // document.getElementById(":r1d:").value = ""
+
     let filteredDetails = taskList;
     filteredDetails = taskList.filter((task) => {
       return task.title.toLowerCase().includes(b.toLowerCase());
@@ -110,11 +111,11 @@ const Todo = () => {
     console.log("data change");
     console.log(
       "progress",
-      `http://89.116.30.81:8000/todo/filterlist/2/?status=inprogress&start_date=${viewDate}&end_date=${viewDate}`
+      `http://89.116.30.81:8000/todo/filterlist/${userid}/?status=inprogress&start_date=${viewDate}&end_date=${viewDate}`
     );
     axios
       .get(
-        `http://89.116.30.81:8000/todo/filterlist/2/?status=inprogress&start_date=${viewDate}&end_date=${viewDate}`
+        `http://89.116.30.81:8000/todo/filterlist/${userid}/?status=inprogress&start_date=${viewDate}&end_date=${viewDate}`
       )
       .then((val) => {
         console.log("progress", val.data);
@@ -127,11 +128,11 @@ const Todo = () => {
   useEffect(() => {
     console.log(
       "review",
-      `http://89.116.30.81:8000/todo/filterlist/2/?status=review&start_date=${viewDate}&end_date=${viewDate}`
+      `http://89.116.30.81:8000/todo/filterlist/${userid}/?status=review&start_date=${viewDate}&end_date=${viewDate}`
     );
     axios
       .get(
-        `http://89.116.30.81:8000/todo/filterlist/2/?status=review&start_date=${viewDate}&end_date=${viewDate}`
+        `http://89.116.30.81:8000/todo/filterlist/${userid}/?status=review&start_date=${viewDate}&end_date=${viewDate}`
       )
       .then((val) => {
         console.log("review", val.data);
@@ -143,11 +144,11 @@ const Todo = () => {
   useEffect(() => {
     console.log(
       "completed",
-      `http://89.116.30.81:8000/todo/filterlist/2/?status=completed&start_date=${viewDate}&end_date=${viewDate}`
+      `http://89.116.30.81:8000/todo/filterlist/${userid}/?status=completed&start_date=${viewDate}&end_date=${viewDate}`
     );
     axios
       .get(
-        `http://89.116.30.81:8000/todo/filterlist/2/?status=completed&start_date=${viewDate}&end_date=${viewDate}`
+        `http://89.116.30.81:8000/todo/filterlist/${userid}/?status=completed&start_date=${viewDate}&end_date=${viewDate}`
       )
       .then((val) => {
         console.log("completed", val.data);
@@ -155,14 +156,7 @@ const Todo = () => {
       })
       .catch((err) => console.log("er", err));
   }, [viewDate]);
-  console.log(
-    "progressList",
-    progressList,
-    "revielist",
-    reviewList,
-    "completed",
-    completedList
-  );
+
   // date change---------->
 
   const handleDateChange = (date) => {
@@ -174,9 +168,9 @@ const Todo = () => {
   };
 
   //get Comments
-  const getComments = (taskId) => {
+  const getComments = async(taskId) => {
     console.log("render get comments", taskId);
-    axios
+    return axios
       .get(`http://89.116.30.81:8000/todo/comments/${taskId}/`)
       .then((val) => {
         console.log("getCommentList", val.data);
@@ -184,6 +178,7 @@ const Todo = () => {
       })
       .catch((err) => console.log("er", err));
   };
+  console.log(commentList)
 
   //getcomment dates
   const getCommentDates = (commentdate) => {
@@ -196,12 +191,29 @@ const Todo = () => {
     } else return formattedDate;
   };
   //open comment starts------------
+  
   const toggleComment = (UIid, classname, i, taskId) => {
     console.log(UIid, classname, i, taskId);
     let idElement = document.getElementById(UIid);
     let element = idElement.getElementsByClassName(classname)[i];
-    element.classList.toggle("d-none");
-    getComments(taskId);
+  
+    // Check if the clicked comment is already open
+    const isOpen = !element.classList.contains("d-none");
+  
+    // Close all comments
+    let commentElements = idElement.getElementsByClassName(classname);
+    for (let j = 0; j < commentElements.length; j++) {
+      commentElements[j].classList.add("d-none");
+    }
+  
+    // Open the clicked comment if it was closed
+    if (!isOpen) {
+      getComments(taskId)
+        .then(() => {
+          element.classList.remove("d-none");
+        })
+        .catch((err) => console.log("Error fetching comments:", err));
+    }
   };
   //open comment ends------------
 
@@ -211,7 +223,7 @@ const Todo = () => {
     console.log(`http://89.116.30.81:8000/todo/comments/insert/${taskId}/`);
     let data = {
       content: comment,
-      sender: 2,
+      sender: userid,
       receiver: null,
     };
     console.log(data);
@@ -219,10 +231,11 @@ const Todo = () => {
       .post(`http://89.116.30.81:8000/todo/comments/insert/${taskId}/`, data)
       .then((response) => {
         console.log("entered comment", response);
+        getComments(taskId);
       })
       .catch((err) => console.log("er", err));
     setComment("");
-    getComments(taskId);
+    
   };
   //submit comment ends------------
 
@@ -300,10 +313,13 @@ const Todo = () => {
      */
     value: PropTypes.any,
   };
-  const handleRadioChange = (event, id) => {
+  const handleRadioChange = (event, id,title) => {
     const selectedValue = event.target.value;
 
-    let data = { status: selectedValue };
+    let data = { 
+      status: selectedValue,
+      title :title,
+     };
     console.log(data);
     axios
       .put(`http://89.116.30.81:8000/todo/update/${id}/`, data)
@@ -396,7 +412,7 @@ const Todo = () => {
             <div className="progress-body body" id="progress-body">
               {progressList.length < 1 ? (
                 <div className="card">
-                  <p className="noTask">No task to view in progress</p>
+                  <p className="noTask">No task </p>
                 </div>
               ) : (
                 progressList.map((a, i) => {
@@ -435,7 +451,7 @@ const Todo = () => {
                                   <RadioGroup
                                     name="use-radio-group"
                                     defaultValue={a.status}
-                                    onChange={(e) => handleRadioChange(e, a.id)}
+                                    onChange={(e) => handleRadioChange(e, a.id,a.title)}
                                   >
                                     <MyFormControlLabel
                                       value="inprogress"
@@ -493,14 +509,14 @@ const Todo = () => {
                               {commentList.map((b) => {
                                 console.log(b);
                                 return (
-                                  <div>
+                                  <div style={{ textAlign: b.sender === userid ? "right" : "left" }}>
                                     <p
                                       style={{
-                                        margin: 0,
+                                        margin: "0 4px ",
                                         backgroundColor: "#e5e5e5",
                                         padding: "2px 4px",
                                         display: "inline-block",
-                                        borderRadius: "8px 5px 5px 0",
+                                        borderRadius: b.sender === userid ? "8px 5px 0 5px" : "8px 5px 5px 0" ,
                                       }}
                                     >
                                       {b.content}
@@ -509,6 +525,7 @@ const Todo = () => {
                                       <i
                                         style={{
                                           fontSize: "9px",
+                                          margin: "0 4px ",
                                           color: "gray",
                                         }}
                                       >
@@ -612,7 +629,7 @@ const Todo = () => {
                                   <RadioGroup
                                     name="use-radio-group"
                                     defaultValue={a.status}
-                                    onChange={(e) => handleRadioChange(e, a.id)}
+                                    onChange={(e) => handleRadioChange(e, a.id,a.title)}
                                   >
                                     <MyFormControlLabel
                                       value="inprogress"
@@ -671,14 +688,14 @@ const Todo = () => {
                               {commentList.map((b) => {
                                 console.log(b);
                                 return (
-                                  <div>
+                                  <div style={{ textAlign: b.sender === userid ? "right" : "left" }}>
                                     <p
                                       style={{
                                         margin: 0,
                                         backgroundColor: "#e5e5e5",
                                         padding: "2px 4px",
                                         display: "inline-block",
-                                        borderRadius: "8px 5px 5px 0",
+                                        borderRadius:  b.sender === userid ? "8px 5px 0 5px" :"8px 5px 5px 0",
                                       }}
                                     >
                                       {b.content}
@@ -752,7 +769,7 @@ const Todo = () => {
             <div className="completed-body body" id="completed-body">
               {completedList.length < 1 ? (
                 <div className="card">
-                  <p className="noTask">No task to view in completed</p>
+                  <p className="noTask">No task</p>
                 </div>
               ) : (
                 completedList.map((a, i) => {
@@ -790,7 +807,7 @@ const Todo = () => {
                                   <RadioGroup
                                     name="use-radio-group"
                                     defaultValue={a.status}
-                                    onChange={(e) => handleRadioChange(e, a.id)}
+                                    onChange={(e) => handleRadioChange(e, a.id,a.title)}
                                   >
                                     <MyFormControlLabel
                                       value="inprogress"
@@ -849,14 +866,14 @@ const Todo = () => {
                               {commentList.map((b) => {
                                 console.log(b);
                                 return (
-                                  <div>
+                                  <div style={{ textAlign: b.sender === userid ? "right" : "left" }}>
                                     <p
                                       style={{
                                         margin: 0,
                                         backgroundColor: "#e5e5e5",
                                         padding: "2px 4px",
                                         display: "inline-block",
-                                        borderRadius: "8px 5px 5px 0",
+                                        borderRadius:  b.sender === userid ? "8px 5px 0 5px" : "8px 5px 5px 0",
                                       }}
                                     >
                                       {b.content}
